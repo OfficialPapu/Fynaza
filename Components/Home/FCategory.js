@@ -70,7 +70,7 @@ export default function CategoryCarousel() {
             <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/4 lg:basis-basis-15 basis-1/3">
               <Link href="#" className="group">
                 <div className="flex flex-col items-center gap-2">
-                  <div className={`rounded-full p-4 ${category.bgColor} lg:w-28 lg:h-28 md:w-24 md:h-24 sm:w-20 sm:h-20 w-[4.5rem] h-[4.5rem] flex items-center justify-center group-hover:scale-105 group-hover:shadow-lg duration-300`}>
+                  <div className={`rounded-full p-4 ${category.bgColor} lg:w-28 lg:h-28 md:w-24 md:h-24 sm:w-20 sm:h-20 w-[4.2rem] h-[4.2rem] flex items-center justify-center group-hover:scale-105 group-hover:shadow-lg duration-300`}>
                     <Image
                       src={category.icon || "/placeholder.svg"}
                       alt={category.name}
@@ -78,7 +78,6 @@ export default function CategoryCarousel() {
                       height={100}
                       className="object-contain md:w-12 md:h-12 w-8 h-8 lg:w-14 lg:h-14"
                     />
-
                   </div>
                   <span className="text-sm font-medium text-center text-gray-500">{category.name}</span>
                 </div>

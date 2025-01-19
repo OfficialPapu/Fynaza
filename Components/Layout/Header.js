@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Search, ShoppingBag, ChevronDown, Menu, Home, Heart, User } from 'lucide-react'
+import { Search, ShoppingBag, Menu, Home, Heart, User } from 'lucide-react'
 import { Button } from '@/Components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/Components/ui/sheet'
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from '@/Components/ui/navigation-menu'
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from '@/Components/ui/navigation-menu'
 import { SearchDesktop, SearchMobile } from './SearchBox/SearchBar'
 
 const categories = [
@@ -24,6 +24,7 @@ export default function Navbar() {
             <div className="container mx-auto px-4">
                 {/* Top Navigation */}
                 <div className="flex items-center justify-between h-16 gap-4">
+                   
                     {/* Mobile Menu */}
                     <Sheet>
                         <SheetTrigger asChild>
@@ -54,7 +55,7 @@ export default function Navbar() {
 
                     <SearchDesktop />
 
-                    {/* Sign In, Cart & Wishlist */}
+                    {/* Cart & Wishlist */}
                     <div className="flex items-center gap-4 HideMobileView">
                         <Button variant="ghost" size="icon">
                             <User className="!h-5 !w-5" />
