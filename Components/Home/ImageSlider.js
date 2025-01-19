@@ -29,7 +29,7 @@ export default function ImageSlider() {
   
   const plugin = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: true }))
   return (
-    <Carousel className="w-full mt-2 relative" opts={{ align: "start", loop: true, }} plugins={[plugin.current]}>
+    <Carousel className="w-full mt-2 relative bg-white" opts={{ align: "start", loop: true, }} plugins={[plugin.current]}>
       <CarouselContent>
         {images.map((image, index) => (
           <CarouselItem key={index}>

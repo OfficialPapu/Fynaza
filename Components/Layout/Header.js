@@ -20,7 +20,7 @@ const categories = [
 
 export default function Navbar() {
     return (
-        <div className="border-b lg:pb-0">
+        <div className="border-b lg:pb-0 bg-white">
             <div className="container mx-auto px-4">
                 {/* Top Navigation */}
                 <div className="flex items-center justify-between h-16 gap-4">
@@ -93,7 +93,7 @@ export default function Navbar() {
                 <SearchMobile />
 
                 {/* Mobile Bottom Navigation */}
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t lg:hidden">
+                <div className="z-10 fixed bottom-0 left-0 right-0 bg-white border-t lg:hidden">
                     <div className="flex justify-between items-center px-4 py-2">
                         <Link href="/" className="flex flex-col items-center gap-1">
                             <Home className="h-6 w-6" />
