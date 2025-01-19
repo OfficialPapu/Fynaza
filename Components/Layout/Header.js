@@ -9,7 +9,13 @@ import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMe
 import { SearchDesktop, SearchMobile } from './SearchBox/SearchBar'
 
 const categories = [
-    { name: 'Jewellery', icon: '🧘' },
+    { name: 'FASHION', icon: '👕' },
+    { name: 'ELECTRONICS', icon: '📱' },
+    { name: 'BAGS', icon: '👜' },
+    { name: 'FOOTWEAR', icon: '👟' },
+    { name: 'GROCERIES', icon: '🛒' },
+    { name: 'BEAUTY', icon: '💄' },
+    { name: 'WELLNESS', icon: '🧘' },
 ]
 
 export default function Navbar() {
@@ -43,7 +49,7 @@ export default function Navbar() {
 
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2">
-                        <img src="./Main Logo.png" alt="Fynaza Logo" className='h-14' />
+                        <img src="/Main Logo.png" alt="Fynaza Logo" className='h-14' />
                     </Link>
 
                     <SearchDesktop />
@@ -69,7 +75,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Categories Navigation (Desktop) */}
-                {/* <div className="hidden lg:block border-t">
+                <div className="hidden lg:block border-t">
                     <NavigationMenu className="mx-auto">
                         <NavigationMenuList>
                             {categories.map((category) => (
@@ -82,7 +88,7 @@ export default function Navbar() {
                             ))}
                         </NavigationMenuList>
                     </NavigationMenu>
-                </div> */}
+                </div>
 
                 <SearchMobile />
 

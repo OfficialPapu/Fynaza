@@ -1,12 +1,14 @@
-import ImageSlider from '@/Components/Layout/Home/ImageSlider'
-// import { ProductSlider } from '@/Components/Product'
+import FeaturedCategories from '@/Components/Home/Featured Categories'
+import ImageSlider from '@/Components/Home/ImageSlider'
+import { SingleProductDisplay } from '@/Components/Product/Product'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
       <ImageSlider/>
-      {/* <ProductSlider/> */}
+      <FeaturedCategories/>
+      <SingleProductDisplay/>
     </div>
   )
 }
