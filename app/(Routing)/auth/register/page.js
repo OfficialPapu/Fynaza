@@ -1,4 +1,4 @@
-import RegisterPage from '@/Components/Auth/Register'
+import RegisterPage from '@/Components/Account/Auth/Register'
 import React from 'react'
 
 const page = () => {

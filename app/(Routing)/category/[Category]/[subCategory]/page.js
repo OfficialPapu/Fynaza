@@ -1,14 +1,14 @@
 "use client"
 import React from 'react'
-import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 
-const Page = () => {
-  const { subCategory } = useParams();  
+const page = () => {
+  const {subCategory} = useParams();
   return (
     <div>
-      Sub Category : {subCategory}
+     HI :{subCategory}
     </div>
   )
 }
 
-export default Page;
+export default page

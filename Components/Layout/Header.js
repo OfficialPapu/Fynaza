@@ -16,6 +16,7 @@ const categories = [
     { name: 'GROCERIES', icon: '🛒' },
     { name: 'BEAUTY', icon: '💄' },
     { name: 'WELLNESS', icon: '🧘' },
+    { name: 'Jewellery', icon: '🧘', href: "jewellery" },
 ]
 
 export default function Navbar() {
@@ -24,7 +25,7 @@ export default function Navbar() {
             <div className="container mx-auto px-4">
                 {/* Top Navigation */}
                 <div className="flex items-center justify-between h-16 gap-4">
-                   
+
                     {/* Mobile Menu */}
                     <Sheet>
                         <SheetTrigger asChild>
@@ -37,7 +38,7 @@ export default function Navbar() {
                                 {categories.map((category) => (
                                     <Link
                                         key={category.name}
-                                        href="#"
+                                        href={"/category/"+category.href}
                                         className="flex items-center gap-2 text-sm font-medium"
                                     >
                                         <span>{category.icon}</span>
@@ -58,22 +59,26 @@ export default function Navbar() {
                     {/* Cart & Wishlist */}
                     <div className="flex items-center gap-4 HideMobileView">
                         <Link href="/auth/login">
-                        <Button variant="ghost" size="icon">
-                            <User className="!h-5 !w-5" />
-                        </Button>
+                            <Button variant="ghost" size="icon">
+                                <User className="!h-5 !w-5" />
+                            </Button>
                         </Link>
-                        <Button variant="ghost" size="icon" className="relative">
-                            <ShoppingBag className="h-6 w-6" />
-                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                0
-                            </span>
-                        </Button>
-                        <Button variant="ghost" size="icon" className="relative">
+                        <Link href="/account/cart">
+                            <Button variant="ghost" size="icon" className="relative">
+                                <ShoppingBag className="h-6 w-6" />
+                                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                    0
+                                </span>
+                            </Button>
+                        </Link>
+                       <Link href="/account/wishlist">
+                       <Button variant="ghost" size="icon" className="relative">
                             <Heart className="!h-5 !w-5" />
                             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                                 0
                             </span>
                         </Button>
+                        </Link>
                     </div>
                 </div>
 
@@ -82,12 +87,14 @@ export default function Navbar() {
                     <NavigationMenu className="mx-auto">
                         <NavigationMenuList>
                             {categories.map((category) => (
+                             <Link href={"/category/" + category.href} key={category.name}>
                                 <NavigationMenuItem key={category.name}>
                                     <NavigationMenuTrigger className="h-12">
                                         <span className="mr-2">{category.icon}</span>
                                         {category.name}
                                     </NavigationMenuTrigger>
                                 </NavigationMenuItem>
+                             </Link>
                             ))}
                         </NavigationMenuList>
                     </NavigationMenu>
@@ -106,14 +113,14 @@ export default function Navbar() {
                             <Search className="h-6 w-6" />
                             <span className="text-xs">Search</span>
                         </button>
-                        <Link href="/orders" className="flex flex-col items-center gap-1 relative">
+                        <Link href="/account/cart" className="flex flex-col items-center gap-1 relative">
                             <ShoppingBag className="h-6 w-6" />
                             <span className="text-xs">Cart</span>
                             <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full h-5 w-5 grid place-items-center">
                                 0
                             </span>
                         </Link>
-                        <Link href="/wishlist" className="flex flex-col items-center gap-1 relative">
+                        <Link href="/account/wishlist" className="flex flex-col items-center gap-1 relative">
                             <Heart className="h-6 w-6" />
                             <span className="absolute -top-2 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 grid place-items-center">
                                 0
