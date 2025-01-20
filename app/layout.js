@@ -1,6 +1,6 @@
 import Header from "@/Components/Layout/Header";
-import "./globals.css";
 import Footer from "@/Components/Layout/Footer";
+import "./globals.css";
 
 export const metadata = {
   title: "Online Shopping in Nepal: Best Deals, Prices & Discounts - Fynaza",

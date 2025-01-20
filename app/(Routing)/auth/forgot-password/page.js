@@ -1,9 +1,10 @@
+import ForgotPasswordPage from '@/Components/Auth/Forgot Password'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      Sub cat
+      <ForgotPasswordPage/>
     </div>
   )
 }

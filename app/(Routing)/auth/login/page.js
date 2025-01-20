@@ -1,9 +1,10 @@
+import LoginPage from '@/Components/Auth/Login'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      Main Cat
+      <LoginPage/>
     </div>
   )
 }

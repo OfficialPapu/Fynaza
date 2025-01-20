@@ -57,9 +57,11 @@ export default function Navbar() {
 
                     {/* Cart & Wishlist */}
                     <div className="flex items-center gap-4 HideMobileView">
+                        <Link href="/auth/login">
                         <Button variant="ghost" size="icon">
                             <User className="!h-5 !w-5" />
                         </Button>
+                        </Link>
                         <Button variant="ghost" size="icon" className="relative">
                             <ShoppingBag className="h-6 w-6" />
                             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -118,7 +120,7 @@ export default function Navbar() {
                             </span>
                             <span className="text-xs">Wishlist</span>
                         </Link>
-                        <Link href="/account" className="flex flex-col items-center gap-1">
+                        <Link href="/auth/login" className="flex flex-col items-center gap-1">
                             <User className="h-6 w-6" />
                             <span className="text-xs">Account</span>
                         </Link>
