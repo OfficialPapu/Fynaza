@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-    images: {
-        domains: ['justopjewelry.com', 'api.spicezgold.com'],
-    },
+ images: {
+        remotePatterns: [
+            { hostname: 'justopjewelry.com' },
+            { hostname: 'api.spicezgold.com' }
+        ],
+    }
 };
 
 export default nextConfig;

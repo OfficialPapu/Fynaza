@@ -4,6 +4,7 @@ import { Badge } from "@/Components/ui/badge";
 import { ShoppingCart, Heart } from "lucide-react";
 
 interface ProductCardProps {
+  id: number,
   title: string;
   image: string;
   price: number;
@@ -11,6 +12,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({
+  id,
   title,
   image,
   price,
@@ -57,6 +59,7 @@ export function ProductCard({
           alt={title}
           layout="fill"
           objectFit="cover"
+          sizes="auto"
           className="transition-transform duration-300 group-hover:scale-105"
         />
         {badge}
