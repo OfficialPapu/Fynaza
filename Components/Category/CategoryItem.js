@@ -34,14 +34,14 @@ const CategoryItemPage = ({ subcategories }) => {
     const [BreadcrumbView, setBreadcrumbView] = useState([
         { label: "Home", href: "/", icon: <Home className="w-4 h-4" /> },
         { label: "Category", href: "/category", icon: <LayoutGrid className="w-4 h-4" /> },
-        { label: Category.charAt(0).toUpperCase() + Category.slice(1), href: `/category/ + ${Category}`, icon: "" }
+        { label: Category.charAt(0).toUpperCase() + Category.slice(1), href: `/category/${Category}`, icon: "" }
     ]);
     return (
         <>
             <div className='my-2'>
                 <Breadcrumb items={BreadcrumbView} />
             </div>
-            <div className="min-h-screen bg-white">
+            <div className="min-h-screen bg-white rounded-md">
                 <div className="container mx-auto px-4 py-12">
                     <motion.h1
                         className="text-2xl md:text-4xl font-bold mb-12 text-gray-700"

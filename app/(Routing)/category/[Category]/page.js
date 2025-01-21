@@ -1,6 +1,5 @@
 import CategoryItemPage from "@/Components/Category/CategoryItem"
 
-
 const subcategories = [
   { name: "Bracelets", image: "https://justopjewelry.com/wp-content/uploads/2025/01/9112097-9112098-9112099-9112102_05.jpg" },
   { name: "Necklaces", image: "https://justopjewelry.com/wp-content/uploads/2024/11/9112581-9112582-9112583-9112584-9112585_01.jpg" },
@@ -10,7 +9,7 @@ const subcategories = [
   { name: "Watches", image: "https://justopjewelry.com/wp-content/uploads/2024/11/9112581-9112582-9112583-9112584-9112585_01.jpg" },
 ]
 
-export default function JewelleryCategory() {
+export default function Category() {
   return (
     <CategoryItemPage subcategories={subcategories} />
   )
