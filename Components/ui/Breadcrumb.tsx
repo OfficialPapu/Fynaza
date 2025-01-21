@@ -24,7 +24,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
               }`}
             >
               {item.icon && (
-                <span className="mr-1 mb-[1px] hidden sm:inline">
+                <span className="mr-1 mb-[1px]">
                   {item.icon}
                 </span>
               )}

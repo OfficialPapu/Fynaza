@@ -1,5 +1,5 @@
-import Product from '@/Components/Category/Filter/Product'
 import React from 'react'
+import SubCategory from '@/Components/Category/SubCategory'
 const products = [
   {
     id: 1,
@@ -87,7 +87,7 @@ const categories = ["Men's Fashion", "Women's Fashion"];
 const page = () => {
   return (
     <div>
-      <Product products={products} categories={categories}/>
+      <SubCategory products={products} categories={categories}/>
     </div>
   )
 }

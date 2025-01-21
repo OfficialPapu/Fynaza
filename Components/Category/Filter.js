@@ -90,9 +90,9 @@ const Filter = ({ products, categories, setFilteredProducts, maxPrice }) => {
                 </div>
                 <div>
                     <h3 className="text-lg font-semibold mb-2">Minimum Rating</h3>
-                    <div className="flex space-x-2">
+                    <div className="flex sm:space-x-2 space-x-1 flex-wrap !md:justify-center">
                         {[1, 2, 3, 4, 5].map((rating) => (
-                            <Button className="bg-white hover:bg-[#F4F4F5]"
+                            <Button className="bg-white hover:bg-[#F4F4F5] mb-1"
                                 key={rating}
                                 variant="default"
                                 onClick={() => handleRatingChange(rating)}
@@ -104,7 +104,7 @@ const Filter = ({ products, categories, setFilteredProducts, maxPrice }) => {
                 </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-                <Button onClick={applyFilters}>Apply Filters</Button>
+                <Button onClick={applyFilters} className="bg-gray-700 hover:bg-gray-800 duration-300">Apply Filters</Button>
                 <Button variant="outline" onClick={resetFilters}>
                     Reset
                 </Button>
