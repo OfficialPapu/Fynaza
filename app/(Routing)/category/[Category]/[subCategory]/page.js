@@ -8,6 +8,7 @@ const products = [
     price: 199.99,
     originalPrice: 299.99,
     category: "Men's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ const products = [
     price: 89.99,
     originalPrice: 89.99,
     category: "Men's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 3,
@@ -24,6 +26,7 @@ const products = [
     price: 599.99,
     originalPrice: 799.99,
     category: "Men's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 4,
@@ -32,6 +35,7 @@ const products = [
     price: 79.99,
     originalPrice: 99.99,
     category: "Men's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 5,
@@ -40,6 +44,7 @@ const products = [
     price: 649.99,
     originalPrice: 799.99,
     category: "Women's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 6,
@@ -48,6 +53,7 @@ const products = [
     price: 1199.99,
     originalPrice: 1499.99,
     category: "Women's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 6,
@@ -56,6 +62,7 @@ const products = [
     price: 1199.99,
     originalPrice: 1499.99,
     category: "Women's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 6,
@@ -64,6 +71,7 @@ const products = [
     price: 1199.99,
     originalPrice: 1499.99,
     category: "Women's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 6,
@@ -72,6 +80,7 @@ const products = [
     price: 1199.99,
     originalPrice: 1499.99,
     category: "Women's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
     id: 6,
@@ -80,6 +89,7 @@ const products = [
     price: 1199.99,
     originalPrice: 1499.99,
     category: "Men's Fashion",
+    slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
 ]
 const categories = ["Men's Fashion", "Women's Fashion"];

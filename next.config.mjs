@@ -4,7 +4,8 @@ const nextConfig = {
  images: {
         remotePatterns: [
             { hostname: 'justopjewelry.com' },
-            { hostname: 'api.spicezgold.com' }
+            { hostname: 'api.spicezgold.com' },
+            { hostname: 'dreamskinnepal.com' }
         ],
     }
 };
