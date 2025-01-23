@@ -119,6 +119,8 @@
   }
 }
 
+/* Product Detail Page */
+
 .MiniSwiper.swiper-slide-thumb-active img {
   opacity: 1 !important;
 }
@@ -154,7 +156,8 @@
   }
 
   .SliderWrapper {
-    grid-template-columns: 99vw;
-    grid-template-rows: 400px auto;
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 1rem;
   }
 }

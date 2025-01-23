@@ -2,7 +2,7 @@
 import React from "react"
 import { useState } from "react"
 import { Home, LayoutGrid, PackageSearch } from "lucide-react"
-import { ProductCard } from "../ui/Product"
+import { ProductCard } from "../ui/ProductCard"
 import { Breadcrumb } from "../ui/Breadcrumb"
 import { useParams } from "next/navigation"
 import { Button } from "../ui/button"

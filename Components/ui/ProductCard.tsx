@@ -60,7 +60,7 @@ export function ProductCard({
 
   return (
     <div className="group relative bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-      <Link href={"/products/" + slugUrl}>
+      <Link href={"/product/" + slugUrl}>
         <div className="relative aspect-square">
           <Image
             src={image || "/placeholder.svg"}
