@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Breadcrumb } from "../ui/Breadcrumb"
@@ -68,10 +67,9 @@ const CategoryItemPage = ({ subcategories }) => {
                                 >
                                     <div className="bg-white rounded-lg overflow-hidden transition-all duration-300 transform">
                                         <div className="relative aspect-square">
-                                            <Image
+                                            <img
                                                 src={subcategory.image || "/placeholder.svg"}
                                                 alt={subcategory.name}
-                                                fill
                                                 sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                                                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                                             />

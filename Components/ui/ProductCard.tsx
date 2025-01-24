@@ -1,26 +1,15 @@
 import React from "react";
-import Image from "next/image";
 import { Badge } from "@/Components/ui/badge";
 import { ShoppingCart, Heart } from "lucide-react";
 import Link from "next/link";
 
-interface ProductCardProps {
-  id: number;
-  title: string;
-  image: string;
-  price: number;
-  originalPrice: number;
-  slugUrl: string;
-}
-
-export function ProductCard({
-  id,
+export function ProductCard({id,
   title,
   image,
   price,
   originalPrice,
   slugUrl,
-}: ProductCardProps) {
+}) {
   const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
 
   let badge = null;
@@ -62,13 +51,10 @@ export function ProductCard({
     <div className="group relative bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
       <Link href={"/product/" + slugUrl}>
         <div className="relative aspect-square">
-          <Image
+          <img
             src={image || "/placeholder.svg"}
             alt={title}
-            layout="fill"
-            objectFit="cover"
-            sizes="auto"
-            className="transition-transform duration-300 group-hover:scale-105"
+            className="transition-transform duration-300 group-hover:scale-105 object-cover"
           />
           {badge}
           <button

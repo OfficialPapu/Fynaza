@@ -38,7 +38,7 @@ export default function subCategory({ products, categories }) {
                 filteredProducts.length > 0 ?
 
                   (filteredProducts.map((product) => {
-                    return <ProductCard {...product} />
+                    return <ProductCard {...product} key={product.id}/>
                   })) : (
                     <div className="flex flex-col items-center justify-center h-[70vh] bg-[#f3f7fa] rounded-lg p-8">
                       <PackageSearch className="w-16 h-16 text-black mb-4" />

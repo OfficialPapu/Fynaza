@@ -6,23 +6,15 @@ import Autoplay from "embla-carousel-autoplay"
 export default function ImageSlider() {
   const images = [
     {
-      src: "https://www.dreamskinnepal.com/Assets/Product/Media/Images/Slider%20Images/LOVED%20ONES.jpg",
+      src: "./Test Images/LOVED ONES.jpg",
       alt: "SS'24 Poppies on the sea collection",
     },
     {
-      src: "https://www.dreamskinnepal.com/Assets/Product/Media/Images/Slider%20Images/LOVED%20ONES.jpg",
+      src: "./Test Images/LOVED ONES.jpg",
       alt: "SS'24 Poppies on the sea collection",
     },
     {
-      src: "https://www.dreamskinnepal.com/Assets/Product/Media/Images/Slider%20Images/LOVED%20ONES.jpg",
-      alt: "SS'24 Poppies on the sea collection",
-    },
-    {
-      src: "https://www.dreamskinnepal.com/Assets/Product/Media/Images/Slider%20Images/LOVED%20ONES.jpg",
-      alt: "SS'24 Poppies on the sea collection",
-    },
-    {
-      src: "https://www.dreamskinnepal.com/Assets/Product/Media/Images/Slider%20Images/LOVED%20ONES.jpg",
+      src: "./Test Images/LOVED ONES.jpg",
       alt: "SS'24 Poppies on the sea collection",
     },
   ];

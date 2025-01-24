@@ -56,7 +56,7 @@ const products = [
     slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
-    id: 6,
+    id: 7,
     title: "Gaming Laptop 15.6\" 144Hz RTX 3060",
     image: "https://justopjewelry.com/wp-content/uploads/2024/11/9112581-9112582-9112583-9112584-9112585_01.jpg",
     price: 1199.99,
@@ -65,7 +65,7 @@ const products = [
     slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
-    id: 6,
+    id: 8,
     title: "Gaming Laptop 15.6\" 144Hz RTX 3060",
     image: "https://justopjewelry.com/wp-content/uploads/2024/11/9112581-9112582-9112583-9112584-9112585_01.jpg",
     price: 1199.99,
@@ -74,7 +74,7 @@ const products = [
     slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
-    id: 6,
+    id: 9,
     title: "Gaming Laptop 15.6\" 144Hz RTX 3060",
     image: "https://justopjewelry.com/wp-content/uploads/2024/11/9112581-9112582-9112583-9112584-9112585_01.jpg",
     price: 1199.99,
@@ -83,7 +83,7 @@ const products = [
     slugUrl: "Wireless-Noise-Cancelling-Headphones",
   },
   {
-    id: 6,
+    id: 10,
     title: "Gaming Laptop 15.6\" 144Hz RTX 3060",
     image: "https://justopjewelry.com/wp-content/uploads/2024/11/9112581-9112582-9112583-9112584-9112585_01.jpg",
     price: 1199.99,
