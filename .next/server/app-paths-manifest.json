@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/icon.png/route": "app/icon.png/route.js",
+  "/(Routing)/account/cart/page": "app/(Routing)/account/cart/page.js",
+  "/(Routing)/account/wishlist/page": "app/(Routing)/account/wishlist/page.js",
+  "/(Routing)/auth/login/page": "app/(Routing)/auth/login/page.js",
+  "/(Routing)/auth/register/page": "app/(Routing)/auth/register/page.js",
+  "/(Routing)/auth/forgot-password/page": "app/(Routing)/auth/forgot-password/page.js",
+  "/(Routing)/category/[Category]/[subCategory]/page": "app/(Routing)/category/[Category]/[subCategory]/page.js",
+  "/(Routing)/category/[Category]/page": "app/(Routing)/category/[Category]/page.js",
+  "/(Routing)/category/page": "app/(Routing)/category/page.js",
+  "/(Routing)/product/[Slug]/page": "app/(Routing)/product/[Slug]/page.js",
+  "/page": "app/page.js"
+}
