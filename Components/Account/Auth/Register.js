@@ -2,10 +2,10 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
+import { Card, CardContent } from "@/Components/ui/card"
+import { Input } from "@/Components/ui/input"
+import { Button } from "@/Components/ui/button"
+import { Label } from "@/Components/ui/label"
 import Link from "next/link"
 
 export default function RegisterPage() {
