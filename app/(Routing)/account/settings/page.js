@@ -1,8 +1,8 @@
 import React from 'react';
-import Settings from "@/Components/Account/AccountCore/Settings";
+import Setting from "@/Components/Account/AccountCore/Settings";
 export default function SettingsPage() {
     return (
-        <Settings />
+        <Setting />
     )
 }
 

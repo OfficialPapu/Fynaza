@@ -7,7 +7,7 @@ import { Home, UserRound, Settings } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card"
 
-const Settings = () => {
+const Setting = () => {
     const [BreadcrumbView, setBreadcrumbView] = useState([
         { label: "Home", href: "/", icon: <Home className="w-4 h-4" /> },
         { label: "Account", href: "/account", icon: <UserRound className="w-4 h-4" /> },
@@ -83,4 +83,4 @@ const Settings = () => {
     )
 }
 
-export default Settings
+export default Setting

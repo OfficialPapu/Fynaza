@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { useState } from "react"
-import { Minus, Plus, X, Home, ShoppingCart, User, ShoppingBag } from "lucide-react"
+import { Minus, Plus, X, Home, ShoppingCart, ShoppingBag, UserRound } from "lucide-react"
 import { Button } from "@/Components/ui/button"
 import { Breadcrumb } from "../ui/Breadcrumb";
 import { RadioGroup } from "@/Components/ui/radio-group"
@@ -22,7 +22,7 @@ const Cart = ({ initialCartItems }) => {
   const [cartItems, setCartItems] = useState(initialCartItems)
   const [BreadcrumbView, setBreadcrumbView] = useState([
     { label: "Home", href: "/", icon: <Home className="w-4 h-4" /> },
-    { label: "Account", href: "/account", icon: <User className="w-4 h-4" /> },
+    { label: "Account", href: "/account", icon: <UserRound className="w-4 h-4" /> },
     { label: "Cart", href: "/account/cart", icon: <ShoppingCart className="w-4 h-4" /> }
   ]);
 

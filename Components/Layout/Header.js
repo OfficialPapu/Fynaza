@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Search, ShoppingBag, Menu, Home, Heart, User } from 'lucide-react'
+import { Search, ShoppingBag, Menu, Home, Heart, UserRound } from 'lucide-react'
 import { Button } from '@/Components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/Components/ui/sheet'
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from '@/Components/ui/navigation-menu'
@@ -60,7 +60,7 @@ export default function Navbar() {
                     <div className="flex items-center gap-4 HideMobileView">
                         <Link href="/account">
                             <Button variant="ghost" size="icon">
-                                <User className="!h-5 !w-5" />
+                                <UserRound className="!h-5 !w-5" />
                             </Button>
                         </Link>
                         <Link href="/account/cart">
@@ -128,7 +128,7 @@ export default function Navbar() {
                             <span className="text-xs">Wishlist</span>
                         </Link>
                         <Link href="/account" className="flex flex-col items-center gap-1">
-                            <User className="h-6 w-6" />
+                            <UserRound className="h-6 w-6" />
                             <span className="text-xs">Account</span>
                         </Link>
                     </div>

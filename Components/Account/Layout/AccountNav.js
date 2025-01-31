@@ -3,13 +3,13 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { User, Package, Heart, MapPin, Settings } from "lucide-react"
+import { Package, Heart, MapPin, Settings, UserRound } from "lucide-react"
 
 const menuItems = [
   {
     title: "Profile",
     href: "/account",
-    icon: User,
+    icon: UserRound,
   },
   {
     title: "Orders",
