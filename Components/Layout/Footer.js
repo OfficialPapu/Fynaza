@@ -1,7 +1,12 @@
 import Link from "next/link"
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
-
+  import 'boxicons/css/boxicons.min.css'
 export default function Footer() {
+  const socialIcons = [
+    { icon: () => <i className="bx bxl-facebook text-xl"></i>, link: "https://www.facebook.com/fynaza.global" },
+    { icon: () => <i className="bx bxl-tiktok text-xl"></i>, link: "https://www.tiktok.com/@fynaza.global" },
+    { icon: () => <i className='bx bxl-instagram text-xl' ></i>, link: "https://www.instagram.com/fynaza.global" },
+  ];
+
   return (
     <footer className="w-full bg-white border-t border-gray-100 FooterMain">
       <div className="container mx-auto px-4 py-12">
@@ -12,19 +17,20 @@ export default function Footer() {
               Your premier destination for online shopping. Discover amazing deals and shop with confidence.
             </p>
             <div className="flex space-x-4">
-              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, index) => (
-                <Link 
-                  key={index} 
-                  href="#" 
+              {socialIcons.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.link}
                   className="text-gray-400 hover:text-[#3F8CFF] transition-colors"
+                  target="_blank"
                 >
-                  <Icon className="h-5 w-5" />
+                  <item.icon className="h-5 w-5" />
                   <span className="sr-only">Social Media</span>
                 </Link>
               ))}
             </div>
           </div>
-          
+
           <div>
             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2">
@@ -44,7 +50,7 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-semibold text-lg mb-4">Your Account</h3>
             <ul className="space-y-2">
@@ -64,7 +70,7 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-semibold text-lg mb-4">Help & Support</h3>
             <ul className="space-y-2">
@@ -85,7 +91,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        
+
         <div className="mt-12 pt-8 border-t border-gray-100">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-600 text-center w-full">
