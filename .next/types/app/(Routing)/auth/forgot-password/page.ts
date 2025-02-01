@@ -1,4 +1,4 @@
-// File: D:\Next Js\Fynaza\client-2\client\app\(Routing)\auth\forgot-password\page.js
+// File: D:\Next Js\Fynaza\client\app\(Routing)\auth\forgot-password\page.js
 import * as entry from '../../../../../../app/(Routing)/auth/forgot-password/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

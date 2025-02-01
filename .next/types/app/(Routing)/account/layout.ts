@@ -1,4 +1,4 @@
-// File: D:\Next Js\Fynaza\client-2\client\app\(Routing)\account\layout.js
+// File: D:\Next Js\Fynaza\client\app\(Routing)\account\layout.js
 import * as entry from '../../../../../app/(Routing)/account/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -1,10 +1,35 @@
 import Link from "next/link"
-  import 'boxicons/css/boxicons.min.css'
+import 'boxicons/css/boxicons.min.css'
 export default function Footer() {
   const socialIcons = [
     { icon: () => <i className="bx bxl-facebook text-xl"></i>, link: "https://www.facebook.com/fynaza.global" },
     { icon: () => <i className="bx bxl-tiktok text-xl"></i>, link: "https://www.tiktok.com/@fynaza.global" },
     { icon: () => <i className='bx bxl-instagram text-xl' ></i>, link: "https://www.instagram.com/fynaza.global" },
+  ];
+
+  const AccountLinks = [
+    { title: "Your Orders", link: "/account/orders" },
+    { title: "Returns & Refunds", link: "/support/returns-and-refunds" },
+    { title: "Shipping Rates", link: "#" },
+    { title: "Wishlist", link: "/account/wishlist" },
+    { title: "Your Profile", link: "/account" }
+  ];
+
+  const SupportLinks = [
+    { title: "Help Center", link: "/support/help-center" },
+    { title: "Payment Methods", link: "#" },
+    { title: "Delivery Options", link: "#" },
+    { title: "Privacy Policy", link: "/support/privacy-policy" },
+    { title: "Terms and Conditions", link: "/support/terms-and-conditions" }
+  ];
+
+  const QuickLinks = [
+    { title: "Today's Deals", link: "#" },
+    { title: "Best Sellers", link: "#" },
+    { title: "New Arrivals", link: "#" },
+    { title: "Gift Cards", link: "#" },
+    { title: "Clearance", link: "#" },
+    { title: "Customer Service", link: "#" }
   ];
 
   return (
@@ -34,17 +59,10 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {[
-                "Today's Deals",
-                "Best Sellers",
-                "New Arrivals",
-                "Gift Cards",
-                "Clearance",
-                "Customer Service"
-              ].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-gray-600 hover:text-[#3F8CFF] transition-colors text-sm">
-                    {item}
+              {QuickLinks.map((item, index) => (
+                <li key={index}>
+                  <Link href={item.link} className="text-gray-600 hover:text-[#3F8CFF] transition-colors text-sm">
+                    {item.title}
                   </Link>
                 </li>
               ))}
@@ -54,17 +72,10 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Your Account</h3>
             <ul className="space-y-2">
-              {[
-                "Your Orders",
-                "Track Package",
-                "Returns & Refunds",
-                "Shipping Rates",
-                "Wishlist",
-                "Your Profile"
-              ].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-gray-600 hover:text-[#3F8CFF] transition-colors text-sm">
-                    {item}
+              {AccountLinks.map((item, index) => (
+                <li key={index}>
+                  <Link href={item.link} className="text-gray-600 hover:text-[#3F8CFF] transition-colors text-sm">
+                    {item.title}
                   </Link>
                 </li>
               ))}
@@ -74,17 +85,10 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Help & Support</h3>
             <ul className="space-y-2">
-              {[
-                "Help Center",
-                "Payment Methods",
-                "Delivery Options",
-                "Return Policy",
-                "Privacy Policy",
-                "Terms of Service"
-              ].map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-gray-600 hover:text-[#3F8CFF] transition-colors text-sm">
-                    {item}
+              {SupportLinks.map((item, index) => (
+                <li key={index}>
+                  <Link href={item.link} className="text-gray-600 hover:text-[#3F8CFF] transition-colors text-sm">
+                    {item.title}
                   </Link>
                 </li>
               ))}

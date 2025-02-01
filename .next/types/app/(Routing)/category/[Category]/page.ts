@@ -1,4 +1,4 @@
-// File: D:\Next Js\Fynaza\client-2\client\app\(Routing)\category\[Category]\page.js
+// File: D:\Next Js\Fynaza\client\app\(Routing)\category\[Category]\page.js
 import * as entry from '../../../../../../app/(Routing)/category/[Category]/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

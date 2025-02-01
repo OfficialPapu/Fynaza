@@ -23,12 +23,8 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
                   : "text-gray-600 hover:text-black transition-colors duration-200"
               }`}
             >
-              {item.icon && (
-                <span className="mr-1 mb-[1px]">
-                  {item.icon}
-                </span>
-              )}
-              <span className="truncate max-w-[100px] sm:max-w-none">
+              {item.icon && <span className="mr-1 mb-[1px]">{item.icon}</span>}
+              <span className="truncate max-w-[120px] sm:max-w-none">
                 {item.label}
               </span>
             </Link>
