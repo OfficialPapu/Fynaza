@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react"
+import { SalesOverview } from "@/Components/(Admin)/Dashboard/SalesOverview"
 
-const page = () => {
+export default function Home() {
   return (
-    <div>
-      hi
-    </div>
+    <>
+      <SalesOverview />
+    </>
   )
 }
 
-export default page

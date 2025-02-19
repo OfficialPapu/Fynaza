@@ -2,6 +2,6 @@
   "headers": {
     "x-nextjs-stale-time": "4294967294",
     "x-nextjs-prerender": "1",
-    "x-next-cache-tags": "_N_T_/layout,_N_T_/(Routing)/layout,_N_T_/(Routing)/account/layout,_N_T_/(Routing)/account/settings/layout,_N_T_/(Routing)/account/settings/page,_N_T_/account/settings"
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(Routing)/layout,_N_T_/(Routing)/(Website)/layout,_N_T_/(Routing)/(Website)/account/layout,_N_T_/(Routing)/(Website)/account/settings/layout,_N_T_/(Routing)/(Website)/account/settings/page,_N_T_/account/settings"
   }
 }
