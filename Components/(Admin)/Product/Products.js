@@ -116,7 +116,7 @@ export default function Products() {
             <Button size="icon" className="sm:hidden" title="Add Product">
               <Plus className="h-4 w-4" />
             </Button>
-            <Link href="/admin/products/new">
+            <Link href="/admin/products/add">
               <Button size="sm" className="hidden sm:inline-flex">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Product

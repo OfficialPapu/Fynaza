@@ -2,7 +2,7 @@
 
 import React from "react"
 import { useState } from "react"
-import { FileText, LayoutDashboard, LogOutIcon, Menu, Moon, Package, Settings, ShoppingBag, Sun, Tags, Users, } from "lucide-react"
+import { Edit, FileText, LayoutDashboard, List, LogOutIcon, Menu, Moon, Package, PlusCircle, Settings, ShoppingBag, Sun, Tags, Users, } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { Button } from "@/Components/ui/button"
@@ -20,6 +20,10 @@ const sidebarLinks = [
         title: "Products",
         icon: Package,
         href: "/admin/products",
+        submenu: [
+            { title: "Product List", icon: List, href: "/admin/products" },
+            { title: "Add New", icon: PlusCircle, href: "/admin/products/add" },
+        ],
     },
     {
         title: "Categories",
