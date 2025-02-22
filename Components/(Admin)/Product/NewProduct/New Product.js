@@ -6,116 +6,21 @@ import ProductInformation from "./ProductInformation";
 import PricingAndInventory from "./PricingAndInventory"
 import ProductMedia from "./ProductMedia"
 import AdditionalDetails from "./AdditionalDetails"
-import axios from "axios";
 import { ProductProvider, useProduct } from "@/Components/(Admin)/Product/Context/ProductContext";
 import { TipTapProvider, useTipTap } from "@/Components/(Admin)/Product/Context/TipTapContext";
 
 export default function NewProduct() {
   return (
-    <ProductProvider>
-      <TipTapProvider>
+    <TipTapProvider>
+      <ProductProvider>
         <NewProductForm />
-      </TipTapProvider>
-    </ProductProvider>
+      </ProductProvider>
+    </TipTapProvider>
   );
 }
 
 function NewProductForm() {
-  const { product } = useProduct();
-  const { editor } = useTipTap();
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-
-  const convertObjectToFormData = (obj, formData = new FormData(), parentKey = '') => {
-    for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        const value = obj[key];
-        const formKey = parentKey ? `${parentKey}[${key}]` : key;
-
-        if (typeof value === 'object' && !Array.isArray(value)) {
-          convertObjectToFormData(value, formData, formKey);
-        } else if (Array.isArray(value)) {
-          value.forEach((item, index) => {
-            if (item instanceof File) {
-            } else {
-              formData.append(`${formKey}[${index}]`, item);
-            }
-          });
-        } else {
-          if (!(value instanceof File)) {
-            formData.append(formKey, value);
-          }
-        }
-      }
-    }
-  };
-
-  const convertBase64ToFile = (base64String, filename) => {
-    const arr = base64String.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
-  };
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    let uploadedImages = [];
-    let tiptapContent = editor.getJSON();
-
-    tiptapContent.content.forEach((node, index) => {
-      if (node.type === "image" && node.attrs.src.startsWith("data:image")) {
-        const file = convertBase64ToFile(node.attrs.src, `wysiwyg-image-${index}.png`);
-        formData.append("WysiwygImages", file);
-        uploadedImages.push({ index, placeholder: node.attrs.src });
-      }
-    });
-
-    if (uploadedImages.length > 0) {
-      try {
-        const response = await axios.post(`${BASE_URL}/api/product/tiptap/upload`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-
-        if (response.data.success) {
-          console.log(response.data);
-          uploadedImages.forEach((img, idx) => {
-            tiptapContent.content.forEach((node) => {
-              if (node.type === "image" && node.attrs.src === img.placeholder) {
-                node.attrs.src = response.data.urls[idx];
-              }
-            });
-          });
-        }
-      } catch (error) {
-        console.error("Image upload failed:", error);
-        return;
-      }
-    }
-    convertObjectToFormData(product, formData);
-    formData.append("Description", editor.getHTML());
-
-    product.Media.Images.forEach((image) => {
-      formData.append("Images", image);
-    });
-
-    product.Media.Videos.forEach((video) => {
-      formData.append("Videos", video);
-    });
-
-    try {
-      const response = await axios.post(`${BASE_URL}/api/product/add`, formData);
-      console.log("Product created successfully:", response.data);
-    } catch (error) {
-      console.error("Error creating product:", error);
-    }
-  };
+  const { handleSubmit } = useProduct();
 
   return (
     <div className="flex min-h-screen flex-col bg-background">

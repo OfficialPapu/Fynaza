@@ -7,7 +7,7 @@ import { Separator } from "@/Components/ui/separator"
 import { useProduct } from "@/Components/(Admin)/Product/Context/ProductContext";
 
 const PricingAndInventory = () => {
-    const { product, handleInputChange, handleNestedInputChange } = useProduct();
+    const { product, handleInputChange, handleNestedInputChange, errors, handleErrorClear } = useProduct();
     return (
         <Card>
             <CardHeader>
@@ -21,11 +21,16 @@ const PricingAndInventory = () => {
                         name="Price"
                         type="number"
                         value={product.Price}
-                        onChange={handleInputChange}
+                        onChange={(e) => {
+                            handleInputChange(e);
+                            handleErrorClear("Price");
+                        }}
                         required
                         min="0"
                         step="0.01"
+                        className={errors.Price ? 'border-red-500 !ring-0' : ''}
                     />
+                    {errors.Price && <p className="text-red-500 text-sm">{errors.Price}</p>}
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="DiscountPercentage">Discount Percentage</Label>
@@ -58,10 +63,14 @@ const PricingAndInventory = () => {
                         name="StockQuantity"
                         type="number"
                         value={product.Stock.Quantity}
-                        onChange={(e) => handleNestedInputChange("Stock", "Quantity", e.target.value)}
-                        required
+                        onChange={(e) => {
+                            handleNestedInputChange("Stock", "Quantity", e.target.value);
+                            handleErrorClear("StockQuantity");
+                        }}
                         min="0"
+                        className={errors.StockQuantity ? 'border-red-500 !ring-0' : ''}
                     />
+                    {errors.StockQuantity && <p className="text-red-500 text-sm">{errors.StockQuantity}</p>}
                 </div>
             </CardContent>
         </Card>

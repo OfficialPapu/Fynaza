@@ -1,19 +1,23 @@
+
 "use client";
+import { TipTapProvider, useTipTap } from "@/Components/(Admin)/Product/Context/TipTapContext";
 import React, { createContext, useContext, useState } from 'react'
+import axios from "axios";
+
 const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
     const [product, setProduct] = useState({
         SKU: "",
         Name: "",
         Category: "",
-        Brand: "Generic",
-        Price: 0,
+        Brand: "Fynaza",
+        Price: "",
         Discount: {
-            Percentage: 0,
+            Percentage: "",
             ValidUntil: "",
         },
         Stock: {
-            Quantity: 0,
+            Quantity: "",
         },
         Media: {
             Images: [],
@@ -35,6 +39,9 @@ export const ProductProvider = ({ children }) => {
         },
     })
 
+    const { editor } = useTipTap();
+    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+    const [errors, setErrors] = useState({});
     const [previews, setPreviews] = useState({
         Media: {
             Images: [],
@@ -129,12 +136,125 @@ export const ProductProvider = ({ children }) => {
     }
 
 
+    const validateForm = () => {
+        const newErrors = {};
+        if (!product.SKU) newErrors.SKU = "SKU is required";
+        if (!product.Name) newErrors.Name = "Product Name is required";
+        if (!product.Category) newErrors.Category = "Category is required";
+        if (!product.Price) newErrors.Price = "Price is required";
+        if (!product.Stock.Quantity) newErrors.StockQuantity = "Stock is required";
+        if (!product.Images || product.Images.length === 0) newErrors.Images = "At least one image is required";
+    
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleErrorClear = (field) => {
+        setErrors((prevErrors) => {
+            const newErrors = { ...prevErrors };
+            delete newErrors[field];
+            return newErrors;
+        });
+    };
+
+    const convertObjectToFormData = (obj, formData = new FormData(), parentKey = '') => {
+        for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                const value = obj[key];
+                const formKey = parentKey ? `${parentKey}[${key}]` : key;
+
+                if (typeof value === 'object' && !Array.isArray(value)) {
+                    convertObjectToFormData(value, formData, formKey);
+                } else if (Array.isArray(value)) {
+                    value.forEach((item, index) => {
+                        if (item instanceof File) {
+                        } else {
+                            formData.append(`${formKey}[${index}]`, item);
+                        }
+                    });
+                } else {
+                    if (!(value instanceof File)) {
+                        formData.append(formKey, value);
+                    }
+                }
+            }
+        }
+    };
+
+    const convertBase64ToFile = (base64String, filename) => {
+        const arr = base64String.split(",");
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+        const formData = new FormData();
+        let uploadedImages = [];
+        let tiptapContent = editor.getJSON();
+
+        tiptapContent.content.forEach((node, index) => {
+            if (node.type === "image" && node.attrs.src.startsWith("data:image")) {
+                const file = convertBase64ToFile(node.attrs.src, `wysiwyg-image-${index}.png`);
+                formData.append("WysiwygImages", file);
+                uploadedImages.push({ index, placeholder: node.attrs.src });
+            }
+        });
+
+        if (uploadedImages.length > 0) {
+            try {
+                const response = await axios.post(`${BASE_URL}/api/product/tiptap/upload`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+
+                if (response.data.success) {
+                    console.log(response.data);
+                    uploadedImages.forEach((img, idx) => {
+                        tiptapContent.content.forEach((node) => {
+                            if (node.type === "image" && node.attrs.src === img.placeholder) {
+                                node.attrs.src = response.data.urls[idx];
+                            }
+                        });
+                    });
+                    formData.delete("WysiwygImages");
+                }
+            } catch (error) {
+                console.error("Image upload failed:", error);
+                return;
+            }
+        }
+        convertObjectToFormData(product, formData);
+        formData.append("Description", editor.getHTML());
+
+        product.Media.Images.forEach((image) => {
+            formData.append("Images", image);
+        });
+
+        product.Media.Videos.forEach((video) => {
+            formData.append("Videos", video);
+        });
+
+        try {
+            const response = await axios.post(`${BASE_URL}/api/product/add`, formData);
+            console.log("Product created successfully:", response.data);
+        } catch (error) {
+            console.error("Error creating product:", error);
+        }
+    };
+
     return (
 
         <>
             <ProductContext.Provider value={{
                 product, setProduct, uploadProgress, setUploadProgress, handleInputChange, handleNestedInputChange, removeMedia,
-                handleMediaUpload, updateCustomAttribute, addCustomAttribute, removeCustomAttribute, handleSelectInputChange, previews,
+                handleMediaUpload, updateCustomAttribute, addCustomAttribute, removeCustomAttribute, handleSelectInputChange, previews, errors, setErrors, handleErrorClear, validateForm, convertObjectToFormData, convertBase64ToFile, handleSubmit
             }} >{children}</ProductContext.Provider >
         </>
 

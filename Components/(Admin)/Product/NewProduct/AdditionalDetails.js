@@ -67,13 +67,13 @@ const AdditionalDetails = () => {
                                                     value={attr.Value}
                                                     onChange={(e) => updateCustomAttribute(index, "Value", e.target.value)}
                                                 />
-                                                <Button variant="destructive" size="icon" className="w-20 h-9" onClick={() => removeCustomAttribute(index)}>
+                                                <Button type="button" variant="destructive" size="icon" className="w-20 h-9" onClick={() => removeCustomAttribute(index)}>
                                                     <X />
                                                 </Button>
                                             </div>
                                         ))}
                                     </div>
-                                    <Button variant="outline" onClick={addCustomAttribute}>
+                                    <Button type="button" variant="outline" onClick={addCustomAttribute}>
                                         <Plus className="h-4 w-4" /> Add Attribute
                                     </Button>
                                 </div>

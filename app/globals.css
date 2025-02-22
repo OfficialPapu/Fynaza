@@ -3,6 +3,7 @@
 * {
   font-family: "Nunito Sans", serif !important;
   scrollbar-width: none;
+  outline: none;
 }
 
 *::-webkit-scrollbar {
@@ -230,8 +231,6 @@ img {
 
 .TipTapEditor .tiptap {
   min-height: 300px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
   outline: none;
   padding: 10px;
 }

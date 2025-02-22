@@ -2,7 +2,7 @@
 
 import React from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import {EditorContent } from "@tiptap/react";
+import { EditorContent } from "@tiptap/react";
 import { Button } from "@/Components/ui/button"
 import { Input } from "@/Components/ui/input"
 import { Slider } from "@/Components/ui/slider"
@@ -20,6 +20,7 @@ const Tiptap = () => {
                     <div className="flex justify-center gap-10">
                         {tabs.map((tab) => (
                             <Button
+                                type="button"
                                 key={tab.id}
                                 variant="ghost"
                                 size="icon"
@@ -55,6 +56,7 @@ const Tiptap = () => {
                                 <div className="flex space-x-2">
                                     {[1, 2, 3, 4, 5, 6].map((level) => (
                                         <Button
+                                            type="button"
                                             key={level}
                                             variant="outline"
                                             size="icon"
@@ -67,6 +69,7 @@ const Tiptap = () => {
                                     ))}
                                     <Button
                                         variant="outline"
+                                        type="button"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleBulletList().run()}
                                         className={cn(editor.isActive("bulletList") && "bg-muted")}
@@ -75,6 +78,7 @@ const Tiptap = () => {
                                         <List className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleOrderedList().run()}
@@ -84,6 +88,7 @@ const Tiptap = () => {
                                         <ListOrdered className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleBlockquote().run()}
@@ -97,6 +102,7 @@ const Tiptap = () => {
                             {activeTab === "format" && (
                                 <div className="flex space-x-2">
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleBold().run()}
@@ -106,6 +112,7 @@ const Tiptap = () => {
                                         <Bold className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -115,6 +122,7 @@ const Tiptap = () => {
                                         <Italic className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleUnderline().run()}
@@ -124,6 +132,7 @@ const Tiptap = () => {
                                         <UnderlineIcon className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleStrike().run()}
@@ -133,6 +142,7 @@ const Tiptap = () => {
                                         <Strikethrough className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleSubscript().run()}
@@ -142,6 +152,7 @@ const Tiptap = () => {
                                         <SubscriptIcon className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleSuperscript().run()}
@@ -151,6 +162,7 @@ const Tiptap = () => {
                                         <SuperscriptIcon className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => {
@@ -163,6 +175,7 @@ const Tiptap = () => {
                                         <Link2 className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
@@ -172,6 +185,7 @@ const Tiptap = () => {
                                         <Code className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().setTextAlign("left").run()}
@@ -181,6 +195,7 @@ const Tiptap = () => {
                                         <AlignLeft className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().setTextAlign("center").run()}
@@ -190,6 +205,7 @@ const Tiptap = () => {
                                         <AlignCenter className="w-4 h-4" />
                                     </Button>
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="icon"
                                         onClick={() => editor.chain().focus().setTextAlign("right").run()}
@@ -204,7 +220,7 @@ const Tiptap = () => {
                                 <div className="flex items-center space-x-4">
                                     <div className="flex space-x-2">
                                         <label htmlFor="image-upload">
-                                            <Button variant="outline" size="icon" asChild>
+                                            <Button variant="outline" size="icon" asChild type="button">
                                                 <span>
                                                     <ImageIcon className="w-4 h-4" />
                                                 </span>
@@ -219,6 +235,7 @@ const Tiptap = () => {
                                             onChange={handleImageUpload}
                                         />
                                         <Button
+                                            type="button"
                                             variant="outline"
                                             size="icon"
                                             onClick={() => editor.chain().focus().setHorizontalRule().run()}
@@ -226,7 +243,7 @@ const Tiptap = () => {
                                         >
                                             <Minus className="w-4 h-4" />
                                         </Button>
-                                        <Button variant="outline" size="icon" onClick={insertTable} aria-label="Insert Table">
+                                        <Button variant="outline" size="icon" onClick={insertTable} aria-label="Insert Table" type="button">
                                             <Table2 className="w-4 h-4" />
                                         </Button>
                                     </div>
@@ -267,7 +284,7 @@ const Tiptap = () => {
                                     </div>
                                     <Popover>
                                         <PopoverTrigger asChild>
-                                            <Button variant="outline" size="icon" aria-label="Text Color">
+                                            <Button variant="outline" size="icon" aria-label="Text Color" type="button">
                                                 <Palette className="w-4 h-4" />
                                             </Button>
                                         </PopoverTrigger>
@@ -275,6 +292,7 @@ const Tiptap = () => {
                                             <div className="flex flex-wrap gap-1">
                                                 {["#000000", "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FF00FF", "#00FFFF"].map((color) => (
                                                     <Button
+                                                        type="button"
                                                         key={color}
                                                         variant="outline"
                                                         size="icon"
@@ -288,7 +306,7 @@ const Tiptap = () => {
                                     </Popover>
                                     <Popover>
                                         <PopoverTrigger asChild>
-                                            <Button variant="outline" size="icon" aria-label="Highlight Color">
+                                            <Button variant="outline" size="icon" aria-label="Highlight Color" type="button">
                                                 <span className="w-4 h-4 bg-yellow-200 rounded" />
                                             </Button>
                                         </PopoverTrigger>
@@ -296,6 +314,7 @@ const Tiptap = () => {
                                             <div className="flex flex-wrap gap-1">
                                                 {["#FFFF00", "#00FF00", "#00FFFF", "#FF69B4", "#FFA500"].map((color) => (
                                                     <Button
+                                                        type="button"
                                                         key={color}
                                                         variant="outline"
                                                         size="icon"
@@ -315,10 +334,11 @@ const Tiptap = () => {
             </div>
             <div className="bg-gray-100 dark:bg-gray-800 p-4 flex justify-between items-center">
                 <div className="flex items-center space-x-4">
-                    <Button variant="ghost" size="sm" onClick={() => editor.chain().focus().clearContent().run()}>
+                    <Button type="button" variant="ghost" size="sm" onClick={() => editor.chain().focus().clearContent().run()}>
                         <X className="w-4 h-4 mr-2" /> Clear
                     </Button>
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().undo().run()}
@@ -327,6 +347,7 @@ const Tiptap = () => {
                         <Undo className="w-4 h-4 mr-2" /> Undo
                     </Button>
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().redo().run()}

@@ -10,7 +10,7 @@ import { Progress } from "@/Components/ui/progress"
 import { useProduct } from "@/Components/(Admin)/Product/Context/ProductContext"
 
 const ProductMedia = () => {
-    const { product, uploadProgress, removeMedia, handleMediaUpload, previews } = useProduct();
+    const { uploadProgress, removeMedia, handleMediaUpload, previews, errors, handleErrorClear } = useProduct();
     return (
         <Card>
             <CardHeader>
@@ -35,6 +35,7 @@ const ProductMedia = () => {
                                                 className="object-cover rounded-lg border"
                                             />
                                             <Button
+                                                type="button"
                                                 variant="destructive"
                                                 size="xs"
                                                 className="absolute top-2 right-2"
@@ -46,7 +47,7 @@ const ProductMedia = () => {
                                     ))
                                 }
 
-                                <div className="flex aspect-square items-center justify-center rounded-lg border-2 border-dashed h-[200px] w-[200px]">
+                                <div className={`flex aspect-square items-center justify-center rounded-lg border-2 border-dashed h-[200px] w-[200px] ${errors.Images ? "border-red-500" : "border-gray-300"}`}>
                                     <label htmlFor="ProductImage" className="cursor-pointer text-center">
                                         <ImageIcon className="mx-auto h-8 w-8 text-gray-400" />
                                         <span className="mt-2 block text-sm text-gray-600">Upload Image</span>
@@ -56,12 +57,13 @@ const ProductMedia = () => {
                                             className="hidden"
                                             accept="image/*"
                                             multiple
-                                            onChange={(e) => handleMediaUpload("Images", e)}
+                                            onChange={(e) => { handleMediaUpload("Images", e); handleErrorClear("Images"); }}
                                             name="Images"
                                         />
                                     </label>
                                 </div>
                             </div>
+                            {errors.Images && <p className="text-red-500 text-sm text-center w-[200px] mt-3">{errors.Images}</p>}
                         </ScrollArea>
                     </TabsContent>
                     <TabsContent value="videos" className="space-y-4 mt-4">
@@ -72,6 +74,7 @@ const ProductMedia = () => {
                                         <div key={index} className="relative h-[200px] w-[200px]">
                                             <video src={video} className="w-full h-full object-cover rounded-lg" controls />
                                             <Button
+                                                type="button"
                                                 variant="destructive"
                                                 size="xs"
                                                 className="absolute top-2 right-2"

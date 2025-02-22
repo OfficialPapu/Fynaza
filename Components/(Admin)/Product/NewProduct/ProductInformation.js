@@ -8,7 +8,7 @@ import Tiptap from "../Tiptap";
 import { useProduct } from "@/Components/(Admin)/Product/Context/ProductContext";
 
 const ProductInformation = () => {
-    const { product, handleInputChange, handleSelectInputChange } = useProduct();
+    const { product, handleInputChange, handleSelectInputChange, errors, handleErrorClear } = useProduct();
 
     return (
         <Card className="lg:col-span-2">
@@ -19,11 +19,20 @@ const ProductInformation = () => {
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
                         <Label htmlFor="SKU">SKU</Label>
-                        <Input id="SKU" name="SKU" value={product.SKU} onChange={handleInputChange} />
+                        <Input id="SKU" name="SKU" value={product.SKU} onChange={(e) => {
+                            handleInputChange(e);
+                            handleErrorClear("SKU");
+                        }}
+                            className={errors.SKU ? 'border-red-500 !ring-0' : ''} />
+                        {errors.SKU && <p className="text-red-500 text-sm">{errors.SKU}</p>}
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="Name">Product Name</Label>
-                        <Input id="Name" name="Name" value={product.Name} onChange={handleInputChange} />
+                        <Input id="Name" name="Name" onChange={(e) => {
+                            handleInputChange(e);
+                            handleErrorClear("Name");
+                        }}
+                            className={errors.Name ? 'border-red-500 !ring-0' : ''} />
                     </div>
                 </div>
                 <div className="space-y-2">
@@ -35,11 +44,15 @@ const ProductInformation = () => {
                         <Label htmlFor="Category">Category</Label>
                         <Select
                             value={product.Category || ""}
-                            onValueChange={(value) => handleSelectInputChange("Category", value)}
+                            onValueChange={(value) => {
+                                handleSelectInputChange("Category", value);
+                                handleErrorClear("Category");
+                            }}
                         >
-                            <SelectTrigger id="Category">
+                            <SelectTrigger id="Category" className={errors.Category ? 'border-red-500' : ''}>
                                 <SelectValue placeholder="Select a category" />
                             </SelectTrigger>
+                            {errors.Category && <p className="text-red-500 text-sm">{errors.Category}</p>}
                             <SelectContent>
                                 <SelectItem value="electronics">Electronics</SelectItem>
                                 <SelectItem value="clothing">Clothing</SelectItem>
