@@ -1,4 +1,0 @@
-{
-  "/(Routing)/(Admin)/admin/dashboard/page": "app/(Routing)/(Admin)/admin/dashboard/page.js",
-  "/(Routing)/(Admin)/admin/products/add/page": "app/(Routing)/(Admin)/admin/products/add/page.js"
-}

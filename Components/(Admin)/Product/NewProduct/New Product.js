@@ -7,76 +7,115 @@ import PricingAndInventory from "./PricingAndInventory"
 import ProductMedia from "./ProductMedia"
 import AdditionalDetails from "./AdditionalDetails"
 import axios from "axios";
-import { ProductProvider, useProduct } from "@/Components/(Admin)/Product/NewProduct/ProductContext";
+import { ProductProvider, useProduct } from "@/Components/(Admin)/Product/Context/ProductContext";
+import { TipTapProvider, useTipTap } from "@/Components/(Admin)/Product/Context/TipTapContext";
 
 export default function NewProduct() {
   return (
     <ProductProvider>
-      <NewProductForm />
+      <TipTapProvider>
+        <NewProductForm />
+      </TipTapProvider>
     </ProductProvider>
   );
 }
 
 function NewProductForm() {
   const { product } = useProduct();
+  const { editor } = useTipTap();
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-  
   const convertObjectToFormData = (obj, formData = new FormData(), parentKey = '') => {
     for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            const value = obj[key];
-            const formKey = parentKey ? `${parentKey}[${key}]` : key;
+      if (obj.hasOwnProperty(key)) {
+        const value = obj[key];
+        const formKey = parentKey ? `${parentKey}[${key}]` : key;
 
-            if (typeof value === 'object' && !Array.isArray(value)) {
-                // Recursively call for objects
-                convertObjectToFormData(value, formData, formKey);
-            } else if (Array.isArray(value)) {
-                // For arrays, append each element
-                value.forEach((item, index) => {
-                    if (item instanceof File) {
-                        // Skip files (we'll handle them separately)
-                    } else {
-                        formData.append(`${formKey}[${index}]`, item);
-                    }
-                });
+        if (typeof value === 'object' && !Array.isArray(value)) {
+          convertObjectToFormData(value, formData, formKey);
+        } else if (Array.isArray(value)) {
+          value.forEach((item, index) => {
+            if (item instanceof File) {
             } else {
-                // For non-file values, append directly to FormData
-                if (!(value instanceof File)) {
-                    formData.append(formKey, value);
-                }
+              formData.append(`${formKey}[${index}]`, item);
             }
+          });
+        } else {
+          if (!(value instanceof File)) {
+            formData.append(formKey, value);
+          }
         }
+      }
     }
-};
+  };
+
+  const convertBase64ToFile = (base64String, filename) => {
+    const arr = base64String.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  };
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    convertObjectToFormData(product, formData);
+    let uploadedImages = [];
+    let tiptapContent = editor.getJSON();
 
+    tiptapContent.content.forEach((node, index) => {
+      if (node.type === "image" && node.attrs.src.startsWith("data:image")) {
+        const file = convertBase64ToFile(node.attrs.src, `wysiwyg-image-${index}.png`);
+        formData.append("WysiwygImages", file);
+        uploadedImages.push({ index, placeholder: node.attrs.src });
+      }
+    });
+
+    if (uploadedImages.length > 0) {
+      try {
+        const response = await axios.post(`${BASE_URL}/api/product/tiptap/upload`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        if (response.data.success) {
+          console.log(response.data);
+          uploadedImages.forEach((img, idx) => {
+            tiptapContent.content.forEach((node) => {
+              if (node.type === "image" && node.attrs.src === img.placeholder) {
+                node.attrs.src = response.data.urls[idx];
+              }
+            });
+          });
+        }
+      } catch (error) {
+        console.error("Image upload failed:", error);
+        return;
+      }
+    }
+    convertObjectToFormData(product, formData);
+    formData.append("Description", editor.getHTML());
 
     product.Media.Images.forEach((image) => {
-      formData.append("Images", image); // Appending image files
+      formData.append("Images", image);
     });
-    
-    // Append videos
-    // product.Media.Videos.forEach((video) => {
-    //   formData.append("Videos", video); // Appending video files
-    // });    
+
+    product.Media.Videos.forEach((video) => {
+      formData.append("Videos", video);
+    });
 
     try {
-      console.log([...formData.entries()]);
-      
       const response = await axios.post(`${BASE_URL}/api/product/add`, formData);
       console.log("Product created successfully:", response.data);
     } catch (error) {
       console.error("Error creating product:", error);
     }
   };
-
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -94,24 +133,22 @@ function NewProductForm() {
       </header>
 
       <main className="flex-1 overflow-y-auto">
-        <div className="container mx-auto py-6">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="grid gap-6 lg:grid-cols-3">
-              <ProductInformation />
-              <PricingAndInventory />
-            </div>
+        <div className="container mx-auto py-6 space-y-8">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <ProductInformation />
+            <PricingAndInventory />
+          </div>
 
-            <ProductMedia />
-            <AdditionalDetails />
+          <ProductMedia />
+          <AdditionalDetails />
 
-            <div className="flex justify-end space-x-4">
-              <Button variant="outline">Cancel</Button>
-              <Button type="submit">
-                <Save className="mr-2 h-4 w-4" />
-                Create Product
-              </Button>
-            </div>
-          </form>
+          <div className="flex justify-end space-x-4">
+            <Button variant="outline">Cancel</Button>
+            <Button type="submit" onClick={handleSubmit}>
+              <Save className="mr-2 h-4 w-4" />
+              Create Product
+            </Button>
+          </div>
         </div>
       </main>
     </div>

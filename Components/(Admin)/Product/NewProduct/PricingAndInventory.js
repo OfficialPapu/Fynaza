@@ -4,7 +4,7 @@ import { Input } from "@/Components/ui/input"
 import { Label } from "@/Components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card"
 import { Separator } from "@/Components/ui/separator"
-import { useProduct } from "@/Components/(Admin)/Product/NewProduct/ProductContext";
+import { useProduct } from "@/Components/(Admin)/Product/Context/ProductContext";
 
 const PricingAndInventory = () => {
     const { product, handleInputChange, handleNestedInputChange } = useProduct();

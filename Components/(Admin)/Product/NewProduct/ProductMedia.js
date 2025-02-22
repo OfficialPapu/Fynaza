@@ -7,10 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import { ScrollArea } from "@/Components/ui/scroll-area"
 import { Progress } from "@/Components/ui/progress"
-import { useProduct } from "@/Components/(Admin)/Product/NewProduct/ProductContext"
+import { useProduct } from "@/Components/(Admin)/Product/Context/ProductContext"
 
 const ProductMedia = () => {
-    const { product, uploadProgress, removeMedia, handleMediaUpload } = useProduct();
+    const { product, uploadProgress, removeMedia, handleMediaUpload, previews } = useProduct();
     return (
         <Card>
             <CardHeader>
@@ -25,30 +25,33 @@ const ProductMedia = () => {
                     <TabsContent value="images" className="space-y-4 mt-4">
                         <ScrollArea className="w-full rounded-md border p-4">
                             <div className="h-[200px] gap-4 flex md:items-start md:justify-start justify-center flex-wrap">
-                                {product.Media.Images.map((image, index) => (
-                                    <div key={index} className="relative h-[200px] w-[200px] ">
-                                        <Image
-                                            src={image.Url || "/placeholder.svg"}
-                                            alt={image.Name}
-                                            fill
-                                            className="object-cover rounded-lg border"
-                                        />
-                                        <Button
-                                            variant="destructive"
-                                            size="xs"
-                                            className="absolute top-2 right-2"
-                                            onClick={() => removeMedia("Images", index)}
-                                        >
-                                            <X className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                ))}
+                                {previews?.Images?.length > 0 &&
+                                    previews.Images.map((image, index) => (
+                                        <div key={index} className="relative h-[200px] w-[200px]">
+                                            <Image
+                                                src={image}
+                                                alt={`preview-${index}`}
+                                                fill
+                                                className="object-cover rounded-lg border"
+                                            />
+                                            <Button
+                                                variant="destructive"
+                                                size="xs"
+                                                className="absolute top-2 right-2"
+                                                onClick={() => removeMedia("Images", index)}
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    ))
+                                }
+
                                 <div className="flex aspect-square items-center justify-center rounded-lg border-2 border-dashed h-[200px] w-[200px]">
-                                    <label htmlFor="image-upload" className="cursor-pointer text-center">
+                                    <label htmlFor="ProductImage" className="cursor-pointer text-center">
                                         <ImageIcon className="mx-auto h-8 w-8 text-gray-400" />
                                         <span className="mt-2 block text-sm text-gray-600">Upload Image</span>
                                         <Input
-                                            id="image-upload"
+                                            id="ProductImage"
                                             type="file"
                                             className="hidden"
                                             accept="image/*"
@@ -63,20 +66,21 @@ const ProductMedia = () => {
                     </TabsContent>
                     <TabsContent value="videos" className="space-y-4 mt-4">
                         <ScrollArea className="w-full rounded-md border p-4">
-                        <div className="h-[200px] gap-4 flex md:items-start md:justify-start justify-center flex-wrap">
-                                {product.Media.Videos.map((video, index) => (
-                                    <div key={index} className="relative h-[200px] w-[200px]">
-                                        <video src={video.Url} className="w-full h-full object-cover rounded-lg" controls />
-                                        <Button
-                                            variant="destructive"
-                                            size="xs"
-                                            className="absolute top-2 right-2"
-                                            onClick={() => removeMedia("Videos", index)}
-                                        >
-                                            <X className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                ))}
+                            <div className="h-[200px] gap-4 flex md:items-start md:justify-start justify-center flex-wrap">
+                                {previews?.Videos?.length > 0 &&
+                                    previews.Videos.map((video, index) => (
+                                        <div key={index} className="relative h-[200px] w-[200px]">
+                                            <video src={video} className="w-full h-full object-cover rounded-lg" controls />
+                                            <Button
+                                                variant="destructive"
+                                                size="xs"
+                                                className="absolute top-2 right-2"
+                                                onClick={() => removeMedia("Videos", index)}
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    ))}
                                 <div className="flex aspect-video items-center justify-center rounded-lg border-2 border-dashed h-[200px] w-[200px]">
                                     <label htmlFor="video-upload" className="cursor-pointer text-center">
                                         <Video className="mx-auto h-8 w-8 text-gray-400" />

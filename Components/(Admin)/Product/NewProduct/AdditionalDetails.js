@@ -6,7 +6,7 @@ import { Label } from "@/Components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/Components/ui/accordion"
 import { Badge } from "@/Components/ui/badge"
-import { useProduct } from "@/Components/(Admin)/Product/NewProduct/ProductContext";
+import { useProduct } from "@/Components/(Admin)/Product/Context/ProductContext";
 import { Plus, X } from "lucide-react"
 
 const AdditionalDetails = () => {

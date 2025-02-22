@@ -4,7 +4,8 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
-import { useProduct } from "@/Components/(Admin)/Product/NewProduct/ProductContext";
+import Tiptap from "../Tiptap";
+import { useProduct } from "@/Components/(Admin)/Product/Context/ProductContext";
 
 const ProductInformation = () => {
     const { product, handleInputChange, handleSelectInputChange } = useProduct();
@@ -27,7 +28,7 @@ const ProductInformation = () => {
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="Description">Description</Label>
-                    <textarea name="" id="" className="h-[200px] w-full border outline-none rounded-md"></textarea>
+                    <Tiptap />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
