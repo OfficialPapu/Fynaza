@@ -1,7 +1,7 @@
 
 "use client";
 import { TipTapProvider, useTipTap } from "@/Components/(Admin)/Product/Context/TipTapContext";
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import axios from "axios";
 
 const ProductContext = createContext();
@@ -41,6 +41,7 @@ export const ProductProvider = ({ children }) => {
 
     const { editor } = useTipTap();
     const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+    const [categories, setCategories] = useState([]);
     const [errors, setErrors] = useState({});
     const [previews, setPreviews] = useState({
         Media: {
@@ -80,6 +81,15 @@ export const ProductProvider = ({ children }) => {
                 [type]: prevProduct.Media[type].filter((_, i) => i !== index),
             },
         }))
+
+        setPreviews((prev) => ({
+            ...prev,
+            Media: {
+                ...prev.Media,
+                [type]: prev.Media[type].filter((_, i) => i !== index),
+            },
+        }));
+
     }
 
     const handleMediaUpload = (type, e) => {
@@ -113,6 +123,7 @@ export const ProductProvider = ({ children }) => {
                 ),
             },
         }))
+
     }
 
     const addCustomAttribute = () => {
@@ -143,8 +154,8 @@ export const ProductProvider = ({ children }) => {
         if (!product.Category) newErrors.Category = "Category is required";
         if (!product.Price) newErrors.Price = "Price is required";
         if (!product.Stock.Quantity) newErrors.StockQuantity = "Stock is required";
-        if (!product.Images || product.Images.length === 0) newErrors.Images = "At least one image is required";
-    
+        if (!product.Media.Images || product.Media.Images.length === 0) newErrors.Images = "At least one image is required";
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -167,19 +178,23 @@ export const ProductProvider = ({ children }) => {
                     convertObjectToFormData(value, formData, formKey);
                 } else if (Array.isArray(value)) {
                     value.forEach((item, index) => {
-                        if (item instanceof File) {
+                        if (typeof item === 'object' && !Array.isArray(item)) {
+                            for (let subKey in item) {
+                                if (item.hasOwnProperty(subKey)) {
+                                    formData.append(`${formKey}[${index}][${subKey}]`, item[subKey]);
+                                }
+                            }
                         } else {
                             formData.append(`${formKey}[${index}]`, item);
                         }
                     });
                 } else {
-                    if (!(value instanceof File)) {
-                        formData.append(formKey, value);
-                    }
+                    formData.append(formKey, value);
                 }
             }
         }
     };
+
 
     const convertBase64ToFile = (base64String, filename) => {
         const arr = base64String.split(",");
@@ -196,7 +211,7 @@ export const ProductProvider = ({ children }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
-        const formData = new FormData();
+        let formData = new FormData();
         let uploadedImages = [];
         let tiptapContent = editor.getJSON();
 
@@ -215,7 +230,6 @@ export const ProductProvider = ({ children }) => {
                 });
 
                 if (response.data.success) {
-                    console.log(response.data);
                     uploadedImages.forEach((img, idx) => {
                         tiptapContent.content.forEach((node) => {
                             if (node.type === "image" && node.attrs.src === img.placeholder) {
@@ -240,21 +254,32 @@ export const ProductProvider = ({ children }) => {
         product.Media.Videos.forEach((video) => {
             formData.append("Videos", video);
         });
-
         try {
-            const response = await axios.post(`${BASE_URL}/api/product/add`, formData);
+            const response = await axios.post(`${BASE_URL}/api/product/add`, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
             console.log("Product created successfully:", response.data);
         } catch (error) {
             console.error("Error creating product:", error);
         }
     };
 
+    async function GetCategories() {
+        const response = await axios.get(BASE_URL + '/api/categories');
+        const result = response.data;
+        setCategories(result);
+    }
+
+    useEffect(() => {
+        GetCategories();
+    }, [])
+
     return (
 
         <>
             <ProductContext.Provider value={{
                 product, setProduct, uploadProgress, setUploadProgress, handleInputChange, handleNestedInputChange, removeMedia,
-                handleMediaUpload, updateCustomAttribute, addCustomAttribute, removeCustomAttribute, handleSelectInputChange, previews, errors, setErrors, handleErrorClear, validateForm, convertObjectToFormData, convertBase64ToFile, handleSubmit
+                handleMediaUpload, updateCustomAttribute, addCustomAttribute, removeCustomAttribute, handleSelectInputChange, previews, errors, setErrors, handleErrorClear, validateForm, convertObjectToFormData, convertBase64ToFile, handleSubmit, categories
             }} >{children}</ProductContext.Provider >
         </>
 

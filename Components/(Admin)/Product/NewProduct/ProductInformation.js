@@ -8,8 +8,7 @@ import Tiptap from "../Tiptap";
 import { useProduct } from "@/Components/(Admin)/Product/Context/ProductContext";
 
 const ProductInformation = () => {
-    const { product, handleInputChange, handleSelectInputChange, errors, handleErrorClear } = useProduct();
-
+    const { product, handleInputChange, handleSelectInputChange, errors, handleErrorClear, categories } = useProduct();
     return (
         <Card className="lg:col-span-2">
             <CardHeader>
@@ -54,9 +53,15 @@ const ProductInformation = () => {
                             </SelectTrigger>
                             {errors.Category && <p className="text-red-500 text-sm">{errors.Category}</p>}
                             <SelectContent>
-                                <SelectItem value="electronics">Electronics</SelectItem>
-                                <SelectItem value="clothing">Clothing</SelectItem>
-                                <SelectItem value="food">Food & Beverage</SelectItem>
+                                {categories.length > 0 ?
+                                    categories.map((category, index) => {
+                                        return (
+                                            <SelectItem key={category._id} value={category._id}>{category.CategoryAttribute}</SelectItem>
+                                        )
+                                    })
+                                    : 
+                                    <div className="ml-4 mt-1">N/A</div>
+                                    }
                             </SelectContent>
                         </Select>
                     </div>

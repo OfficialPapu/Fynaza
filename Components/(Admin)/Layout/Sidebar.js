@@ -19,7 +19,6 @@ const sidebarLinks = [
     {
         title: "Products",
         icon: Package,
-        href: "/admin/products",
         submenu: [
             { title: "Product List", icon: List, href: "/admin/products" },
             { title: "Add New", icon: PlusCircle, href: "/admin/products/add" },
@@ -28,8 +27,12 @@ const sidebarLinks = [
     {
         title: "Categories",
         icon: Tags,
-        href: "/admin/categories",
         active: true,
+        submenu: [
+            { title: "Categories ", icon: List, href: "/admin/categories" },
+            { title: "Add a Category", icon: PlusCircle, href: "/admin/categories/add" },
+        ],
+
     },
     {
         title: "Customers",

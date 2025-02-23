@@ -1,6 +1,7 @@
+
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Download, FileUp, MoreHorizontal, Package, Plus, Search, Trash2 } from "lucide-react"
 import Image from "next/image"
 
@@ -25,59 +26,40 @@ import {
   SelectValue,
 } from "@/Components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table"
-import { Badge } from "@/Components/ui/badge"
 import { Switch } from "@/Components/ui/switch"
 import Link from "next/link"
-
-// Sample product data
-const products = [
-  {
-    id: 1,
-    name: "Premium Headphones",
-    category: "Electronics",
-    price: 199.99,
-    salePrice: 179.99,
-    stock: 45,
-    status: "In Stock",
-    published: true,
-    image: "/placeholder.svg",
-  },
-  {
-    id: 2,
-    name: "Organic Coffee Beans",
-    category: "Food & Beverage",
-    price: 24.99,
-    salePrice: null,
-    stock: 150,
-    status: "In Stock",
-    published: true,
-    image: "/placeholder.svg",
-  },
-  {
-    id: 3,
-    name: "Wireless Charger",
-    category: "Electronics",
-    price: 39.99,
-    salePrice: 29.99,
-    stock: 0,
-    status: "Out of Stock",
-    published: false,
-    image: "/placeholder.svg",
-  },
-]
+import axios from "axios"
 
 export default function Products() {
   const [selectedProducts, setSelectedProducts] = useState([])
   const [viewMode, setViewMode] = useState("list")
 
+
+  const [products, setproduct] = useState([]);
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  const BASE_IMAGES_PATH = process.env.NEXT_PUBLIC_BASE_IMAGES_PATH;
+
+  async function GetAllProducts() {
+    const response = await axios.get(BASE_URL + '/api/product');
+    const result = response.data;
+    setproduct(result);
+    console.log(result);
+
+  }
+
+  useEffect(() => {
+    GetAllProducts();
+  }, [])
+
+
   const toggleProduct = (productId) => {
     setSelectedProducts((prev) =>
-      prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId],
+      prev.includes(productId) ? prev.filter((_id) => _id !== productId) : [...prev, productId],
     )
   }
 
   const toggleAllProducts = () => {
-    setSelectedProducts((prev) => (prev.length === products.length ? [] : products.map((p) => p.id)))
+    setSelectedProducts((prev) => (prev.length === products.length ? [] : products.map((p) => p._id)))
   }
 
   return (
@@ -174,46 +156,38 @@ export default function Products() {
                 <TableHead>Product</TableHead>
                 <TableHead className="hidden md:table-cell">Category</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead className="hidden lg:table-cell">Sale Price</TableHead>
                 <TableHead className="hidden sm:table-cell">Stock</TableHead>
-                <TableHead className="hidden sm:table-cell">Status</TableHead>
                 <TableHead className="hidden md:table-cell">Published</TableHead>
                 <TableHead className="w-12">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {products.map((product) => (
-                <TableRow key={product.id}>
+                <TableRow key={product._id}>
                   <TableCell>
                     <Checkbox
-                      checked={selectedProducts.includes(product.id)}
-                      onCheckedChange={() => toggleProduct(product.id)}
+                      checked={selectedProducts.includes(product._id)}
+                      onCheckedChange={() => toggleProduct(product._id)}
                     />
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Image
-                        src={product.image || "/placeholder.svg"}
-                        alt={product.name}
+                        src={BASE_IMAGES_PATH + `${product.Media.Images[0].Url}` || "/placeholder.svg"}
+                        alt={product.Name}
                         width={40}
                         height={40}
-                        className="rounded-lg border object-cover"
+                        className="rounded-lg border object-cover h-[40px]"
                       />
                       <div className="flex flex-col">
-                        <span className="font-medium">{product.name}</span>
-                        <span className="text-sm text-muted-foreground md:hidden">{product.category}</span>
+                        <span className="font-medium">{product.Name}</span>
+                        <span className="text-sm text-muted-foreground md:hidden">{product.CategoryID.CategoryAttribute}</span>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="hidden md:table-cell">{product.category}</TableCell>
-                  <TableCell>${product.price}</TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    {product.salePrice ? `$${product.salePrice}` : "-"}
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">{product.stock}</TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge variant={product.status === "In Stock" ? "default" : "secondary"}>{product.status}</Badge>
-                  </TableCell>
+                  <TableCell className="hidden md:table-cell">{product.CategoryID.CategoryAttribute}</TableCell>
+                  <TableCell>Rs. {product.Price}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{product.Stock.Quantity}</TableCell>
                   <TableCell className="hidden md:table-cell">
                     <Switch checked={product.published} />
                   </TableCell>

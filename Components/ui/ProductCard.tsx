@@ -3,7 +3,8 @@ import { Badge } from "@/Components/ui/badge";
 import { ShoppingCart, Heart } from "lucide-react";
 import Link from "next/link";
 
-export function ProductCard({id,
+export function ProductCard({
+  id,
   title,
   image,
   price,
@@ -11,7 +12,6 @@ export function ProductCard({id,
   slugUrl,
 }) {
   const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
-
   let badge = null;
   if (price !== originalPrice) {
     badge = (
@@ -54,7 +54,7 @@ export function ProductCard({id,
           <img
             src={image || "/placeholder.svg"}
             alt={title}
-            className="transition-transform duration-300 group-hover:scale-105 object-cover"
+            className="transition-transform duration-300 group-hover:scale-105 object-contain min-h-[200px]"
           />
           {badge}
           <button
@@ -66,11 +66,11 @@ export function ProductCard({id,
         </div>
       </Link>
       <div className="p-3">
-      <Link href={"/product/" + slugUrl}>
-        <h3 className="text-sm font-medium text-gray-800 line-clamp-2 mb-2 group-hover:text-primary transition-colors duration-300 h-[40px]">
-          {title}
-        </h3>
-      </Link>
+        <Link href={"/product/" + slugUrl}>
+          <h3 className="text-sm font-medium text-gray-800 line-clamp-2 mb-2 group-hover:text-primary transition-colors duration-300 w-full py-1 h-[58px]">
+            {title}
+          </h3>
+        </Link>
         <div className="flex items-center justify-between">
           {Price}
           <button className="flex items-center justify-center rounded-full border p-2 transition-all duration-300 hover:bg-primary/10">
