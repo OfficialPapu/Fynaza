@@ -27,7 +27,7 @@ const ProductInformation = () => {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="Name">Product Name</Label>
-                        <Input id="Name" name="Name" onChange={(e) => {
+                        <Input id="Name" name="Name" value={product.Name} onChange={(e) => {
                             handleInputChange(e);
                             handleErrorClear("Name");
                         }}

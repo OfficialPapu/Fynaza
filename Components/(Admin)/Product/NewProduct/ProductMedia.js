@@ -25,8 +25,8 @@ const ProductMedia = () => {
                     <TabsContent value="images" className="space-y-4 mt-4">
                         <ScrollArea className="w-full rounded-md border p-4">
                             <div className="h-[200px] gap-4 flex md:items-start md:justify-start justify-center flex-wrap">
-                                {previews?.Images?.length > 0 &&
-                                    previews.Images.map((image, index) => (
+                                {previews?.Media?.Images?.length > 0 &&
+                                    previews.Media.Images.map((image, index) => (
                                         <div key={index} className="relative h-[200px] w-[200px]">
                                             <Image
                                                 src={image}
@@ -69,8 +69,8 @@ const ProductMedia = () => {
                     <TabsContent value="videos" className="space-y-4 mt-4">
                         <ScrollArea className="w-full rounded-md border p-4">
                             <div className="h-[200px] gap-4 flex md:items-start md:justify-start justify-center flex-wrap">
-                                {previews?.Videos?.length > 0 &&
-                                    previews.Videos.map((video, index) => (
+                                {previews?.Media?.Videos?.length > 0 &&
+                                    previews.Media.Videos.map((video, index) => (
                                         <div key={index} className="relative h-[200px] w-[200px]">
                                             <video src={video} className="w-full h-full object-cover rounded-lg" controls />
                                             <Button

@@ -34,7 +34,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "Components/ui/ToastProvider.jsx"  ],
   "exclude": [
     "node_modules"
   ]

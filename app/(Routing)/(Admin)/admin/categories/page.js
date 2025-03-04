@@ -1,35 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { MoreHorizontal, Plus, Trash2 } from "lucide-react";
+import { MoreHorizontal, Plus } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/Components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu";
 import Link from "next/link";
-import axios from "axios";
-
-
-
-// const categories = [
-//   {
-//     id: 1,
-//     name: "Electronics",
-//     image: "/placeholder.svg",
-//   },
-//   {
-//     id: 2,
-//     name: "Clothing",
-//     image: "/placeholder.svg",
-//   },
-//   {
-//     id: 3,
-//     name: "Home & Kitchen",
-//     image: "/placeholder.svg",
-//   },
-// ];
-
+import axios from "@/lib/axios";
 
 
 export default function Categories() {
@@ -38,15 +17,12 @@ export default function Categories() {
     name: "",
     image: null
   }]);
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const BASE_IMAGES_PATH = process.env.NEXT_PUBLIC_BASE_IMAGES_PATH;
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   async function GetCategories() {
-    const response = await axios.get(BASE_URL + '/api/categories');
+    const response = await axios.get('api/categories');
     const result = response.data;
-    console.log(result);
-
     setCategories(result.map(category => ({
       id: category._id,
       name: category.CategoryAttribute,
@@ -99,7 +75,7 @@ export default function Categories() {
                   <Checkbox checked={selectedCategories.includes(category.id)} onCheckedChange={() => toggleCategory(category.id)} />
                 </TableCell>
                 <TableCell className="grid place-content-center">
-                  <Image src={category.image} alt={category.name} width={40} height={40} className="rounded-full object-cover w-[60px] h-[60px]" />
+                  <Image src={category.image ?? "/placeholder.svg"} alt={category.name} width={40} height={40} className="rounded-full object-cover w-[60px] h-[60px]" />
                 </TableCell>
                 <TableCell className="font-medium">{category.name}</TableCell>
                 <TableCell>

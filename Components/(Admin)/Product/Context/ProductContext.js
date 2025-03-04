@@ -2,10 +2,12 @@
 "use client";
 import { TipTapProvider, useTipTap } from "@/Components/(Admin)/Product/Context/TipTapContext";
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import axios from "axios";
+import { useSnackbar } from 'notistack';
+import axios from "@/lib/axios";
 
 const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
+    const { enqueueSnackbar: ShowNotification } = useSnackbar();
     const [product, setProduct] = useState({
         SKU: "",
         Name: "",
@@ -40,7 +42,6 @@ export const ProductProvider = ({ children }) => {
     })
 
     const { editor } = useTipTap();
-    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
     const [categories, setCategories] = useState([]);
     const [errors, setErrors] = useState({});
     const [previews, setPreviews] = useState({
@@ -89,7 +90,6 @@ export const ProductProvider = ({ children }) => {
                 [type]: prev.Media[type].filter((_, i) => i !== index),
             },
         }));
-
     }
 
     const handleMediaUpload = (type, e) => {
@@ -97,10 +97,14 @@ export const ProductProvider = ({ children }) => {
         const newPreviews = files.map((file) => URL.createObjectURL(file));
 
 
-        setPreviews((prev) => ({
-            ...prev,
-            [type]: [...(prev[type] || []), ...newPreviews],
-        }));
+        setPreviews((prev) => (
+            {
+                Media: {
+                    ...prev,
+                    [type]: [...(prev[type] || []), ...newPreviews],
+                }
+            }
+        ));
 
         setProduct((prevProduct) => ({
             ...prevProduct,
@@ -208,6 +212,49 @@ export const ProductProvider = ({ children }) => {
         return new File([u8arr], filename, { type: mime });
     };
 
+    const resetForm = () => {
+        setProduct({
+            SKU: "",
+            Name: "",
+            Category: "",
+            Brand: "Fynaza",
+            Price: "",
+            Discount: {
+                Percentage: "",
+                ValidUntil: "",
+            },
+            Stock: {
+                Quantity: "",
+            },
+            Media: {
+                Images: [],
+                Videos: [],
+            },
+            Specifications: {
+                Color: "",
+                Size: "",
+                Weight: "",
+                CustomAttributes: [],
+            },
+            ShippingDetails: {
+                Weight: 0,
+                Dimensions: {
+                    Length: 0,
+                    Width: 0,
+                    Height: 0,
+                },
+            },
+        });
+        setPreviews({
+            Media: {
+                Images: [],
+                Videos: [],
+            }
+        });
+        editor.commands.clearContent();
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -225,7 +272,7 @@ export const ProductProvider = ({ children }) => {
 
         if (uploadedImages.length > 0) {
             try {
-                const response = await axios.post(`${BASE_URL}/api/product/tiptap/upload`, formData, {
+                const response = await axios.post(`api/product/tiptap/upload`, formData, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
 
@@ -240,7 +287,7 @@ export const ProductProvider = ({ children }) => {
                     formData.delete("WysiwygImages");
                 }
             } catch (error) {
-                console.error("Image upload failed:", error);
+                ShowNotification('Image upload failed.', { variant: 'error' });
                 return;
             }
         }
@@ -255,17 +302,22 @@ export const ProductProvider = ({ children }) => {
             formData.append("Videos", video);
         });
         try {
-            const response = await axios.post(`${BASE_URL}/api/product/add`, formData, {
+            const response = await axios.post(`api/product/add`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            console.log("Product created successfully:", response.data);
+            if (response.data.success) {
+                resetForm();
+                ShowNotification('Product created successfully!', { variant: 'success' });
+            } else {
+                ShowNotification('Failed to create product.', { variant: 'error' });
+            }
         } catch (error) {
-            console.error("Error creating product:", error);
+            ShowNotification('Failed to create product.', { variant: 'error' });
         }
     };
 
     async function GetCategories() {
-        const response = await axios.get(BASE_URL + '/api/categories');
+        const response = await axios.get('api/categories');
         const result = response.data;
         setCategories(result);
     }

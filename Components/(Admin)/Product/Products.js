@@ -28,7 +28,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table"
 import { Switch } from "@/Components/ui/switch"
 import Link from "next/link"
-import axios from "axios"
+import axios from "@/lib/axios"
 
 export default function Products() {
   const [selectedProducts, setSelectedProducts] = useState([])
@@ -36,15 +36,11 @@ export default function Products() {
 
 
   const [products, setproduct] = useState([]);
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const BASE_IMAGES_PATH = process.env.NEXT_PUBLIC_BASE_IMAGES_PATH;
-
   async function GetAllProducts() {
-    const response = await axios.get(BASE_URL + '/api/product');
+    const response = await axios.get('api/product');
     const result = response.data;
     setproduct(result);
-    console.log(result);
-
   }
 
   useEffect(() => {
@@ -172,7 +168,7 @@ export default function Products() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <Image
+                      <img
                         src={BASE_IMAGES_PATH + `${product.Media.Images[0].Url}` || "/placeholder.svg"}
                         alt={product.Name}
                         width={40}
