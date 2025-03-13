@@ -1,0 +1,18 @@
+
+# Node.js dependencies
+**/node_modules/
+
+# Testing & coverage
+**/coverage/
+
+# Next.js build artifacts
+/client/.next/
+
+
+# Production builds
+/client/build/
+
+
+# Environment variables (should not be committed)
+**/.env*
+
