@@ -1,4 +1,4 @@
-import ReturnsAndRefunds from '@/Components/(Website)/Support/ReturnsAndRefunds'
+import ReturnsAndRefunds from '@/Components/Website/Support/ReturnsAndRefunds'
 import React from 'react'
 
 const page = () => {

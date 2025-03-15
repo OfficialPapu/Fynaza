@@ -1,4 +1,4 @@
-import MainCategory from "@/Components/(Website)/Category/MainCategory";
+import MainCategory from "@/Components/Website/Category/MainCategory";
 import { Shirt, Smartphone, ShoppingBag, Footprints, ShoppingCart, Sparkles, Heart, Gem } from "lucide-react"
 
 const category = [

@@ -1,5 +1,5 @@
 import React from 'react'
-import AddCategoryForm from '@/Components/(Admin)/Category/Add/NewCategory'
+import AddCategoryForm from '@/Components/Admin/Category/Add/NewCategory'
 
 const page = () => {
   return (

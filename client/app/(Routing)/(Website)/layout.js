@@ -1,9 +1,9 @@
 "use client";
-import Header from "@/Components/(Website)/Layout/Header";
-import Footer from "@/Components/(Website)/Layout/Footer";
+import Header from "@/Components/Website/Layout/Header";
+import Footer from "@/Components/Website/Layout/Footer";
 import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
-import { Store, Persistor } from "@/Components/(Website)/Redux/Store"
+import { Store, Persistor } from "@/Components/Website/Redux/Store"
 export default function RootLayout({ children }) {
     return (
         <html lang="en">

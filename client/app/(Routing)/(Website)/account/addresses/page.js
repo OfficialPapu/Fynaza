@@ -1,4 +1,4 @@
-import Addresses from '@/Components/(Website)/Account/AccountCore/Addresses'
+import Addresses from '@/Components/Website/Account/AccountCore/Addresses'
 import React from 'react'
 
 const page = () => {

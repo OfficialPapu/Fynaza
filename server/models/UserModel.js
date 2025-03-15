@@ -43,4 +43,4 @@ const UserSchema = mongoose.Schema({
     },
 }, { timestamps: { createdAt: 'CreatedAt', updatedAt: 'UpdateAt' } })
 
-module.exports = { UserSchema: mongoose.model("user", UserSchema, "user") };
+module.exports = { UserSchema: mongoose.model("users", UserSchema, "users") };

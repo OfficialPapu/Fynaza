@@ -1,5 +1,5 @@
 import React from 'react'
-import SubCategory from '@/Components/(Website)/Category/SubCategory'
+import SubCategory from '@/Components/Website/Category/SubCategory'
 const products = [
   {
     id: 1,

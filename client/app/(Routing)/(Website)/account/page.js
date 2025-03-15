@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Card, CardContent } from "@/Components/ui/card"
 import { UserRoundPen, Package, Heart, MapPin, Settings, ShoppingCart } from "lucide-react"
-import { AccountHeader } from "@/Components/(Website)/Account/Layout/AccountHeader"
+import { AccountHeader } from "@/Components/Website/Account/Layout/AccountHeader"
 
 const accountSections = [
     { title: "Profile", icon: UserRoundPen, href: "/account/profile", description: "Manage your personal information" },

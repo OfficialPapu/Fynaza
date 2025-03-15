@@ -37,26 +37,31 @@ const Signup = async (req, res) => {
 
 const Login = async (req, res) => {
     try {
-        const { Email, Password } = req.body;
+        const { Email, Password, isAdmin } = req.body;
         if (!Email || !Password) {
             res.status(200).json({ message: "All fields are mandatory" })
             return;
         }
         const User = await UserSchema.findOne({ Email: Email, Password: Password });
-        if (User) {
-            const token = GenerateJWTToken(User);
-            res.setHeader("Set-Cookie", serialize("LOGIN_INFO", token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "Strict",
-                path: "/",
-                maxAge: 2592000000,
-                domain: process.env.NODE_ENV === 'production' ? '.fynaza.com' : 'localhost',
-            }));
-            res.status(200).json({ success: true, ID: User._id, Name: User.Name, Email: User.Email, Mobile: User.Mobile, Role: User.Role })
-        } else {
-            res.status(200).json({ message: "Invalid credentials" })
+        if (!User) {
+            return res.status(200).json({ message: "Invalid credentials" });
         }
+        
+        if (isAdmin && !User.Role.includes("Admin")) {
+            return res.status(200).json({ message: "Unauthorized access" });
+        }
+
+        const token = GenerateJWTToken(User);
+        res.setHeader("Set-Cookie", serialize("LOGIN_INFO", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "Strict",
+            path: "/",
+            maxAge: 2592000000,
+            domain: process.env.NODE_ENV === 'production' ? '.fynaza.com' : 'localhost',
+        }));
+        res.status(200).json({ success: true, ID: User._id, Name: User.Name, Email: User.Email, Mobile: User.Mobile, Role: User.Role })
+
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" });
     }
@@ -70,6 +75,7 @@ const GenerateJWTToken = (User) => {
 const ValidateToken = (req, res) => {
     try {
         const Token = req.cookies.LOGIN_INFO;
+        
         if (!Token) return res.status(401).json({ message: "Not authenticated" });
         const decoded = jwt.verify(Token, process.env.JWT_SECRET_KEY);
         const UserDetail = { ...decoded };

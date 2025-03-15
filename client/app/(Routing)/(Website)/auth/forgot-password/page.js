@@ -1,4 +1,4 @@
-import ForgotPassword from '@/Components/(Website)/Account/Auth/Forgot Password'
+import ForgotPassword from '@/Components/Website/Account/Auth/Forgot Password'
 import React from 'react'
 
 const page = () => {

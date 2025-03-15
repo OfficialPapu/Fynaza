@@ -1,4 +1,4 @@
-import HelpCenter from '@/Components/(Website)/Support/HelpCenter'
+import HelpCenter from '@/Components/Website/Support/HelpCenter'
 import React from 'react'
 
 const page = () => {

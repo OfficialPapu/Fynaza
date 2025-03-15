@@ -1,4 +1,4 @@
-import CategoryItemPage from "@/Components/(Website)/Category/CategoryItem"
+import CategoryItemPage from "@/Components/Website/Category/CategoryItem"
 
 const subcategories = [
   { name: "Bracelets", image: "https://justopjewelry.com/wp-content/uploads/2025/01/9112097-9112098-9112099-9112102_05.jpg" },

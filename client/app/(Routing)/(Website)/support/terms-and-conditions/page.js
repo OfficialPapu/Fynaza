@@ -1,4 +1,4 @@
-import TermsAndConditions from '@/Components/(Website)/Support/TermsAndConditions'
+import TermsAndConditions from '@/Components/Website/Support/TermsAndConditions'
 import React from 'react'
 
 const page = () => {

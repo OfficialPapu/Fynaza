@@ -1,4 +1,4 @@
-import Orders from '@/Components/(Website)/Account/AccountCore/Orders'
+import Orders from '@/Components/Website/Account/AccountCore/Orders'
 import React from 'react'
 const page = () => {
   return (
