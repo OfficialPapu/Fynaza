@@ -31,8 +31,6 @@ const Filter = ({ products, categories, setFilteredProducts, maxPrice }) => {
             // product.rating >= minRating,
         )
         setFilteredProducts(filtered)
-        console.log(filtered);
-
     }
 
     const resetFilters = () => {

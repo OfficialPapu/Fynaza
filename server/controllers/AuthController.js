@@ -1,5 +1,8 @@
 const { UserSchema } = require("../models/UserModel");
+const { serialize } = require('cookie')
 const jwt = require('jsonwebtoken');
+
+
 const Signup = async (req, res) => {
     try {
         const { Name, Email, Mobile, Password } = req.body;
@@ -42,14 +45,15 @@ const Login = async (req, res) => {
         const User = await UserSchema.findOne({ Email: Email, Password: Password });
         if (User) {
             const token = GenerateJWTToken(User);
-            res.cookie("LOGIN_INFO", token, {
+            res.setHeader("Set-Cookie", serialize("LOGIN_INFO", token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+                secure: true,
+                sameSite: "Strict",
+                path: "/",
+                maxAge: 2592000000,
                 domain: process.env.NODE_ENV === 'production' ? '.fynaza.com' : 'localhost',
-                maxAge: 2592000000
-            });
-            res.status(200).json({ success: true })
+            }));
+            res.status(200).json({ success: true, ID: User._id, Name: User.Name, Email: User.Email, Mobile: User.Mobile, Role: User.Role })
         } else {
             res.status(200).json({ message: "Invalid credentials" })
         }
@@ -59,7 +63,23 @@ const Login = async (req, res) => {
 }
 
 const GenerateJWTToken = (User) => {
-    const UserData = { ID: User._id, Name: User.Name, Email: User.Email }
+    const UserData = { ID: User._id, Email: User.Email, Role: User.Role }
     return token = jwt.sign(UserData, process.env.JWT_SECRET_KEY, { expiresIn: "30d" });
 }
-module.exports = { Signup, Login };
+
+const ValidateToken = (req, res) => {
+    try {
+        const Token = req.cookies.LOGIN_INFO;
+        if (!Token) return res.status(401).json({ message: "Not authenticated" });
+        const decoded = jwt.verify(Token, process.env.JWT_SECRET_KEY);
+        const UserDetail = { ...decoded };
+        delete UserDetail.iat;
+        delete UserDetail.exp;
+        res.status(200).json({ success: true, User: UserDetail });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+module.exports = { Signup, Login, ValidateToken };

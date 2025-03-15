@@ -17,8 +17,6 @@ const ProductDetail = () => {
 }
 function ProductDetailInfo() {
     const { Product, BreadcrumbView } = useProduct();
-    console.log(Product);
-
     return (
         <>
             {Product && Object.keys(Product).length > 0 ?

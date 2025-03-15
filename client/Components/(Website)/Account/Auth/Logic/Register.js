@@ -116,8 +116,6 @@ const useRegisterLogic = () => {
             }
         } catch (error) {
             ShowNotification('Something went wrong!!', { variant: 'error' });
-            console.log(error);
-            
         }
         setIsLoading(false);
     }
