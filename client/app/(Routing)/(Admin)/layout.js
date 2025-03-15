@@ -6,17 +6,15 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { usePathname } from "next/navigation";
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-  const excludedPaths = ["/admin/login", "/admin"];
+  const excludedPaths = ["/admin/auth/login", "/admin"];
   const isExcluded = excludedPaths.includes(pathname);
   return (
-    <html lang="en">
-      <body>
-        <Provider store={Store}>
-          <PersistGate loading={null} persistor={Persistor}>
-            {(!isExcluded) ? <Sidebar>{children}</Sidebar> : children}
-          </PersistGate>
-        </Provider>
-      </body>
-    </html>
+    <div>
+      <Provider store={Store}>
+        <PersistGate loading={null} persistor={Persistor}>
+          {(!isExcluded) ? <Sidebar>{children}</Sidebar> : children}
+        </PersistGate>
+      </Provider>
+    </div>
   );
 }

@@ -1,13 +1,11 @@
 "use client"
-import ValidateToken from "@/Components/Admin/HOC/ValidateToken";
+import ValidateToken from "@/Components/Hoc/ValidateToken";
 function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        {children}
-      </body>
-    </html>
+    <div>
+      {children}
+    </div>
   );
 }
 
-export default ValidateToken(RootLayout);
+export default ValidateToken(RootLayout, "Admin");

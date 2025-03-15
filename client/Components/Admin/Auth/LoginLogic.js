@@ -62,7 +62,7 @@ const useAdminLoginLogin = () => {
                 const UserDetails = { ...response.data };
                 delete UserDetails.success;
                 dispatch(Login(UserDetails));
-                const redirectTo = localStorage.getItem("redirectAfterLogin") || "/admin/dashboard";
+                const redirectTo = localStorage.getItem("RedirectAfterLogin") || "/admin/dashboard";
                 localStorage.removeItem("RedirectAfterLogin");  
                 router.push(redirectTo);
             } else {

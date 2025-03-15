@@ -46,7 +46,7 @@ const Login = async (req, res) => {
         if (!User) {
             return res.status(200).json({ message: "Invalid credentials" });
         }
-        
+
         if (isAdmin && !User.Role.includes("Admin")) {
             return res.status(200).json({ message: "Unauthorized access" });
         }
@@ -75,8 +75,7 @@ const GenerateJWTToken = (User) => {
 const ValidateToken = (req, res) => {
     try {
         const Token = req.cookies.LOGIN_INFO;
-        
-        if (!Token) return res.status(401).json({ message: "Not authenticated" });
+        if (!Token) return res.status(200).json({ message: "Not authenticated" });
         const decoded = jwt.verify(Token, process.env.JWT_SECRET_KEY);
         const UserDetail = { ...decoded };
         delete UserDetail.iat;
@@ -88,4 +87,21 @@ const ValidateToken = (req, res) => {
     }
 }
 
-module.exports = { Signup, Login, ValidateToken };
+const Logout = (req, res) => {
+    try {
+        res.setHeader("Set-Cookie", serialize("LOGIN_INFO", "", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "Strict",
+            path: "/",
+            maxAge: 0,
+            domain: process.env.NODE_ENV === 'production' ? '.fynaza.com' : 'localhost',
+        }));
+
+        res.status(200).json({ success: true });
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+module.exports = { Signup, Login, Logout, ValidateToken };

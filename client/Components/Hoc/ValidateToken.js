@@ -2,47 +2,44 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'
-import { Login, Logout } from "../Redux/Slices/Login";
 import axios from "@/lib/axios";
+import { Login as AdminLogin, Logout as AdminLogout } from "../Admin/Redux/Slices/Login";
+import { Login as UserLogin, Logout as UserLogout } from "../Website/Redux/Slices/Login";
 
-const ValidateToken = (WrappedComponent) => {
+const ValidateToken = (WrappedComponent, Role = "Website") => {
     const handleLogout = (dispatch, router) => {
         const currentPath = window.location.pathname;
-        localStorage.setItem("RedirectAfterLogin", currentPath);
-        dispatch(Logout());
-        router.push("/auth/login");
+        Role != "Admin" ? localStorage.setItem("RedirectAfterLogin", currentPath) : "";
+        const LogoutAction = Role === "Admin" ? AdminLogout : UserLogout;
+        dispatch(LogoutAction());
+        const loginPath = Role === "Admin" ? "/admin/auth/login" : "/auth/login";
+        router.push(loginPath);
     };
 
     const Validate = async (dispatch, router) => {
         try {
             const response = await axios.get("api/auth/validate-token", { withCredentials: true });
             if (response.data.success) {
-                dispatch(Login(response.data.User));
+                const LoginAction = Role === "Admin" ? AdminLogin : UserLogin;
+                dispatch(LoginAction(response.data.User));
             } else {
                 handleLogout(dispatch, router);
             }
         } catch (error) {
             handleLogout(dispatch, router);
-        } finally {
-            setLoading(false);  // Set loading to false after validation is complete
         }
     };
 
     return function ProtectedRoute(props) {
         const dispatch = useDispatch();
         const router = useRouter();
-        const [loading, setLoading] = useState(true);
-
         useEffect(() => {
             const checkToken = async () => {
                 await Validate(dispatch, router);
             };
             checkToken();
         }, [dispatch, router]);
-        if (loading) {
-            // Render a loading spinner or any fallback UI until authentication check is complete
-            return <div>Loading...</div>;
-        }
+
         return <WrappedComponent {...props} />;
     }
 }
