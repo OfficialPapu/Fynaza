@@ -4,18 +4,18 @@ let CartItemSchema = mongoose.Schema({
     ProductID: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
     Price: Number,
     Quantity: Number,
-    status: {
+    Status: {
         type: String,
         enum: ['Active', 'Abandoned', 'Converted'],
         default: 'Active'
     },
 }, { timestamps: { createdAt: 'CreatedAt', updatedAt: 'UpdateAt' } })
 
-CartItemSchema = mongoose.model('CartItem', CartItemSchema, "CartItems");
+CartItemSchema = mongoose.model('CartItems', CartItemSchema, "CartItems");
 
 let CartSchema = mongoose.Schema({
-    UserID: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
-    CartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "CartItem" }],
+    UserID: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
+    CartItems: [{ type: mongoose.Schema.Types.ObjectId, ref: "CartItems" }],
     Total: {
         type: Number,
         default: 0

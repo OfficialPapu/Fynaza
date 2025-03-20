@@ -103,7 +103,7 @@ const Cart = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => HandelRemoveFromCart(item.ProductID)}
+                      onClick={async () => await HandelRemoveFromCart(item.ProductID, item.CartItemID)}
                       className="h-8 w-8 rounded-full text-red-500 hover:text-red-700"
                     >
                       <X className="h-4 w-4" />

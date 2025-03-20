@@ -1,8 +1,37 @@
 const { CartSchema, CartItemSchema } = require('../models/CartModel');
 
+const CalculateTotalPrice = async (UserID) => {
+    let Cart = await CartSchema.findOne({ UserID })
+        .populate({
+            path: 'CartItems',
+            populate: {
+                path: 'ProductID',
+                model: "Products",
+                populate: {
+                    path: 'CategoryID',
+                    model: 'Categories'
+                }
+            }
+        });
+
+    let ProductTotal = 0;
+    let CartTotal = 0;
+
+    Cart.CartItems.forEach(Item => {
+        if (Item.ProductID && Item.ProductID.Price) {
+            ProductTotal += Item.ProductID.Price * Item.Quantity;
+        }
+        if (Item.Price) {
+            CartTotal += Item.Price * Item.Quantity;
+        }
+    });
+    return { ProductTotal, CartTotal };
+};
+
+
 const AddToCart = async (req, res) => {
     try {
-        let { UserID, ID, Price, Discount, Quantity } = req.body;
+        let { UserID, Product: { ID, Price, Discount, Quantity } } = req.body;
         let Cart = await CartSchema.findOne({ UserID });
         if (!Cart) {
             Cart = new CartSchema({ UserID, CartItems: [], Total: 0, Discount: 0 });
@@ -21,25 +50,58 @@ const AddToCart = async (req, res) => {
         await CartItem.save();
 
         Cart.CartItems.push(CartItem._id);
-
-        let ItemsInCart = await CartSchema.findOne({ UserID }).populate({
-            path: 'CartItems',
-            populate:{
-                path: 'ProductID',
-                model: "Product"
-            }
-        });
-        console.log(ItemsInCart);
-        
-        Cart.Total += Price * Quantity;
-        Cart.Discount += Discount;
-
         await Cart.save();
-        res.status(201);
-    } catch (Error) {
-        console.error(Error);
-        res.status(500);
+
+        const { ProductTotal, CartTotal } = await CalculateTotalPrice(UserID);
+        Discount = ProductTotal - CartTotal;
+        await CartSchema.updateOne(
+            { UserID },
+            { $set: { Total: CartTotal, Discount: Discount } }
+        );
+        res.sendStatus(201);
+    } catch (error) {
+        res.sendStatus(500);
     }
 };
 
-module.exports = { AddToCart };
+const RemoveFromCart = async (req, res) => {
+    try {
+        const { CartItemID } = req.params;
+        const { UserID } = req.query;
+
+        let Cart = await CartSchema.findOne({ UserID });
+        if (!Cart) {
+            return res.sendStatus(404);
+        }
+        await CartItemSchema.updateOne(
+            { _id: CartItemID },
+            { $set: { Status: 'Abandoned' } }
+        );
+        res.sendStatus(200);
+    } catch (error) {
+        res.sendStatus(500);
+    }
+}
+
+const CartItems = async (req, res) => {
+    try {
+        const { UserID } = req.params;
+        let Cart = await CartSchema.findOne({ UserID });
+        if (!Cart) {
+            return res.sendStatus(404);
+        }
+        const CartItems = await CartSchema.findOne({ UserID }).populate({
+            path: 'CartItems',
+            match: { Status: 'Active' },
+            populate: {
+                path: 'ProductID',
+                model: "Products",
+            }
+        })
+        res.status(200).json(CartItems['CartItems']);
+    } catch (error) {
+        res.sendStatus(500);
+    }
+}
+
+module.exports = { CartItems, AddToCart, RemoveFromCart };

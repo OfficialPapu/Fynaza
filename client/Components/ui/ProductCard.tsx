@@ -94,8 +94,8 @@ export function ProductCard({ ID, Title, ImageUrl, Price, Discount, SlugUrl }) {
           {Price}
           <button
             className="flex items-center justify-center rounded-full border p-2 transition-all duration-300 hover:bg-primary/10"
-            onClick={() => {
-              HandleAddToCart(Product);
+            onClick={async () => {
+              await HandleAddToCart(Product);
             }}
           >
             {isInCart ? (

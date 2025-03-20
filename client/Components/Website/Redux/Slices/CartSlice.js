@@ -16,7 +16,7 @@ const CartSlice = createSlice({
     initialState: {
         CartItems: [],
         OriginalTotal: 0,
-        DiscountedTotal: 0,  
+        DiscountedTotal: 0,
     },
     reducers: {
         AddToCart: ((state, action) => {
@@ -47,8 +47,14 @@ const CartSlice = createSlice({
             Object.assign(state, CalculatePrice(state.CartItems));
         },
 
+        ClearCart: (state) => {
+            state.CartItems = [];
+            state.OriginalTotal = 0;
+            state.DiscountedTotal = 0;
+        }
+
     }
 })
 
-export const { AddToCart, UpdateQuantity, RemoveFromCart } = CartSlice.actions;
+export const { AddToCart, UpdateQuantity, RemoveFromCart, ClearCart } = CartSlice.actions;
 export default CartSlice.reducer;
