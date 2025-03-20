@@ -18,14 +18,14 @@ const ValidateToken = (WrappedComponent, Role = "Website") => {
 
     const Validate = async (dispatch, router) => {
         try {
-            const response = await axios.get("api/auth/validate-token", { withCredentials: true });
+            let AccessRole = Role === "Admin" ? "Admin" : "Customer";
+            const response = await axios.get("api/auth/validate-token", { params: { AccessRole }, withCredentials: true });
             if (response.status === 200) {
                 const LoginAction = Role === "Admin" ? AdminLogin : UserLogin;
                 dispatch(LoginAction(response.data.User));
             }
         } catch (error) {
             const message = error.response?.data?.message || "Something went wrong";
-            ShowNotification(message, { variant: 'error' });
             handleLogout(dispatch, router);
         }
     };
@@ -33,6 +33,7 @@ const ValidateToken = (WrappedComponent, Role = "Website") => {
     return function ProtectedRoute(props) {
         const dispatch = useDispatch();
         const router = useRouter();
+
         useEffect(() => {
             const checkToken = async () => {
                 await Validate(dispatch, router);

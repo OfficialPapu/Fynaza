@@ -65,6 +65,7 @@ const GenerateJWTToken = (User, req) => {
 
 const ValidateToken = (req, res) => {
     try {
+        const { AccessRole } = req.query;
         const Token = req.cookies.LOGIN_INFO;
         if (!Token) return res.status(401).json({ message: "Not authenticated" });
         const decoded = jwt.verify(Token, process.env.JWT_SECRET_KEY);
@@ -73,6 +74,12 @@ const ValidateToken = (req, res) => {
             return res.status(401).json({ message: "Session hijacking detected" });
         }
         const UserDetail = { ...decoded };
+        if (AccessRole == "Admin") {
+            if (!UserDetail['Role'].includes("Admin")) {
+                return res.status(401).json({ message: "Unauthorized access" });
+            }
+        }
+
         delete UserDetail.iat;
         delete UserDetail.exp;
         res.status(200).json({ User: UserDetail });
@@ -85,7 +92,7 @@ const ValidateToken = (req, res) => {
 const Logout = (req, res) => {
     try {
         res.clearCookie("LOGIN_INFO");
-        res.status(200);
+        res.sendStatus(200);
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" });
     }
