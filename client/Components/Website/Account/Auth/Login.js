@@ -6,14 +6,13 @@ import { Button } from "@/Components/ui/button"
 import { Label } from "@/Components/ui/label"
 import Link from "next/link"
 import { Eye, EyeOff } from "lucide-react"
-import { useLoginLogic } from "./Logic/Login"
-
+import { useLoginLogic } from "@/Components/Logic/LoginLogic"
 export default function LoginPage() {
-  const {ShowPass, SetShowPass, isLoading, UserDetails, handleInputChange, HandelLoginForm } = useLoginLogic();
+  const { ShowPass, SetShowPass, isLoading, UserDetails, handleInputChange, handleSubmit, errors } = useLoginLogic({ Role: "Website" });
   return (
     <div className="min-h-[75vh] bg-gradient-to-br from-white to-gray-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-[450px] overflow-hidden shadow-xl border-0">
-        <form onSubmit={HandelLoginForm}>
+        <form onSubmit={handleSubmit}>
           <CardContent className="p-0">
             <div className="p-8">
               <motion.div
@@ -41,6 +40,8 @@ export default function LoginPage() {
                       value={UserDetails.Email}
                       onChange={(e) => { handleInputChange(e) }}
                     />
+                    {errors.Email && <p className="text-sm text-red-500">{errors.Email}</p>}
+
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password" className="text-sm font-medium">
@@ -60,6 +61,7 @@ export default function LoginPage() {
                       {ShowPass ? (<Eye className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer h-4" onClick={() => { SetShowPass(false) }} />) :
                         (<EyeOff className="text-muted-foreground absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer h-4" onClick={() => { SetShowPass(true) }} />)}
                     </div>
+                    {errors.Password && <p className="text-sm text-red-500">{errors.Password}</p>}
                   </div>
                 </div>
 

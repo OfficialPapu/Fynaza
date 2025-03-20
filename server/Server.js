@@ -9,6 +9,7 @@ const { ProductRouter } = require('./routes/ProductRoute');
 const bodyParser = require('body-parser');
 const { SecureRouter } = require('./routes/SecureRoutes');
 const { AuthRouter } = require('./routes/AuthRoute');
+const { CartRouter } = require('./routes/CartRouter');
 require('dotenv/config');
 ConnectDB();
 
@@ -37,6 +38,9 @@ app.use('/api/product', ProductRouter);
 
 //auth
 app.use("/api/auth", AuthRouter);
+
+//cart
+app.use("/api/cart", CartRouter);
 
 
 const startServer = async () => {

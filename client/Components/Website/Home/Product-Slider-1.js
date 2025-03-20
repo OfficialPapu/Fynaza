@@ -11,12 +11,12 @@ export function SingleProductDisplay() {
     const result = response.data;
     setproducts(
       result.map((product) => ({
-        id: product._id,
-        title: product.Name,
-        image: BASE_IMAGES_PATH + product.Media.Images[0].Url,
-        price: (product.Discount != 0) ? Number((product.Price) - (((product.Price) / 100) * product.Discount.Percentage)) : Number(product.Price),
-        originalPrice: Number(product.Price),
-        slugUrl: product.Slug
+        ID: product._id,
+        Title: product.Name,
+        ImageUrl: BASE_IMAGES_PATH + product.Media.Images[0].Url,
+        Price: Number(product.Price),
+        Discount: Number(product.Discount.Percentage),
+        SlugUrl: product.Slug
       }))
     );
   }

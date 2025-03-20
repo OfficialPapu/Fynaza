@@ -4,8 +4,7 @@ import { useSnackbar } from "notistack"
 import { useRouter } from 'next/navigation'
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { Login } from "@/Components/Admin/Redux/Slices/Login"
-const useAdminLoginLogin = () => {
+const useLoginLogic = ({ Role }) => {
     const router = useRouter();
     const [ShowPass, SetShowPass] = useState(false);
     const { enqueueSnackbar: ShowNotification } = useSnackbar();
@@ -15,8 +14,17 @@ const useAdminLoginLogin = () => {
     const [UserDetails, SetUserDetails] = useState({
         Email: "",
         Password: "",
-        isAdmin: true,
+        isAdmin: (Role == "Admin" ? true : false),
     });
+
+    const importLoginSlice = async () => {
+        if (Role === "Admin") {
+            return await import("@/Components/Admin/Redux/Slices/LoginSlice");
+        } else {
+            return await import("@/Components/Website/Redux/Slices/LoginSlice");
+        }
+    };
+
     const handleInputChange = (e) => {
         SetUserDetails((prev) => ({
             ...prev,
@@ -53,27 +61,28 @@ const useAdminLoginLogin = () => {
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (!validateForm()) return
-        setIsLoading(true)
+        e.preventDefault();
+        if (!validateForm()) return;
+        setIsLoading(true);
         try {
-            const response = await axios.post("api/auth/login", UserDetails, { withCredentials: true })
-            if (response.data.success) {
+            const { Login } = await importLoginSlice();
+            const response = await axios.post("api/auth/login", UserDetails, { withCredentials: true });
+            if (response.status === 200) {
                 const UserDetails = { ...response.data };
-                delete UserDetails.success;
                 dispatch(Login(UserDetails));
-                const redirectTo = localStorage.getItem("RedirectAfterLogin") || "/admin/dashboard";
-                localStorage.removeItem("RedirectAfterLogin");  
+                let redirectTo = (Role == "Admin" ? "/admin/dashboard" : "/");
+                redirectTo = localStorage.getItem("RedirectAfterLogin") || redirectTo;
+                localStorage.removeItem("RedirectAfterLogin");
                 router.push(redirectTo);
-            } else {
-                ShowNotification(response.data.message, { variant: 'error' });
             }
         } catch (error) {
-            ShowNotification(error.response.data.message || "Something went wrong", { variant: 'error' });
+            const message = error.response?.data?.message || "Something went wrong";
+            ShowNotification(message, { variant: 'error' });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
+
 
     return {
         ShowPass,
@@ -86,4 +95,4 @@ const useAdminLoginLogin = () => {
     }
 
 }
-module.exports = { useAdminLoginLogin };
+module.exports = { useLoginLogic };

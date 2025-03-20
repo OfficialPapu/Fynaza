@@ -38,6 +38,10 @@ const UserSchema = mongoose.Schema({
         enum: ['Customer', 'Influencer', 'Admin'],
         default: ['Customer'],
     },
+    LoginCount: {
+        type: Number,
+        default: 0
+    },
     DOB: {
         type: Date,
     },

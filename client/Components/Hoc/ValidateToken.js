@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'
 import axios from "@/lib/axios";
-import { Login as AdminLogin, Logout as AdminLogout } from "../Admin/Redux/Slices/Login";
-import { Login as UserLogin, Logout as UserLogout } from "../Website/Redux/Slices/Login";
+import { Login as AdminLogin, Logout as AdminLogout } from "../Admin/Redux/Slices/LoginSlice";
+import { Login as UserLogin, Logout as UserLogout } from "../Website/Redux/Slices/LoginSlice";
 
 const ValidateToken = (WrappedComponent, Role = "Website") => {
     const handleLogout = (dispatch, router) => {
@@ -19,13 +19,13 @@ const ValidateToken = (WrappedComponent, Role = "Website") => {
     const Validate = async (dispatch, router) => {
         try {
             const response = await axios.get("api/auth/validate-token", { withCredentials: true });
-            if (response.data.success) {
+            if (response.status === 200) {
                 const LoginAction = Role === "Admin" ? AdminLogin : UserLogin;
                 dispatch(LoginAction(response.data.User));
-            } else {
-                handleLogout(dispatch, router);
             }
         } catch (error) {
+            const message = error.response?.data?.message || "Something went wrong";
+            ShowNotification(message, { variant: 'error' });
             handleLogout(dispatch, router);
         }
     };

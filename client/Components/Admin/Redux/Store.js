@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
-import Login from "./Slices/Login";
+import LoginSlice from "./Slices/LoginSlice";
 
 const persistConfig = ({
     key: "Admin",
@@ -10,7 +10,7 @@ const persistConfig = ({
 })
 
 const rootReducer = combineReducers({
-    Admin_INFO: Login,
+    Admin: LoginSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

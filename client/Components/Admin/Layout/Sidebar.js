@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
 import axios from "@/lib/axios"
 import { useSnackbar } from "notistack"
-import { Logout } from "../Redux/Slices/Login"
+import { Logout } from "../Redux/Slices/LoginSlice"
 
 const sidebarLinks = [
     {
@@ -75,7 +75,7 @@ const sidebarLinks = [
 export function Sidebar({ children }) {
     const [isSidebarOpen, setSidebarOpen] = useState(true)
     const { theme, setTheme } = useTheme();
-    const isAuth = useSelector((state) => state.Admin_INFO.isAuth);
+    const isAuth = useSelector((state) => state.Admin.isAuth);
     const router = useRouter();
     const { enqueueSnackbar: ShowNotification } = useSnackbar();
     const dispatch = useDispatch();
@@ -88,7 +88,7 @@ export function Sidebar({ children }) {
     }, [isAuth, router]);
     const Logoutfunction = async () => {
         const response = await axios.post("api/auth/logout", "", { withCredentials: true });
-        if (response.data.success) {
+        if (response.status === 200) {
             dispatch(Logout());
         } else {
             ShowNotification(response.data.message, { variant: 'error' });

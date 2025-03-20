@@ -105,17 +105,16 @@ const useRegisterLogic = () => {
         setIsLoading(true);
         try {
             const response = await axios.post("api/auth/register", UserDetails);
-            if (response.data.success) {
+            if (response.status === 201) {
                 resetForm();
                 ShowNotification('Account created', { variant: 'success' });
                 setTimeout(() => {
                     router.push('/auth/login');
                 }, 2000);
-            } else {
-                ShowNotification(response.data.message, { variant: 'error' });
             }
         } catch (error) {
-            ShowNotification('Something went wrong!!', { variant: 'error' });
+            const message = error.response?.data?.message || "Something went wrong";
+            ShowNotification(message, { variant: 'error' });
         }
         setIsLoading(false);
     }
