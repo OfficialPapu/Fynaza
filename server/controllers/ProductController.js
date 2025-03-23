@@ -2,6 +2,7 @@ const { upload } = require("../config/MulterConfig");
 const { getFormattedPath, createSlug } = require("../config/UrlConfig");
 
 const { ProductSchema } = require('../models/ProductModel');
+const ProductReviewSchema = require("../models/ProductReviewModel");
 
 const GetProductBySlug = async (req, res) => {
     try {
@@ -68,7 +69,6 @@ const TiptapMediaUpload = (req, res) => {
 
 const GetProducts = async (req, res) => {
     try {
-        
         const products = await ProductSchema.find().populate('CategoryID', 'CategoryAttribute').populate('BrandID', 'CategoryAttribute');
         if (products.length === 0) {
             return res.status(404).json({ message: "Product not found" });
@@ -79,4 +79,33 @@ const GetProducts = async (req, res) => {
     }
 }
 
-module.exports = { GetProductBySlug, AddProduct, TiptapMediaUpload, GetProducts };
+
+const AddReview = async (req, res) => {
+    try {
+        const { UserID, ProductID, Rating, Comment } = req.body;
+        if (!UserID || !ProductID || !Rating || !Comment) {
+            return res.status(400);
+        }
+        const Review = await ProductReviewSchema.findOne({ ProductID, UserID });
+        if (Review) {
+            return res.sendStatus(400);
+        }
+        const NewReview = new ProductReviewSchema({ ProductID, UserID, Rating, Comment });
+        NewReview.save();
+        res.sendStatus(201);
+    } catch (error) {
+        res.sendStatus(500);
+    }
+}
+
+const GetReview = async (req, res) => {
+    try {
+        const { ProductID } = req.params;
+        const reviews = await ProductReviewSchema.find({ ProductID }).populate('UserID', 'Name').sort({ CreatedAt: -1 });
+        res.status(200).json(reviews);
+    } catch (error) {
+        res.status(500);
+    }
+}
+
+module.exports = { GetProductBySlug, AddProduct, TiptapMediaUpload, GetProducts, AddReview, GetReview };

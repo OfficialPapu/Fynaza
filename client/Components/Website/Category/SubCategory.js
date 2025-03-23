@@ -8,11 +8,11 @@ import { useParams } from "next/navigation"
 import { Button } from "@/Components/ui/button"
 import Filter from "./Filter"
 
-export default function subCategory({ products, categories }) {
-  const maxPrice = Math.max(...products.map(product => product.price));
+export default function subCategory({ Products, Categories }) {
+  const maxPrice = Math.max(...Products.map(product => product.Price));
   const { Category } = useParams();
   const { subCategory } = useParams();
-  const [filteredProducts, setFilteredProducts] = useState(products)
+  const [filteredProducts, setFilteredProducts] = useState(Products)
 
   const [BreadcrumbView, setBreadcrumbView] = useState([
     { label: "Home", href: "/", icon: <Home className="w-4 h-4" /> },
@@ -22,7 +22,7 @@ export default function subCategory({ products, categories }) {
   ]);
 
   const resetFilters = () => {
-    setFilteredProducts(products); 
+    setFilteredProducts(Products); 
   };
   return (
     <>
@@ -31,14 +31,14 @@ export default function subCategory({ products, categories }) {
           <Breadcrumb items={BreadcrumbView} />
         </div>
         <div className="flex flex-col lg:flex-row gap-8 bg-white rounded-md px-4 py-8">
-          <Filter products={products} categories={categories} setFilteredProducts={setFilteredProducts} maxPrice={maxPrice} />
+          <Filter Products={Products} Categories={Categories} setFilteredProducts={setFilteredProducts} maxPrice={maxPrice} />
           <div className="w-full lg:w-3/4">
             <div className={"grid " + (filteredProducts.length > 0 ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" : "")}>
               {
                 filteredProducts.length > 0 ?
 
                   (filteredProducts.map((product) => {
-                    return <ProductCard {...product} key={product.id}/>
+                    return <ProductCard {...product} key={product.ID}/>
                   })) : (
                     <div className="flex flex-col items-center justify-center h-[70vh] bg-[#f3f7fa] rounded-lg p-8">
                       <PackageSearch className="w-16 h-16 text-black mb-4" />

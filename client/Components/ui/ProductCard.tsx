@@ -40,10 +40,10 @@ export function ProductCard({ ID, Title, ImageUrl, Price, Discount, SlugUrl }) {
     Price = (
       <div className="flex flex-col">
         <span className="text-sm font-bold text-primary">
-          Rs. {PriceAfterDiscount.toFixed(2)}
+          Rs. {PriceAfterDiscount?.toFixed(2)}
         </span>
         <span className="text-xs text-gray-500 line-through">
-          Rs. {Price.toFixed(2)}
+          Rs. {Price?.toFixed(2)}
         </span>
       </div>
     );
@@ -51,7 +51,7 @@ export function ProductCard({ ID, Title, ImageUrl, Price, Discount, SlugUrl }) {
     Price = (
       <div className="flex flex-col">
         <span className="text-sm font-bold text-primary">
-          Rs. {Price.toFixed(2)}
+          Rs. {Price?.toFixed(2)}
         </span>
       </div>
     );
@@ -87,7 +87,7 @@ export function ProductCard({ ID, Title, ImageUrl, Price, Discount, SlugUrl }) {
       <div className="p-3">
         <Link href={"/product/" + SlugUrl}>
           <h3 className="text-sm font-medium text-gray-800 line-clamp-2 mb-2 group-hover:text-primary transition-colors duration-300 w-full py-1 h-[58px]">
-            {Title}
+            {Title.substring(0, 40) + "..."}
           </h3>
         </Link>
         <div className="flex items-center justify-between">

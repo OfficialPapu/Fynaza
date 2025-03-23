@@ -3,9 +3,22 @@ import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import { Star, Heart, Share2, ShoppingBasket, ShoppingBag } from "lucide-react"
 import { useProduct } from '@/Components/Website/Product/ProductContext'
+import useCartActions from '@/hooks/Cart'
 
 const ActionSection = () => {
-    const { Product, BASE_IMAGES_PATH, handleShare } = useProduct();
+    const { Product, handleShare } = useProduct();
+    const ProductData = Product
+        ? {
+            ID: Product._id,
+            Title: Product.Name,
+            ImageUrl: Product.Media.Images[0].Url,
+            Price: Product.Price,
+            Discount: Product.Discount.Percentage,
+            SlugUrl: Product.Slug,
+            Quantity: 1
+        }
+        : null;
+    const { HandleAddToCart } = useCartActions();
     let DiscountPrice = "";
     if (Product.Discount.Percentage != 0) {
         DiscountPrice = Number((Product.Price) - (((Product.Price) / 100) * Product.Discount.Percentage));
@@ -41,7 +54,7 @@ const ActionSection = () => {
 
             <div className="space-y-4 flex flex-col gap-4">
                 <div className="flex items-center gap-4">
-                    {Product.Discount.Percentage != 0 ? <>
+                    {Product.Discount.Percentage ? <>
                         <div className="sm:text-3xl text-2xl font-bold text-red-600">Rs. {DiscountPrice}</div>
                         <div className="sm:text-xl text-md text-gray-500 line-through">Rs. {Product.Price.toFixed(2)}</div>
                         <div className="bg-red-100 text-red-800 sm:text-sm text-xs font-semibold px-2 py-1 rounded">{Product.Discount.Percentage}% OFF</div></>
@@ -52,10 +65,11 @@ const ActionSection = () => {
 
                 </div>
                 <div className="flex gap-4 border">
-                    <Button variant="outline" className="flex-1">
+                    <Button variant="outline" className="flex-1" onClick={async () => await HandleAddToCart(ProductData)}>
                         <ShoppingBag className="w-4 h-4 mr-2" />
                         Add to Cart
                     </Button>
+
                     <Button variant="outline" className="flex-1" onClick={handleShare}>
                         <ShoppingBasket className="w-4 h-4 mr-2" />
                         Buy Now

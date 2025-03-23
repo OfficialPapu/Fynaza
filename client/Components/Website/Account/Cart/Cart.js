@@ -68,7 +68,7 @@ const Cart = () => {
                       className="w-16 h-16 object-cover rounded"
                     />
                     <div>
-                      <p className="text-black">{item.Name}</p>
+                      <p className="text-black">{item.Name.substring(0, 40) + "...."}</p>
                       <p className="text-gray-600">
                         {item.PriceAfterDiscount ? (
                           <>
@@ -86,7 +86,7 @@ const Cart = () => {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => HandelUpdateQuantity(item.ProductID, item.Quantity - 1)}
+                      onClick={async () => await HandelUpdateQuantity(item.ProductID, item.Quantity - 1, item.CartItemID)}
                       className="h-8 w-8 rounded-full"
                     >
                       <Minus className="h-4 w-4" />
@@ -95,7 +95,7 @@ const Cart = () => {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => HandelUpdateQuantity(item.ProductID, item.Quantity + 1)}
+                      onClick={async () => await HandelUpdateQuantity(item.ProductID, item.Quantity + 1, item.CartItemID)}
                       className="h-8 w-8 rounded-full"
                     >
                       <Plus className="h-4 w-4" />

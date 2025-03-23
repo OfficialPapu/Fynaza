@@ -6,7 +6,7 @@ import { Checkbox } from "@/Components/ui/checkbox"
 import { Button } from "@/Components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card"
 import { Star } from "lucide-react"
-const Filter = ({ products, categories, setFilteredProducts, maxPrice }) => {
+const Filter = ({ Products, Categories, setFilteredProducts, maxPrice }) => {
     const [priceRange, setPriceRange] = useState([0, maxPrice])
     const [selectedCategories, setSelectedCategories] = useState([])
     const [minRating, setMinRating] = useState(0)
@@ -24,7 +24,7 @@ const Filter = ({ products, categories, setFilteredProducts, maxPrice }) => {
     }
 
     const applyFilters = () => {
-        const filtered = products.filter(
+        const filtered = Products.filter(
             (product) =>
                 (selectedCategories.length == 0 ||selectedCategories.includes(product.category)) &&
                 (product.price >= priceRange[0] && product.price <= priceRange[1])
@@ -37,7 +37,7 @@ const Filter = ({ products, categories, setFilteredProducts, maxPrice }) => {
         setPriceRange([0, maxPrice])
         setSelectedCategories([])
         setMinRating(0)
-        setFilteredProducts(products)
+        setFilteredProducts(Products)
     }
     return (
         <Card className="w-full lg:w-1/4 h-fit lg:sticky lg:top-4">
@@ -70,8 +70,8 @@ const Filter = ({ products, categories, setFilteredProducts, maxPrice }) => {
                 </div>
                 <div>
                     <h3 className="text-lg font-semibold mb-2">Categories</h3>
-                    {categories.map((category) => (
-                        <div key={category} className="flex items-center space-x-2 mb-2">
+                    {Categories.map((category) => (
+                        <div key={category} className="flex items-center space-x-2 mb-2 mt-2">
                             <Checkbox
                                 id={category}
                                 checked={selectedCategories.includes(category)}

@@ -1,5 +1,5 @@
 const { CartSchema, CartItemSchema } = require('../models/CartModel');
-
+const { ProductSchema } = require('../models/ProductModel');
 const CalculateTotalPrice = async (UserID) => {
     let Cart = await CartSchema.findOne({ UserID })
         .populate({
@@ -37,7 +37,7 @@ const AddToCart = async (req, res) => {
             Cart = new CartSchema({ UserID, CartItems: [], Total: 0, Discount: 0 });
         }
 
-        if (Discount != 0) {
+        if (Discount) {
             Discount = (Price / 100) * Discount;
             Price = (Price - Discount)
         }
@@ -68,11 +68,6 @@ const RemoveFromCart = async (req, res) => {
     try {
         const { CartItemID } = req.params;
         const { UserID } = req.query;
-
-        let Cart = await CartSchema.findOne({ UserID });
-        if (!Cart) {
-            return res.sendStatus(404);
-        }
         await CartItemSchema.updateOne(
             { _id: CartItemID },
             { $set: { Status: 'Abandoned' } }
@@ -104,4 +99,22 @@ const CartItems = async (req, res) => {
     }
 }
 
-module.exports = { CartItems, AddToCart, RemoveFromCart };
+const UpdateQuantity = async (req, res) => {
+    try {
+        const { CartItemID } = req.params;
+        const { ProductID, UserID, Quantity } = req.body;
+        const Product = await ProductSchema.findOne({ _id: ProductID });
+        if (Product.Stock.Quantity < Quantity) {
+            return res.sendStatus(450);
+        }
+        await CartItemSchema.updateOne(
+            { _id: CartItemID },
+            { $set: { Quantity: parseInt(Quantity) } }
+        );
+        res.sendStatus(200);
+    } catch (error) {
+        res.sendStatus(500);
+    }
+}
+
+module.exports = { CartItems, AddToCart, RemoveFromCart, UpdateQuantity };

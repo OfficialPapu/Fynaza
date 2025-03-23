@@ -18,6 +18,14 @@ const useCartActions = () => {
     const RemoveFromDB = async (CartItemID, UserID) => {
         return (await axios.delete(`api/cart/remove/${CartItemID}`, { params: { UserID } })).status
     }
+    const UpdateQuantityDB = async (ProductID, CartItemID, UserID, Quantity) => {
+        try {
+            return (await axios.put(`api/cart/update/${CartItemID}`, { ProductID, UserID, Quantity })).status
+        } catch (error) {
+            return error.status;
+        }
+    }
+
     const HandleAddToCart = async (Product, ReAddingItem = false) => {
         const isAlreadyInCart = IsProductInCart(Product.ID);
         if (!isAuth) {
@@ -55,11 +63,18 @@ const useCartActions = () => {
         }
     }
 
-    const HandelUpdateQuantity = (ProductID, Quantity) => {
+    const HandelUpdateQuantity = async (ProductID, Quantity, CartItemID) => {
         if (Quantity <= 0) {
             return;
         }
-        dispatch(UpdateQuantity({ ProductID, Quantity }));
+        const StatusCode = await UpdateQuantityDB(ProductID, CartItemID, UserID, Quantity);
+        if (StatusCode == 200) {
+            dispatch(UpdateQuantity({ ProductID, Quantity }));
+        } else if (StatusCode == 450) {
+            ShowNotification('Low in stock', { variant: 'error' });
+        } else {
+            ShowNotification('Unable to update', { variant: 'error' });
+        }
     }
 
     const IsProductInCart = (ProductID) => {
