@@ -17,6 +17,8 @@ const CartSlice = createSlice({
         CartItems: [],
         OriginalTotal: 0,
         DiscountedTotal: 0,
+        Pickup: [],
+        CartFetched: false,
     },
     reducers: {
         AddToCart: ((state, action) => {
@@ -28,7 +30,6 @@ const CartSlice = createSlice({
                     PriceAfterDiscount: ((NewItem.Price - (NewItem.Price / 100) * NewItem.Discount)) < NewItem.Price ? (NewItem.Price - (NewItem.Price / 100) * NewItem.Discount) : null,
                 })
             }
-
             Object.assign(state, CalculatePrice(state.CartItems));
         }),
 
@@ -51,10 +52,15 @@ const CartSlice = createSlice({
             state.CartItems = [];
             state.OriginalTotal = 0;
             state.DiscountedTotal = 0;
-        }
+        },
+
+        UpdatePickup: (state, action) => {
+            state.Pickup = { ...action.payload };
+        },
+        SetCartFetched: (state, action) => { state.CartFetched = action.payload }
 
     }
 })
 
-export const { AddToCart, UpdateQuantity, RemoveFromCart, ClearCart } = CartSlice.actions;
+export const { AddToCart, UpdateQuantity, RemoveFromCart, ClearCart, UpdatePickup, SetCartFetched } = CartSlice.actions;
 export default CartSlice.reducer;

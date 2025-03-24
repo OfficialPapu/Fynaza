@@ -47,13 +47,12 @@ const Login = async (req, res) => {
         await UserSchema.findOneAndUpdate({ Email: Email }, { $inc: { LoginCount: 1 } }, { new: true });
         const token = GenerateJWTToken(User, req);
         res.setHeader("Set-Cookie", serialize("LOGIN_INFO", token, {
-            httpOnly: true, secure: true, sameSite: "Strict", path: "/", maxAge: 2592000000, domain: process.env.NODE_ENV === 'production' ? '.fynaza.com' : 'localhost',
+            httpOnly: true, secure: true, sameSite: "Strict", path: "/", maxAge: 2592000000, domain: process.env.NODE_ENV === 'production' ? '.fynaza.com' : '192.168.10.84',
         }));
         res.status(200).json({ UserID: User._id, Name: User.Name, Email: User.Email, Mobile: User.Mobile, Role: User.Role })
 
     } catch (error) {
         console.log(error);
-
         res.status(500).json({ message: "Internal Server Error" });
     }
 }

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 let CartItemSchema = mongoose.Schema({
-    ProductID: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+    ProductID: { type: mongoose.Schema.Types.ObjectId, ref: "Products" },
     Price: Number,
     Quantity: Number,
     Status: {
@@ -30,5 +30,5 @@ let CartSchema = mongoose.Schema({
     }
 }, { timestamps: { createdAt: 'CreatedAt', updatedAt: 'UpdateAt' } })
 
-CartSchema = mongoose.model('Cart', CartSchema, "Cart");
+CartSchema = mongoose.model('Carts', CartSchema, "Carts");
 module.exports = { CartSchema, CartItemSchema };

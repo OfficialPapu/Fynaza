@@ -7,6 +7,7 @@ const nextConfig = {
             { hostname: 'api.spicezgold.com' },
             { hostname: 'dreamskinnepal.com' },
             { hostname: 'localhost' },
+            { hostname: '192.168.10.84' },
         ],
     }
 };

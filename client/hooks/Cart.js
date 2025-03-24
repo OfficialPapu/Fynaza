@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { AddToCart, RemoveFromCart, UpdateQuantity, ClearCart } from "@/Components/Website/Redux/Slices/CartSlice";
+import { AddToCart, RemoveFromCart, UpdateQuantity, ClearCart, UpdatePickup, SetCartFetched } from "@/Components/Website/Redux/Slices/CartSlice";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import axios from "@/lib/axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Home, ShoppingCart, Store, Truck, UserRound, Zap } from "lucide-react";
 
 const useCartActions = () => {
     const { enqueueSnackbar: ShowNotification } = useSnackbar();
@@ -12,6 +13,48 @@ const useCartActions = () => {
     const isAuth = useSelector((state) => state.Login.isAuth);
     const UserID = useSelector((state) => state.Login?.UserDetails?.UserID);
     const BASE_IMAGES_PATH = process.env.NEXT_PUBLIC_BASE_IMAGES_PATH;
+    const PickupOptions = [
+        {
+            ID: "Instant-Delivery",
+            Value: "Instant Delivery",
+            Name: "Instant Delivery",
+            Price: 0,
+            Icon: <Zap className="h-4 w-4" />,
+            Description: "Shipping cost payable by you",
+        },
+        {
+            ID: "Inside-Valley",
+            Value: "Inside Valley",
+            Name: "Inside Valley",
+            Price: 100,
+            Icon: <Truck className="h-4 w-4" />,
+            Description: "Delivery within 24 hours",
+        },
+        {
+            ID: "Outside-Valley",
+            Value: "Outside Valley",
+            Name: "Outside Valley",
+            Price: 200,
+            Icon: <Truck className="h-4 w-4" />,
+            Description: "Delivery within 3-5 days",
+        },
+        {
+            ID: "Store-Pickup",
+            Value: "Store Pickup",
+            Name: "Store Pickup",
+            Price: 0,
+            Icon: <Store className="h-4 w-4" />,
+            Description: "Pick up from our store",
+        },
+    ]
+    const [BreadcrumbView, setBreadcrumbView] = useState([
+        { label: "Home", href: "/", icon: <Home className="w-4 h-4" /> },
+        { label: "Account", href: "/account", icon: <UserRound className="w-4 h-4" /> },
+        { label: "Cart", href: "/account/cart", icon: <ShoppingCart className="w-4 h-4" /> },
+    ])
+    const [selectedPickupOption, setSelectedPickupOption] = useState(null)
+    const PickupCost = useSelector((state) => state.Cart.Pickup.Cost) || 0;
+    const PickupLocation = useSelector((state) => state.Cart.Pickup.Location) || 0;
     const router = useRouter();
 
     const StoreInDb = async (Product, UserID) => { return (await axios.post("api/cart/add", { Product, UserID })).status }
@@ -102,11 +145,35 @@ const useCartActions = () => {
             ShowNotification('Something went wrong', { variant: 'error' });
         }
     }
-    useEffect(() => {
-        GetCartItems();
-    }, []);
+    const CartFetched = useSelector((state) => state.Cart.CartFetched);
 
-    return { GetCartItems, HandleAddToCart, HandelUpdateQuantity, HandelRemoveFromCart, IsProductInCart };
+    useEffect(() => {
+        if (!CartFetched) {
+            GetCartItems().then(() => dispatch(SetCartFetched(true)));
+        }
+    }, [CartFetched]);
+
+
+    const HandelCheckout = () => {
+        if (selectedPickupOption) {
+            router.push("/account/checkout")
+        }
+    }
+
+    const handlePickupOptionChange = (Location) => {
+        setSelectedPickupOption(Location);
+        let Pickup = {
+            Location: Location,
+            Cost: PickupOptions.find((option) => option.Name === Location).Price,
+        }
+        dispatch(UpdatePickup(Pickup))
+    }
+
+    const Subtotal = useSelector((state) => state.Cart.OriginalTotal)
+    const Discount = useSelector((state) => state.Cart.OriginalTotal - state.Cart.DiscountedTotal) || null
+    const Total = Math.max(0, Subtotal + PickupCost - (Discount || 0))
+
+    return { GetCartItems, HandleAddToCart, HandelUpdateQuantity, HandelRemoveFromCart, IsProductInCart, HandelCheckout, PickupOptions, BreadcrumbView, handlePickupOptionChange, selectedPickupOption, PickupCost, Subtotal, Discount, Total, PickupLocation, CartItems };
 }
 
 export default useCartActions;

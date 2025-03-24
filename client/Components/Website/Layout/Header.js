@@ -22,6 +22,7 @@ const categories = [
 
 export default function Navbar() {
     const CartItemCount = useSelector((state) => state.Cart.CartItems.length);
+    const isAuth = useSelector((state) => state.Login.isAuth);
     return (
         <div className="border-b lg:pb-0 bg-white">
             <div className="container mx-auto px-4">
@@ -60,7 +61,7 @@ export default function Navbar() {
 
                     {/* Cart & Wishlist */}
                     <div className="flex items-center gap-4 HideMobileView">
-                        <Link href="/account">
+                        <Link href={isAuth ? "/account" : "/auth/login"}>
                             <Button variant="ghost" size="icon">
                                 <UserRound className="!h-5 !w-5" />
                             </Button>
