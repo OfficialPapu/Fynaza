@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { AddToCart, RemoveFromCart, UpdateQuantity, ClearCart, UpdatePickup, SetCartFetched } from "@/Components/Website/Redux/Slices/CartSlice";
+import { AddToCart, RemoveFromCart, UpdateQuantity, ClearCart, UpdatePickup } from "@/Components/Website/Redux/Slices/CartSlice";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import axios from "@/lib/axios";
@@ -126,7 +126,7 @@ const useCartActions = () => {
 
     const GetCartItems = async () => {
         dispatch(ClearCart());
-        const response = await axios(`api/cart/items/${UserID}`);
+        const response = await axios.get(`api/cart/items/${UserID}`);
         if (response.status == 200) {
             Object.keys(response.data).forEach(key => {
                 const Product = {
@@ -145,13 +145,10 @@ const useCartActions = () => {
             ShowNotification('Something went wrong', { variant: 'error' });
         }
     }
-    const CartFetched = useSelector((state) => state.Cart.CartFetched);
 
     useEffect(() => {
-        if (!CartFetched) {
-            GetCartItems().then(() => dispatch(SetCartFetched(true)));
-        }
-    }, [CartFetched]);
+        GetCartItems();
+    }, []);
 
 
     const HandelCheckout = () => {
@@ -173,7 +170,7 @@ const useCartActions = () => {
     const Discount = useSelector((state) => state.Cart.OriginalTotal - state.Cart.DiscountedTotal) || null
     const Total = Math.max(0, Subtotal + PickupCost - (Discount || 0))
 
-    return { GetCartItems, HandleAddToCart, HandelUpdateQuantity, HandelRemoveFromCart, IsProductInCart, HandelCheckout, PickupOptions, BreadcrumbView, handlePickupOptionChange, selectedPickupOption, PickupCost, Subtotal, Discount, Total, PickupLocation, CartItems };
+    return { GetCartItems, HandleAddToCart, HandelUpdateQuantity, HandelRemoveFromCart, IsProductInCart, HandelCheckout, PickupOptions, BreadcrumbView, handlePickupOptionChange, selectedPickupOption, PickupCost, Subtotal, Discount, Total, PickupLocation, CartItems, UserID };
 }
 
 export default useCartActions;

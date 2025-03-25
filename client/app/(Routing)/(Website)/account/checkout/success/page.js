@@ -1,51 +1,67 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { ArrowLeft, Calendar, CheckCircle2, Clock, Download, MapPin, Package2, Receipt, Truck } from "lucide-react"
+import { useState, useEffect } from "react"
+import {
+  ArrowRight,
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  Download,
+  Home,
+  Package,
+  ShoppingBag,
+  Truck,
+} from "lucide-react"
+import { Button } from "@/Components/ui/button"
+import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { motion } from "framer-motion"
+import { Separator } from "@/Components/ui/separator"
+import { Progress } from "@/Components/ui/progress"
 
-import { Button } from "@/Components/ui/button"
-import { Badge } from "@/Components/ui/badge"
-
-export default function OrderSuccess() {
-  const [showConfetti, setShowConfetti] = useState(true)
-
-  useEffect(() => {
-    // Hide confetti after 5 seconds
-    const timer = setTimeout(() => {
-      setShowConfetti(false)
-    }, 5000)
-
-    return () => clearTimeout(timer)
-  }, [])
-
-  // Mock order data - replace with your actual order data
-  const orderData = {
-    orderNumber: "ORD-7829",
-    date: "March 25, 2025",
-    estimatedDelivery: "March 30, 2025",
+export default function OrderSuccessPage() {
+  // Mock data - in a real app, this would come from your API or state management
+  const [orderDetails, setOrderDetails] = useState({
+    orderNumber: "ORD-2023-78945",
+    orderDate: "March 25, 2025",
+    paymentMethod: "Cash on Delivery",
+    shippingAddress: {
+      name: "John Doe",
+      address: "123 Main Street, Kathmandu, 44600",
+      phone: "+977 9812345678",
+    },
     items: [
       {
         id: 1,
-        name: "Classic Stainless Steel Rings",
-        price: 3640,
+        name: "Premium Wireless Headphones",
+        price: 12500,
         quantity: 1,
-        image: "/placeholder.svg",
+        image: "/placeholder.svg?height=80&width=80",
+      },
+      {
+        id: 2,
+        name: "Smartphone Case with Card Holder",
+        price: 1200,
+        quantity: 2,
+        image: "/placeholder.svg?height=80&width=80",
       },
     ],
-    subtotal: 4000,
-    discount: 360,
-    shipping: 0,
-    total: 3640,
-    customer: {
-      name: "Papu Yadav",
-      address: "Saranchiya, Saranchiya",
-      phone: "9826756598",
-    },
-    paymentMethod: "Cash on Delivery",
-  }
+    subtotal: 14900,
+    shipping: 100,
+    discount: 1000,
+    total: 14000,
+    estimatedDelivery: "March 28 - March 30, 2025",
+  })
+
+  const [showAllItems, setShowAllItems] = useState(false)
+  const [progress, setProgress] = useState(0)
+
+  // Simulate progress for order processing
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(100), 500)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Animation variants
   const containerVariants = {
@@ -53,384 +69,267 @@ export default function OrderSuccess() {
     visible: {
       opacity: 1,
       transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.2,
-        duration: 0.3,
+        staggerChildren: 0.1,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5 },
-    },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
   }
 
-  const fadeInVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.5 },
-    },
-  }
-
-  const scaleVariants = {
-    hidden: { scale: 0.8, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        duration: 0.5,
-      },
-    },
-  }
+  // Determine how many items to show initially
+  const initialItemsToShow = 2
+  const hasMoreItems = orderDetails.items.length > initialItemsToShow
+  const visibleItems = showAllItems ? orderDetails.items : orderDetails.items.slice(0, initialItemsToShow)
 
   return (
-    <div className="min-h-[70vh] bg-[#f3f7fa] relative overflow-hidden">
-      {/* Confetti animation */}
-      {showConfetti && (
-        <div className="absolute inset-0 pointer-events-none z-10">
-          {Array.from({ length: 100 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 rounded-full"
-              initial={{
-                top: "-10%",
-                left: `${Math.random() * 100}%`,
-                backgroundColor: `hsl(${Math.random() * 360}, 80%, 60%)`,
-                scale: Math.random() * 0.5 + 0.5,
-              }}
-              animate={{
-                top: "100%",
-                rotate: Math.random() * 360,
-                opacity: [1, 1, 0],
-              }}
-              transition={{
-                duration: Math.random() * 3 + 2,
-                ease: "easeOut",
-                delay: Math.random() * 1,
-              }}
-            />
-          ))}
+    <div className="min-h-[70vh] sm:bg-white pb-12">
+      {/* Header with wave */}
+      <div className="relative bg-gradient-to-r from-[#f3f7fa] via-[#e9f0f7] to-[#f3f7fa] pb-20">
+        <div className="container mx-auto pt-12 px-4 relative z-10">
+          <div className="flex flex-col items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
+              <Check className="h-10 w-10 text-green-600" />
+            </div>
+            <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-800">Order Confirmed!</h1>
+            <p className="text-center text-gray-600 mt-2 max-w-md mx-auto">
+              Your order has been placed successfully and is being processed
+            </p>
+          </div>
         </div>
-      )}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden md:h-[252px]">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-auto">
+            <path
+              fill="#ffffff"
+              fillOpacity="1"
+              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            ></path>
+          </svg>
+        </div>
+      </div>
 
-
-      <div className="mx-auto px-4 py-6 sm:py-10">
-        <motion.div className="max-w-7xl mx-auto" variants={containerVariants} initial="hidden" animate="visible">
+      {/* Main Content */}
+      <div className="mx-auto sm:px-4 -mt-16 relative z-1">
+        <div className="max-w-5xl mx-auto">
+          {/* Order Status Card */}
           <motion.div
-            className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mb-8 md:mb-12"
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-white rounded-3xl shadow-xl overflow-hidden transform transition-all hover:shadow-2xl border border-gray-100 mb-8"
           >
-            <motion.div
-              className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0"
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 200,
-                damping: 15,
-                delay: 0.2,
-              }}
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 200,
-                  delay: 0.5,
-                }}
-              >
-                <CheckCircle2 className="h-10 w-10 md:h-12 md:w-12 text-green-600" />
-              </motion.div>
-            </motion.div>
+            <div className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800">Order #{orderDetails.orderNumber}</h2>
+                  <p className="text-gray-500 text-sm mt-1">Placed on {orderDetails.orderDate}</p>
+                </div>
+                <div className="flex gap-3">
+                  <Link href="/account/orders">
+                    <Button size="sm" className="rounded-xl bg-gray-900 hover:bg-black text-white">
+                      Track Order
+                    </Button>
+                  </Link>
+                </div>
+              </div>
 
-            <div className="text-center md:text-left">
-              <motion.div variants={fadeInVariants}>
-                <Badge className="mb-2 bg-green-100 text-green-800 hover:bg-green-100">Order Confirmed</Badge>
-              </motion.div>
-              <motion.h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2" variants={fadeInVariants}>
-                Order Placed Successfully!
-              </motion.h1>
-              <motion.p className="text-sm md:text-base text-gray-600 max-w-xl" variants={fadeInVariants}>
-                We've received your order and are getting it ready. You'll receive a confirmation email with your order
-                details.
-              </motion.p>
+              <div className="bg-[#f9fafc] rounded-2xl p-4 md:p-6 border border-gray-100">
+                <h3 className="font-semibold text-gray-800 mb-4">Order Status</h3>
+                <Progress value={progress} className="h-2 mb-6" />
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                  <div className="flex flex-col items-center">
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-2">
+                      <Check className="h-5 w-5 text-green-600" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-800">Order Placed</p>
+                    <p className="text-xs text-gray-500">Confirmed</p>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-2">
+                      <Package className="h-5 w-5 text-green-600" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-800">Processing</p>
+                    <p className="text-xs text-gray-500">In progress</p>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mb-2">
+                      <Truck className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-400">Shipped</p>
+                    <p className="text-xs text-gray-500">Pending</p>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mb-2">
+                      <Home className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <p className="text-sm font-medium text-gray-400">Delivered</p>
+                    <p className="text-xs text-gray-500">Pending</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 flex items-center justify-center gap-2 bg-blue-50 p-3 rounded-xl">
+                  <Clock className="h-4 w-4 text-blue-600" />
+                  <p className="text-sm text-blue-700">
+                    Estimated delivery: <span className="font-medium">{orderDetails.estimatedDelivery}</span>
+                  </p>
+                </div>
+              </div>
             </div>
           </motion.div>
 
-          {/* Order details and summary */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-            {/* Left column - Order details */}
-            <div className="md:col-span-2 space-y-4 md:space-y-8">
-              {/* Order info */}
-              <motion.div className="bg-white rounded-xl overflow-hidden border" variants={scaleVariants}>
-                <div className="px-4 md:px-6 py-4 md:py-5 border-b bg-[#f3f7fa] bg-opacity-30">
-                  <h2 className="font-semibold text-base md:text-lg">Order Information</h2>
+          {/* Order Details */}
+          <div className="grid grid-cols-1 gap-6 md:gap-8">
+            {/* Left Column - Order Items */}
+            <motion.div className="md:col-span-2" variants={containerVariants} initial="hidden" animate="visible">
+              <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 mb-6">
+                <div className="p-6 md:p-8">
+                  <div className="flex items-center mb-6">
+                    <div className="w-10 h-10 rounded-2xl bg-[#f3f7fa] flex items-center justify-center mr-3">
+                      <ShoppingBag className="h-5 w-5 text-gray-700" />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-800">Order Items</h2>
+                  </div>
+
+                  <div className="space-y-4">
+                    {visibleItems.map((item, index) => (
+                      <motion.div
+                        key={item.id}
+                        variants={itemVariants}
+                        className="flex gap-4 bg-[#f9fafc] p-4 rounded-2xl border border-gray-100"
+                      >
+                        <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-xl flex items-center justify-center p-2 border border-gray-100 shadow-sm flex-shrink-0">
+                          <Image
+                            src={item.image || "/placeholder.svg"}
+                            alt={item.name}
+                            width={64}
+                            height={64}
+                            className="max-h-full max-w-full object-contain"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-gray-800">{item.name}</h4>
+                          <div className="flex justify-between mt-2">
+                            <p className="text-gray-500 text-sm">Qty: {item.quantity}</p>
+                            <p className="font-semibold text-gray-800">
+                              Rs. {(item.price * item.quantity).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* View All Items Button */}
+                  {hasMoreItems && (
+                    <div className="flex justify-center mt-4">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-primary hover:text-primary/80 hover:bg-primary/5 rounded-xl"
+                        onClick={() => setShowAllItems(!showAllItems)}
+                      >
+                        {showAllItems ? (
+                          <>
+                            <ChevronUp className="h-4 w-4 mr-1" />
+                            Show Less
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-4 w-4 mr-1" />
+                            View All Items ({orderDetails.items.length})
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  )}
                 </div>
+              </div>
+            </motion.div>
 
-                <div className="p-4 md:p-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 }}
-                    >
-                      <div className="flex items-center mb-1">
-                        <Receipt className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm text-gray-500">Order Number</span>
-                      </div>
-                      <p className="font-medium">{orderData.orderNumber}</p>
-                    </motion.div>
+            {/* Right Column - Order Summary */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 h-full">
+                <div className="p-6 md:p-8">
+                  <h2 className="text-xl font-bold text-gray-800 mb-6">Order Summary</h2>
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.7 }}
-                    >
-                      <div className="flex items-center mb-1">
-                        <Calendar className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm text-gray-500">Order Date</span>
-                      </div>
-                      <p className="font-medium">{orderData.date}</p>
-                    </motion.div>
+                  <div className="space-y-4">
+                    <div className="bg-[#f9fafc] rounded-2xl p-4 border border-gray-100">
+                      <h3 className="font-medium text-gray-800 mb-3">Shipping Address</h3>
+                      <p className="text-gray-800 font-medium">{orderDetails.shippingAddress.name}</p>
+                      <p className="text-gray-600 text-sm mt-1">{orderDetails.shippingAddress.address}</p>
+                      <p className="text-gray-600 text-sm mt-1">{orderDetails.shippingAddress.phone}</p>
+                    </div>
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.8 }}
-                    >
-                      <div className="flex items-center mb-1">
-                        <MapPin className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm text-gray-500">Shipping Address</span>
-                      </div>
-                      <p className="font-medium">{orderData.customer.name}</p>
-                      <p className="text-sm text-gray-600">{orderData.customer.address}</p>
-                      <p className="text-sm text-gray-600">{orderData.customer.phone}</p>
-                    </motion.div>
+                    <div className="bg-[#f9fafc] rounded-2xl p-4 border border-gray-100">
+                      <h3 className="font-medium text-gray-800 mb-3">Payment Method</h3>
+                      <p className="text-gray-600">{orderDetails.paymentMethod}</p>
+                    </div>
 
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.9 }}
-                    >
-                      <div className="flex items-center mb-1">
-                        <Truck className="h-4 w-4 text-gray-500 mr-2" />
-                        <span className="text-sm text-gray-500">Delivery Estimate</span>
+                    <div className="bg-[#f9fafc] rounded-2xl p-4 border border-gray-100">
+                      <h3 className="font-medium text-gray-800 mb-3">Price Details</h3>
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between py-1">
+                          <span className="text-gray-600">Subtotal</span>
+                          <span>Rs. {orderDetails.subtotal.toLocaleString()}</span>
+                        </div>
+
+                        <div className="flex justify-between py-1">
+                          <span className="text-gray-600">Shipping</span>
+                          <span>
+                            {orderDetails.shipping === 0 ? "Free" : `Rs. ${orderDetails.shipping.toLocaleString()}`}
+                          </span>
+                        </div>
+
+                        {orderDetails.discount > 0 && (
+                          <div className="flex justify-between py-1">
+                            <span className="text-green-600">Discount</span>
+                            <span className="text-green-600">- Rs. {orderDetails.discount.toLocaleString()}</span>
+                          </div>
+                        )}
+
+                        <Separator className="my-2" />
+
+                        <div className="flex justify-between py-1 font-bold text-gray-800">
+                          <span>Total</span>
+                          <span>Rs. {orderDetails.total.toLocaleString()}</span>
+                        </div>
                       </div>
-                      <p className="font-medium">{orderData.estimatedDelivery}</p>
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
-
-              {/* Order items */}
-              <motion.div className="bg-white rounded-xl overflow-hidden border" variants={scaleVariants}>
-                <div className="px-4 md:px-6 py-4 md:py-5 border-b bg-[#f3f7fa] bg-opacity-30">
-                  <h2 className="font-semibold text-base md:text-lg">Order Items</h2>
-                </div>
-
-                <div className="divide-y">
-                  {orderData.items.map((item, index) => (
-                    <motion.div
-                      key={item.id}
-                      className="p-4 md:p-6 flex"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.8 + index * 0.1 }}
-                      whileHover={{
-                        backgroundColor: "#f9fafb",
-                        transition: { duration: 0.2 },
-                      }}
-                    >
-                      <motion.div
-                        className="h-16 w-16 md:h-20 md:w-20 rounded-lg bg-[#f3f7fa] flex-shrink-0 mr-3 md:mr-4 overflow-hidden"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <Image
-                          src={item.image || "/placeholder.svg"}
-                          alt={item.name}
-                          width={80}
-                          height={80}
-                          className="h-full w-full object-cover"
-                        />
-                      </motion.div>
-                      <div className="flex-1">
-                        <div className="flex flex-col sm:flex-row sm:justify-between">
-                          <h3 className="font-medium text-sm md:text-base">{item.name}</h3>
-                          <p className="font-semibold text-sm md:text-base mt-1 sm:mt-0">Rs. {item.price}</p>
-                        </div>
-                        <p className="text-xs md:text-sm text-gray-500 mt-1">Quantity: {item.quantity}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Delivery tracking */}
-              <motion.div className="bg-white rounded-xl overflow-hidden border" variants={scaleVariants}>
-                <div className="px-4 md:px-6 py-4 md:py-5 border-b bg-[#f3f7fa] bg-opacity-30">
-                  <h2 className="font-semibold text-base md:text-lg">Delivery Status</h2>
-                </div>
-
-                <div className="p-4 md:p-6">
-                  <motion.div
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 md:mb-8"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
-                  >
-                    <div className="flex items-center">
-                      <motion.div
-                        className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 200,
-                          delay: 1.2,
-                        }}
-                      >
-                        <Package2 className="h-5 w-5 text-green-600" />
-                      </motion.div>
-                      <div>
-                        <p className="font-medium">Order Confirmed</p>
-                        <p className="text-sm text-gray-500">Your order has been received</p>
-                      </div>
-                    </div>
-                    <div className="text-left sm:text-right mt-2 sm:mt-0">
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Clock className="h-4 w-4 mr-1" />
-                        {orderData.date}
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.3 }}
-                  >
-                    <div className="w-10 flex justify-center">
-                      <motion.div
-                        className="h-full w-0.5 bg-gray-200"
-                        initial={{ height: 0 }}
-                        animate={{ height: "100%" }}
-                        transition={{ duration: 0.8, delay: 1.4 }}
-                      ></motion.div>
-                    </div>
-                    <div className="flex-1 pb-6 md:pb-8">
-                      <p className="text-sm text-gray-500 italic">We'll update you when your order ships.</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button variant="outline" className="w-full">
-                      Track Your Order
-                    </Button>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Right column - Order summary */}
-            <div className="space-y-4 md:space-y-8">
-              <motion.div className="bg-white rounded-xl overflow-hidden border sticky top-8" variants={itemVariants}>
-                <div className="px-4 md:px-6 py-4 md:py-5 border-b bg-[#f3f7fa] bg-opacity-30">
-                  <h2 className="font-semibold text-base md:text-lg">Order Summary</h2>
-                </div>
-
-                <div className="p-4 md:p-6">
-                  <motion.div
-                    className="space-y-3"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.2 }}
-                  >
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Subtotal</span>
-                      <span>Rs. {orderData.subtotal}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Discount</span>
-                      <motion.span
-                        className="text-green-600"
-                        initial={{ color: "#059669" }}
-                        animate={{ color: ["#059669", "#10b981", "#059669"] }}
-                        transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-                      >
-                        - Rs. {orderData.discount}
-                      </motion.span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Shipping</span>
-                      <span>Rs. {orderData.shipping}</span>
-                    </div>
-                    <div className="border-t pt-3 mt-3">
-                      <motion.div
-                        className="flex justify-between font-semibold"
-                        initial={{ scale: 1 }}
-                        animate={{ scale: [1, 1.03, 1] }}
-                        transition={{ duration: 0.5, delay: 1.5 }}
-                      >
-                        <span>Total</span>
-                        <span>Rs. {orderData.total}</span>
-                      </motion.div>
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="mt-6 pt-6 border-t"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.4 }}
-                  >
-                    <div className="flex items-center mb-4">
-                      <motion.div
-                        className="w-8 h-8 rounded-full bg-[#f3f7fa] flex items-center justify-center mr-3"
-                        whileHover={{ rotate: 10 }}
-                      >
-                        <Receipt className="h-4 w-4 text-gray-700" />
-                      </motion.div>
-                      <div>
-                        <p className="font-medium">{orderData.paymentMethod}</p>
-                        <p className="text-xs text-gray-500">Pay when you receive your order</p>
-                      </div>
-                    </div>
-
-                    <Link href="/" className="block">
-                      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                        <Button variant="outline" className="w-full">
-                          Continue Shopping
-                        </Button>
-                      </motion.div>
-                    </Link>
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              <motion.div className="bg-white rounded-xl p-4 md:p-6 border" variants={itemVariants}>
-                <h3 className="font-medium mb-3">Need Help?</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  If you have any questions about your order, please contact our customer support.
-                </p>
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button variant="outline" className="w-full">
-                    Contact Support
-                  </Button>
-                </motion.div>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
+
+          {/* Continue Shopping Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex justify-center mt-8"
+          >
+            <Link href="/products">
+              <Button
+                size="lg"
+                className="rounded-xl px-8 py-6 bg-gray-900 hover:bg-black text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Continue Shopping
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
       </div>
     </div>
   )

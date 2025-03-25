@@ -1,72 +1,93 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCartActions from "./Cart";
+import axios from "@/lib/axios";
+import { useSnackbar } from "notistack";
+import { useDispatch, useSelector } from "react-redux";
+import { UpdateAddressID } from "@/Components/Website/Redux/Slices/CheckoutSlice";
+import { useRouter } from "next/navigation";
 
 const useCheckoutActions = () => {
-    const { CartItems } = useCartActions();
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const { enqueueSnackbar: ShowNotification } = useSnackbar();
+    const { CartItems, UserID } = useCartActions();
     const [showAllProducts, setShowAllProducts] = useState(false)
     const initialProductsToShow = 2
     const hasMoreProducts = CartItems.length > initialProductsToShow
     const visibleProducts = showAllProducts ? CartItems : CartItems.slice(0, initialProductsToShow)
-    const [selectedPayment, setSelectedPayment] = useState();
-    const [selectedAddress, setSelectedAddress] = useState(null)
-    const [addresses, setAddresses] = useState([]);
-    const [newAddress, setNewAddress] = useState({
-        name: "",
-        streetAddress: "",
-        city: "",
-        postalCode: "",
-        phone: "",
+    const PaymentMethod = useSelector((state) => state.Checkout.PaymentMethod);
+    const AddressID = useSelector((state) => state.Checkout.AddressID);
+    const [Addresses, setAddresses] = useState([]);
+    const [NewAddress, setNewAddress] = useState({
+        UserID: UserID,
+        Name: "",
+        Phone: "",
+        Address: "",
+        City: "",
+        PostalCode: null,
     })
     const [dialogOpen, setDialogOpen] = useState(false)
 
 
     const handleAddressChange = (e) => {
-        const { id, value } = e.target
         setNewAddress((prev) => ({
             ...prev,
-            [id === "first-name" ? "name" : id === "address" ? "streetAddress" : id === "postal-code" ? "postalCode" : id]:
-                value,
+            [e.target.name]: e.target.value
         }))
     }
 
-    const handleAddressSubmit = () => {
-        // Validate form
-        if (!newAddress.name || !newAddress.streetAddress || !newAddress.city || !newAddress.phone) {
-            // Show error (in a real app)
-            return
+    const handleAddressSubmit = async () => {
+        if (!NewAddress.Name || !NewAddress.Address || !NewAddress.City || !NewAddress.Phone) {
+            ShowNotification('Please fill the form!', { variant: 'error' });
+            return;
+        }
+        if (NewAddress.Phone.length < 10) {
+            ShowNotification('Please enter a valid number!', { variant: 'error' });
+            return;
         }
 
-        // Create full name if first and last name were separate
-        const fullName = newAddress.name
-
-        // Create full address
-        const fullAddress = `${newAddress.streetAddress}, ${newAddress.city}${newAddress.postalCode ? ", " + newAddress.postalCode : ""}`
-
-        // Add new address
-        const newAddressObj = {
-            id: `addr${addresses.length + 1}`,
-            name: fullName,
-            address: fullAddress,
-            phone: newAddress.phone,
+        try {
+            const response = await axios.post('api/checkout/delivery/add', NewAddress);
+            if (response.status == 201) {
+                const NewAddressObj = {
+                    ID: response.data.AddressID,
+                    Name: NewAddress.Name,
+                    Address: `${NewAddress.Address}, ${NewAddress.City}${NewAddress.PostalCode ? ", " + NewAddress.PostalCode : ""}`,
+                    Phone: NewAddress.Phone,
+                }
+                setAddresses((prev) => [...prev, NewAddressObj])
+                dispatch(UpdateAddressID({ AddressID: NewAddressObj.ID }))
+                setDialogOpen(false)
+                GetInitialAddress();
+            }
+        } catch (error) {
+            ShowNotification('Something went wrong', { variant: 'error' });
         }
-
-        setAddresses((prev) => [...prev, newAddressObj])
-        setSelectedAddress(newAddressObj.id)
-        setDialogOpen(false)
-
-        // Reset form
-        setNewAddress({
-            name: "",
-            streetAddress: "",
-            city: "",
-            postalCode: "",
-            phone: "",
-        })
     }
+    const GetInitialAddress = async () => {
+        const response = await axios.get(`api/checkout/delivery/${UserID}`);
+        if (response.status === 200) {
+            const newAddresses = Object.values(response.data);
+            setAddresses(newAddresses);
+        } else {
+            ShowNotification('Something went wrong', { variant: 'error' });
+        }
+    };
 
+    useEffect(() => {
+        GetInitialAddress();
+    }, [])
+
+
+
+    const HandelCheckout = () => {
+        if (PaymentMethod && AddressID) {
+            router.push("/account/checkout/success");
+        }
+    }
     return {
-        selectedPayment, setSelectedPayment, showAllProducts, setShowAllProducts, hasMoreProducts, visibleProducts, handleAddressSubmit, handleAddressChange, dialogOpen, selectedAddress, setDialogOpen, newAddress, addresses,selectedAddress, setSelectedAddress
+        PaymentMethod, showAllProducts, setShowAllProducts, hasMoreProducts, visibleProducts, handleAddressSubmit, handleAddressChange, dialogOpen, AddressID, setDialogOpen, NewAddress, Addresses, AddressID, dispatch, UpdateAddressID, HandelCheckout
     }
 }
 

@@ -3,15 +3,7 @@
 import { Check, Home, MapPin, Plus } from "lucide-react"
 
 import { Button } from "@/Components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/Components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/Components/ui/dialog"
 import { Input } from "@/Components/ui/input"
 import { Label } from "@/Components/ui/label"
 import { Textarea } from "@/Components/ui/textarea"
@@ -22,11 +14,11 @@ const AddNewAddress = () => {
     handleAddressSubmit,
     handleAddressChange,
     dialogOpen,
-    selectedAddress,
+    AddressID,
     setDialogOpen,
-    newAddress,
-    addresses,
-    setSelectedAddress,
+    NewAddress,
+    Addresses,
+    dispatch, UpdateAddressID
   } = useCheckoutActions()
 
   return (
@@ -67,9 +59,10 @@ const AddNewAddress = () => {
                   </Label>
                   <Input
                     id="name"
+                    name="Name"
                     className="rounded-lg"
                     placeholder="Enter your full name"
-                    value={newAddress.name}
+                    value={NewAddress.Name}
                     onChange={handleAddressChange}
                   />
                 </div>
@@ -79,10 +72,11 @@ const AddNewAddress = () => {
                   </Label>
                   <Input
                     id="phone"
-                    type="tel"
+                    type="number"
+                    name="Phone"
                     className="rounded-lg"
                     placeholder="Enter your phone number"
-                    value={newAddress.phone}
+                    value={NewAddress.Phone}
                     onChange={handleAddressChange}
                   />
                 </div>
@@ -93,9 +87,10 @@ const AddNewAddress = () => {
                 </Label>
                 <Textarea
                   id="address"
+                  name="Address"
                   className="min-h-[80px] rounded-lg"
                   placeholder="Enter your street address"
-                  value={newAddress.streetAddress}
+                  value={NewAddress.Address}
                   onChange={handleAddressChange}
                 />
               </div>
@@ -106,9 +101,10 @@ const AddNewAddress = () => {
                   </Label>
                   <Input
                     id="city"
+                    name="City"
                     className="rounded-lg"
                     placeholder="Enter your city"
-                    value={newAddress.city}
+                    value={NewAddress.City}
                     onChange={handleAddressChange}
                   />
                 </div>
@@ -118,9 +114,10 @@ const AddNewAddress = () => {
                   </Label>
                   <Input
                     id="postal-code"
+                    name="PostalCode"
                     className="rounded-lg"
                     placeholder="Enter postal code"
-                    value={newAddress.postalCode}
+                    value={NewAddress.PostalCode}
                     onChange={handleAddressChange}
                   />
                 </div>
@@ -138,12 +135,12 @@ const AddNewAddress = () => {
         </Dialog>
       </div>
 
-      {addresses.length === 0 ? (
+      {Addresses.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/50 p-10 text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
             <MapPin className="h-8 w-8 text-primary" />
           </div>
-          <h3 className="mb-2 text-lg font-semibold">No addresses saved yet</h3>
+          <h3 className="mb-2 text-lg font-semibold">No address saved yet</h3>
           <p className="mb-6 max-w-md text-muted-foreground">
             Add a delivery address to continue with your checkout process
           </p>
@@ -154,35 +151,33 @@ const AddNewAddress = () => {
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
-          {addresses.map((addr) => (
+          {Addresses.map((Address) => (
             <div
-              key={addr.id}
-              onClick={() => setSelectedAddress(addr.id)}
-              className={`group relative cursor-pointer rounded-xl border p-5 transition-all duration-200 ${
-                selectedAddress === addr.id
+              key={Address.ID}
+              onClick={() => dispatch(UpdateAddressID({ AddressID: Address.ID }))}
+              className={`group relative cursor-pointer rounded-xl border p-5 transition-all duration-200 ${AddressID === Address.ID
                   ? "border-primary bg-primary/5 ring-1 ring-primary"
                   : "border-border bg-card hover:border-primary/30 hover:bg-primary/5"
-              }`}
+                }`}
             >
-              {selectedAddress === addr.id && (
+              {AddressID === Address.ID && (
                 <div className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
                   <Check className="h-3 w-3" />
                 </div>
               )}
               <div className="flex items-start gap-4">
                 <div
-                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-colors ${
-                    selectedAddress === addr.id
+                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-colors ${AddressID === Address.ID
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground group-hover:bg-primary/20 group-hover:text-primary"
-                  }`}
+                    }`}
                 >
                   <Home className="h-5 w-5" />
                 </div>
                 <div className="space-y-1">
-                  <p className="font-semibold">{addr.name}</p>
-                  <p className="text-sm text-muted-foreground">{addr.address}</p>
-                  <p className="text-sm text-muted-foreground">{addr.phone}</p>
+                  <p className="font-semibold">{Address.Name}</p>
+                  <p className="text-sm text-muted-foreground">{Address.Address}</p>
+                  <p className="text-sm text-muted-foreground">{Address.Phone}</p>
                 </div>
               </div>
             </div>

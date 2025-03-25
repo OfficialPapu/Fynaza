@@ -18,7 +18,6 @@ const CartSlice = createSlice({
         OriginalTotal: 0,
         DiscountedTotal: 0,
         Pickup: [],
-        CartFetched: false,
     },
     reducers: {
         AddToCart: ((state, action) => {
@@ -57,10 +56,9 @@ const CartSlice = createSlice({
         UpdatePickup: (state, action) => {
             state.Pickup = { ...action.payload };
         },
-        SetCartFetched: (state, action) => { state.CartFetched = action.payload }
 
     }
 })
 
-export const { AddToCart, UpdateQuantity, RemoveFromCart, ClearCart, UpdatePickup, SetCartFetched } = CartSlice.actions;
+export const { AddToCart, UpdateQuantity, RemoveFromCart, ClearCart, UpdatePickup } = CartSlice.actions;
 export default CartSlice.reducer;

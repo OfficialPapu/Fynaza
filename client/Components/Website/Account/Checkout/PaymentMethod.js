@@ -1,8 +1,9 @@
 import { Check, CreditCard, Package } from "lucide-react";
 import { motion } from "framer-motion"
 import useCheckoutActions from "@/hooks/Checkout"
-const PaymentMethod = () => {
-    const { selectedPayment, setSelectedPayment } = useCheckoutActions();
+import { UpdatePaymentMethod } from "../../Redux/Slices/CheckoutSlice";
+const PaymentMethodComp = () => {
+    const { PaymentMethod, dispatch } = useCheckoutActions();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -19,18 +20,17 @@ const PaymentMethod = () => {
                 </div>
 
                 <div className="grid gap-4">
-                    {/* COD Payment Option */}
                     <div
-                        onClick={() => setSelectedPayment("Cash on delivery")}
+                        onClick={() => dispatch(UpdatePaymentMethod({ PaymentMethod: "Cash on delivery" }))}
                         className={`
             relative p-4 sm:p-5 rounded-2xl cursor-pointer transition-all duration-300
-            ${selectedPayment === "Cash on delivery"
+            ${PaymentMethod === "Cash on delivery"
                                 ? "bg-[#f3f7fa] shadow-md border-2 border-gray-200"
                                 : "bg-white hover:bg-[#f9fafc] hover:shadow-sm border border-gray-200"
                             }
           `}
                     >
-                        {selectedPayment === "Cash on delivery" && (
+                        {PaymentMethod === "Cash on delivery" && (
                             <div className="absolute top-6 sm:top-[1.9rem] right-4 sm:right-5 w-6 h-6 sm:w-7 sm:h-7 bg-green-500 rounded-full flex items-center justify-center shadow-sm">
                                 <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                             </div>
@@ -46,22 +46,26 @@ const PaymentMethod = () => {
                         </div>
                     </div>
 
-                    {/* eSewa Payment Option */}
                     <div
-                        onClick={() => setSelectedPayment("eSewa")}
-                        className={`
-            relative p-4 sm:p-5 rounded-2xl cursor-pointer transition-all duration-300
-            ${selectedPayment === "eSewa"
+                        // onClick={() => dispatch(UpdatePaymentMethod({ PaymentMethod: "eSewa" }))}
+                        className={`opacity-60 cursor-not-allowed
+            relative p-4 sm:p-5 rounded-2xl transition-all duration-300
+            ${PaymentMethod === "eSewa"
                                 ? "bg-[#f3f7fa] shadow-md border-2 border-gray-200"
                                 : "bg-white hover:bg-[#f9fafc] hover:shadow-sm border border-gray-200"
                             }
           `}
                     >
-                        {selectedPayment === "eSewa" && (
+                        <span className="bg-gray-100 text-black absolute z-1 text-md px-2 py-1 rounded-md font-medium !opacity-[1] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
+                            Coming Soon
+                        </span>
+
+                        {PaymentMethod === "eSewa" && (
                             <div className="absolute top-6 sm:top-[1.9rem] right-4 sm:right-5 w-6 h-6 sm:w-7 sm:h-7 bg-green-500 rounded-full flex items-center justify-center shadow-sm">
                                 <Check className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                             </div>
                         )}
+
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center mr-3 sm:mr-4 shadow-sm flex-shrink-0">
@@ -105,4 +109,4 @@ const PaymentMethod = () => {
     )
 }
 
-export default PaymentMethod
+export default PaymentMethodComp
