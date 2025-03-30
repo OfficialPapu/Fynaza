@@ -1,33 +1,6 @@
 const { CartSchema, CartItemSchema } = require('../models/CartModel');
 const { ProductSchema } = require('../models/ProductModel');
-const CalculateTotalPrice = async (UserID) => {
-    let Cart = await CartSchema.findOne({ UserID })
-        .populate({
-            path: 'CartItems',
-            populate: {
-                path: 'ProductID',
-                model: "Products",
-                populate: {
-                    path: 'CategoryID',
-                    model: 'Categories'
-                }
-            }
-        });
-
-    let ProductTotal = 0;
-    let CartTotal = 0;
-
-    Cart.CartItems.forEach(Item => {
-        if (Item.ProductID && Item.ProductID.Price) {
-            ProductTotal += Item.ProductID.Price * Item.Quantity;
-        }
-        if (Item.Price) {
-            CartTotal += Item.Price * Item.Quantity;
-        }
-    });
-    return { ProductTotal, CartTotal };
-};
-
+const { CalculateTotalPrice } = require("../config/BaseConfig");
 
 const AddToCart = async (req, res) => {
     try {

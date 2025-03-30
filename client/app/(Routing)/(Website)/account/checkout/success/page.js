@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   ArrowRight,
   Check,
@@ -19,9 +19,68 @@ import Link from "next/link"
 import Image from "next/image"
 import { Separator } from "@/Components/ui/separator"
 import { Progress } from "@/Components/ui/progress"
+import useCheckoutActions from "@/hooks/Checkout"
+import useCartActions from "@/hooks/Cart"
+import axios from "@/lib/axios"
+import { convertCartToCheckout  } from "@/Components/Website/Redux/Slices/CheckoutSlice"
+import { useSelector } from "react-redux"
+
+
+const PlaceOrder = async (CartItems, PaymentMethod, AddressID, PickupCost, PickupLocation, Total, UserID) => {
+  const orderData = {
+    CartItems,
+    PaymentMethod,
+    PickupLocation,
+    AddressID,
+    PickupCost,
+    Total,
+    UserID
+  };
+  try {
+    const response = await axios.post("api/checkout/success", orderData);
+    if (response.status == 201) {
+      // console.log(response.data);
+      dispatch(Converted());
+    }
+  } catch (error) {
+
+  }
+}
 
 export default function OrderSuccessPage() {
-  // Mock data - in a real app, this would come from your API or state management
+
+  let { Total, CartItems, PickupCost, PickupLocation, UserID } = useCartActions();
+  const { AddressID, PaymentMethod, dispatch } = useCheckoutActions();
+  const ConvertedItem = useSelector((state) => state.Checkout.PaymentMethod);
+  dispatch(convertCartToCheckout());
+
+  console.log(ConvertedItem);
+  
+  const hasPlacedOrder = useRef(false);
+  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+
+  useEffect(() => {
+    if (CartItems?.length > 0 && !hasPlacedOrder.current && !isOrderPlaced) {
+      hasPlacedOrder.current = true;
+      setIsOrderPlaced(true);
+
+      const placeOrder = async () => {
+        await PlaceOrder(
+          CartItems,
+          PaymentMethod,
+          AddressID,
+          PickupCost,
+          PickupLocation,
+          Total,
+          UserID
+        );
+      };
+
+      placeOrder();
+    }
+  }, [CartItems, AddressID, PaymentMethod, PickupCost, PickupLocation, Total, UserID, isOrderPlaced]);
+
+
   const [orderDetails, setOrderDetails] = useState({
     orderNumber: "ORD-2023-78945",
     orderDate: "March 25, 2025",
@@ -203,13 +262,13 @@ export default function OrderSuccessPage() {
                         variants={itemVariants}
                         className="flex gap-4 bg-[#f9fafc] p-4 rounded-2xl border border-gray-100"
                       >
-                        <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-xl flex items-center justify-center p-2 border border-gray-100 shadow-sm flex-shrink-0">
+                        <div className="relative w-16 h-16 sm:w-24 sm:h-24 bg-white rounded-xl grid place-content-center shadow-sm flex-shrink-0">
                           <Image
                             src={item.image || "/placeholder.svg"}
                             alt={item.name}
                             width={64}
                             height={64}
-                            className="max-h-full max-w-full object-contain"
+                            className="h-12 w-12 sm:h-16 sm:w-16 object-cover m-0"
                           />
                         </div>
                         <div className="flex-1 min-w-0">

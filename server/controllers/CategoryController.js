@@ -1,6 +1,6 @@
 const { CategoriesSchema } = require('../models/CategoryModel')
 const { upload } = require("../config/MulterConfig");
-const { getFormattedPath, createSlug } = require("../config/UrlConfig");
+const { getFormattedPath, createSlug } = require("../config/BaseConfig");
 
 const GetCategories = async (req, res) => {
     try {

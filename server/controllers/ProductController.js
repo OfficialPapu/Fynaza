@@ -1,5 +1,5 @@
 const { upload } = require("../config/MulterConfig");
-const { getFormattedPath, createSlug } = require("../config/UrlConfig");
+const { getFormattedPath, createSlug } = require("../config/BaseConfig");
 
 const { ProductSchema } = require('../models/ProductModel');
 const ProductReviewSchema = require("../models/ProductReviewModel");
