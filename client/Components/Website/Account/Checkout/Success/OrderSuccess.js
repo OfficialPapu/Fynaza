@@ -12,7 +12,6 @@ import { ConvertCartToCheckout, HandelOrderPlace } from "@/Components/Website/Re
 import OrderStatusCard from "@/Components/Website/Account/Checkout/Success/OrderStatusCard"
 import OrderDetails from "@/Components/Website/Account/Checkout/Success/OrderDetails"
 import { ClearCart } from "@/Components/Website/Redux/Slices/CartSlice"
-import { useSelector } from "react-redux"
 
 const PlaceOrder = async (CartItems, PaymentMethod, AddressID, PickupCost, PickupLocation, Total, Subtotal, Discount, UserID, dispatch) => {
     const orderData = { CartItems, PaymentMethod, PickupLocation, AddressID, PickupCost, Total, Subtotal, Discount, UserID };
@@ -53,7 +52,7 @@ export default function OrderSuccessPage() {
                         <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
                             <Check className="h-10 w-10 text-green-600" />
                         </div>
-                        <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-800">Order Confirmed!</h1>
+                        <h1 className="text-3xl md:text-5xl font-bold text-center text-gray-800">Order Placed!</h1>
                         <p className="text-center text-gray-600 mt-2 max-w-md mx-auto">
                             Your order has been placed successfully and is being processed
                         </p>
@@ -80,7 +79,7 @@ export default function OrderSuccessPage() {
                         transition={{ duration: 0.5, delay: 0.3 }}
                         className="flex justify-center mt-8"
                     >
-                        <Link href="/products">
+                        <Link href="/">
                             <Button
                                 size="lg"
                                 className="rounded-xl px-8 py-6 bg-gray-900 hover:bg-black text-white shadow-lg hover:shadow-xl transition-all duration-300"

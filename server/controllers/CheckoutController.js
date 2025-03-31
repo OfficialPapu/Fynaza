@@ -3,6 +3,9 @@ const DeliverySchema = require("../models/DeliveryModel");
 const { OrderSchema, OrderItemsSchema } = require("../models/OrderModel");
 const { ProductSchema } = require("../models/ProductModel");
 const { UserSchema } = require("../models/UserModel");
+const { SendEmail } = require("../services/EmailService");
+const ejs = require('ejs');
+
 const AddNewAddress = async (req, res) => {
     try {
         const { UserID, Name, Phone, City, Address, PostalCode } = req.body;
@@ -90,10 +93,35 @@ const PlaceOrder = async (req, res) => {
         });
 
         await NewOrder.save();
+        const OrderData = await OrderSchema.findById(NewOrder._id).populate({ path: 'OrderItemsID', populate: { path: 'ProductID', select: 'Name Price' } }).populate('UserID', 'Name Email').populate('Shipping.Address', 'Name Phone Address City PostalCode');
+        await UserNotify(OrderData);
+        await AdminNotify(OrderData);
         res.status(201).json({ OrderID: OrderID });
-
     } catch (error) {
         res.sendStatus(500);
+    }
+}
+
+
+const AdminNotify = async (OrderData) => {
+    try {
+        const to = 'pappuyadav982675@gmail.com';
+        const subject = 'New Order Notification';
+        const html = await ejs.renderFile("views/Emails/Notifications/NotifyAdmin.ejs", OrderData);
+        const info = await SendEmail(to, subject, html);
+    } catch (error) {
+        res.status(500).send('Error sending email');
+    }
+}
+
+const UserNotify = async (OrderData) => {
+    try {
+        const to = OrderData.UserID.Email;
+        const subject = 'Order placed successfully - Fynaza';
+        const html = await ejs.renderFile("views/Emails/Notifications/NotifyUser.ejs", OrderData);
+        const info = await SendEmail(to, subject, html);
+    } catch (error) {
+        res.status(500).send('Error sending email');
     }
 }
 module.exports = { AddNewAddress, AllAddress, PlaceOrder }; 
