@@ -4,20 +4,21 @@ import useCartActions from "./Cart";
 import axios from "@/lib/axios";
 import { useSnackbar } from "notistack";
 import { useDispatch, useSelector } from "react-redux";
-import { UpdateAddressID } from "@/Components/Website/Redux/Slices/CheckoutSlice";
+import { UpdateAddress } from "@/Components/Website/Redux/Slices/CheckoutSlice";
 import { useRouter } from "next/navigation";
 
 const useCheckoutActions = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { enqueueSnackbar: ShowNotification } = useSnackbar();
-    const { CartItems, UserID } = useCartActions();
+    const { CartItems, UserID, PickupLocation } = useCartActions();
     const [showAllProducts, setShowAllProducts] = useState(false)
     const initialProductsToShow = 2
     const hasMoreProducts = CartItems.length > initialProductsToShow
     const visibleProducts = showAllProducts ? CartItems : CartItems.slice(0, initialProductsToShow)
     const PaymentMethod = useSelector((state) => state.Checkout.PaymentMethod);
-    const AddressID = useSelector((state) => state.Checkout.AddressID);
+    const AddressID = useSelector((state) => state.Checkout.Address.ID);
+
     const [Addresses, setAddresses] = useState([]);
     const [NewAddress, setNewAddress] = useState({
         UserID: UserID,
@@ -57,7 +58,7 @@ const useCheckoutActions = () => {
                     Phone: NewAddress.Phone,
                 }
                 setAddresses((prev) => [...prev, NewAddressObj])
-                dispatch(UpdateAddressID({ AddressID: NewAddressObj.ID }))
+                dispatch(UpdateAddress({ Address: NewAddressObj }))
                 setDialogOpen(false)
                 GetInitialAddress();
             }
@@ -77,6 +78,7 @@ const useCheckoutActions = () => {
 
     useEffect(() => {
         GetInitialAddress();
+        if (!UserID || !PickupLocation) router.push('/account/cart');
     }, [])
 
 
@@ -87,7 +89,7 @@ const useCheckoutActions = () => {
         }
     }
     return {
-        PaymentMethod, showAllProducts, setShowAllProducts, hasMoreProducts, visibleProducts, handleAddressSubmit, handleAddressChange, dialogOpen, AddressID, setDialogOpen, NewAddress, Addresses, AddressID, dispatch, UpdateAddressID, HandelCheckout
+        PaymentMethod, showAllProducts, setShowAllProducts, hasMoreProducts, visibleProducts, handleAddressSubmit, handleAddressChange, dialogOpen, AddressID, setDialogOpen, NewAddress, Addresses, AddressID, dispatch, UpdateAddress, HandelCheckout, router
     }
 }
 

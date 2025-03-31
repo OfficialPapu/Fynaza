@@ -9,15 +9,15 @@ import { encryptTransform } from "redux-persist-transform-encrypt";
 const persistConfig = {
     key: "Website",
     storage,
-    transforms: [
-        encryptTransform({
-            secretKey: process.env.NEXT_PUBLIC_PERSIST_ENCRYPT_KEY,
-            onError: function (error) {
-                localStorage.clear(); 
-                window.location.href = "/";
-            },
-        }),
-    ],
+    // transforms: [
+    //     encryptTransform({
+    //         secretKey: process.env.NEXT_PUBLIC_PERSIST_ENCRYPT_KEY,
+    //         onError: function (error) {
+    //             localStorage.clear(); 
+    //             window.location.href = "/";
+    //         },
+    //     }),
+    // ],
 };
 
 const rootReducer = combineReducers({

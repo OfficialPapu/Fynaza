@@ -3,7 +3,6 @@ const DeliverySchema = require("../models/DeliveryModel");
 const { OrderSchema, OrderItemsSchema } = require("../models/OrderModel");
 const { ProductSchema } = require("../models/ProductModel");
 const { UserSchema } = require("../models/UserModel");
-const { CalculateTotalPrice } = require("../config/BaseConfig");
 const AddNewAddress = async (req, res) => {
     try {
         const { UserID, Name, Phone, City, Address, PostalCode } = req.body;
@@ -40,7 +39,7 @@ function generateShipmentID() {
 
 const PlaceOrder = async (req, res) => {
     try {
-        const { PaymentMethod, PickupLocation, AddressID, PickupCost, Total, UserID, CartItems } = req.body;
+        const { PaymentMethod, PickupLocation, AddressID, PickupCost, Total, Subtotal, Discount, UserID, CartItems } = req.body;
         if (!PaymentMethod || !PickupLocation || !AddressID || !CartItems || CartItems.length === 0 || !Total || !UserID) {
             return res.status(400).json({ message: "Missing required fields or empty cart" });
         }
@@ -48,7 +47,6 @@ const PlaceOrder = async (req, res) => {
         if (!User) {
             return res.status(404).json({ message: "User not found" });
         }
-        const { ProductTotal, CartTotal } = await CalculateTotalPrice(UserID);
         let OrderItemsID = [];
         for (const [key, Item] of Object.entries(CartItems)) {
             const Product = await ProductSchema.findById(Item.ProductID);
@@ -58,26 +56,26 @@ const PlaceOrder = async (req, res) => {
             let UnitPrice = Item.PriceAfterDiscount ? Item.PriceAfterDiscount : Item.Price;
             let OrderItem = new OrderItemsSchema({
                 ProductID: Product._id,
-                StandardPrice: Product.Price,
+                BasePrice: Product.Price,
                 UnitPrice: UnitPrice,
                 Quantity: Item.Quantity,
                 Total: UnitPrice * Item.Quantity,
             });
-            // await CartItemSchema.updateOne(
-            //     { _id: Item.CartItemID },
-            //     { $set: { Status: 'Converted' } }
-            // );
+            await CartItemSchema.updateOne(
+                { _id: Item.CartItemID },
+                { $set: { Status: 'Converted' } }
+            );
             await OrderItem.save();
             OrderItemsID.push(OrderItem._id);
         }
         let LastOrderID = (await OrderSchema.findOne().sort({ OrderID: -1 }).select('OrderID -_id').limit(1))?.OrderID || "ORD-0000-000";
         let OrderID = `ORD-${new Date().getFullYear()}-${String(parseInt(LastOrderID.split('-')[2]) + 1).padStart(3, '0')}`;
-        let Discount = ProductTotal - CartTotal || 0;
         const NewOrder = new OrderSchema({
             OrderID,
             UserID,
             OrderItemsID,
-            Total: ProductTotal,
+            BaseTotal: Subtotal,
+            GrandTotal: Total,
             Discount,
             Shipping: {
                 ShipmentID: generateShipmentID(),
@@ -92,11 +90,9 @@ const PlaceOrder = async (req, res) => {
         });
 
         await NewOrder.save();
-        res.status(201).json(NewOrder);
+        res.status(201).json({ OrderID: OrderID });
 
     } catch (error) {
-        console.log(error);
-        
         res.sendStatus(500);
     }
 }

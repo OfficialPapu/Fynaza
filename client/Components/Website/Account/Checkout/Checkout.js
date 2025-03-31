@@ -1,4 +1,5 @@
 "use client"
+import { useEffect } from "react";
 import { ArrowRight, Truck } from "lucide-react";
 import { Button } from "@/Components/ui/button"
 import { motion } from "framer-motion"
@@ -9,8 +10,11 @@ import Products from "@/Components/Website/Account/Checkout/Products";
 import useCheckoutActions from "@/hooks/Checkout";
 
 const Checkout = () => {
-    const { Total } = useCartActions();
-    const { AddressID, HandelCheckout, PaymentMethod } = useCheckoutActions();
+    const { Total, CartItems } = useCartActions();
+    const { AddressID, HandelCheckout, PaymentMethod, router } = useCheckoutActions();
+    useEffect(() => {
+        if (!(CartItems?.length > 0)) router.push('/account/cart');
+    }, [])
 
     return (
         <div className="min-h-[70vh] sm:bg-white pb-12">

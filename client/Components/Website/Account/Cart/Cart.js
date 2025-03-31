@@ -216,7 +216,6 @@ const Cart = () => {
               </div>
             </div>
 
-            {/* Order Summary */}
           </div>
         ) : (
           <motion.div
@@ -234,7 +233,7 @@ const Cart = () => {
                 Looks like you haven't added any items to your cart yet. Explore our products and find something you'll
                 love!
               </p>
-              <Link href="/products">
+              <Link href="/">
                 <Button className="px-8 py-6 text-white bg-gray-900 hover:bg-black rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                   Start Shopping
                   <ShoppingBag className="ml-2 h-4 w-4" />

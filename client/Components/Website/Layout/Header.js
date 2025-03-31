@@ -21,7 +21,7 @@ const categories = [
 ]
 
 export default function Navbar() {
-    const CartItemCount = useSelector((state) => state.Cart.CartItems.length);
+    const CartItemCount = useSelector((state) => state.Cart.CartItems?.length);
     const isAuth = useSelector((state) => state.Login.isAuth);
     return (
         <div className="border-b lg:pb-0 bg-white">

@@ -1,50 +1,49 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
 const CheckoutSlice = createSlice({
-    name: "Checkout",
-    initialState: {
-        PaymentMethod: null,
-        AddressID: null,
-        CartItems: [],
-        OriginalTotal: 0,
-        DiscountedTotal: 0,
-        Pickup: [],
+  name: "Checkout",
+  initialState: {
+    PaymentMethod: null,
+    Address: [],
+    CheckoutItems: [],
+    OrderID: null,
+    Subtotal: null,
+    Discount: null,
+    Total: null
+  },
+  reducers: {
+    UpdatePaymentMethod: (state, action) => {
+      state.PaymentMethod = action.payload.PaymentMethod;
     },
-    reducers: {
-        UpdatePaymentMethod: (state, action) => {
-            state.PaymentMethod = action.payload.PaymentMethod;
-        },
-        UpdateAddressID: (state, action) => {
-            state.AddressID = action.payload.AddressID;
-        },
-        ClearCheckoutState: (state) => {
-            state.AddressID = null;
-            state.PaymentMethod = null;
-        },
-        Converted: (state, action) => {
-            // This will just copy the data that was passed from the thunk
-            const { CartItems, OriginalTotal, DiscountedTotal, Pickup } = action.payload;
-            state.CartItems = CartItems;
-            state.OriginalTotal = OriginalTotal;
-            state.DiscountedTotal = DiscountedTotal;
-            state.Pickup = Pickup;
-          },
+    UpdateAddress: (state, action) => {
+      state.Address = action.payload.Address;
+    },
+    ClearCheckoutState: (state) => {
+      state.Address = [];
+      state.PaymentMethod = null;
+    },
+    Converted: (state, action) => {
+      const { CartItems } = action.payload;
+      state.CheckoutItems = CartItems;
+    },
+    HandelOrderPlace: (state, action) => {
+      const { OrderID, Total, Subtotal, Discount } = action.payload;
+      state.OrderID = OrderID;
+      state.Total = Total;
+      state.Subtotal = Subtotal;
+      state.Discount = Discount;
     }
+  }
 })
 
-export const convertCartToCheckout = () => (dispatch, getState) => {
-    const cartState = getState().Cart;
-  
-    // Dispatch the Converted action with the CartSlice data
-    dispatch(
-      CheckoutSlice.actions.Converted({
-        CartItems: cartState.CartItems,
-        OriginalTotal: cartState.OriginalTotal,
-        DiscountedTotal: cartState.DiscountedTotal,
-        Pickup: cartState.Pickup,
-      })
-    );
-  };
+export const ConvertCartToCheckout = () => (dispatch, getState) => {
+  const cartState = getState().Cart;
+  dispatch(
+    CheckoutSlice.actions.Converted({
+      CartItems: cartState.CartItems,
+    })
+  );
+};
 
-export const { UpdatePaymentMethod, UpdateAddressID, ClearCheckoutState, Converted } = CheckoutSlice.actions;
+export const { UpdatePaymentMethod, UpdateAddress, ClearCheckoutState, HandelOrderPlace } = CheckoutSlice.actions;
 export default CheckoutSlice.reducer;

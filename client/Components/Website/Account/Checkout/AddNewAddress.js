@@ -18,7 +18,7 @@ const AddNewAddress = () => {
     setDialogOpen,
     NewAddress,
     Addresses,
-    dispatch, UpdateAddressID
+    dispatch, UpdateAddress
   } = useCheckoutActions()
 
   return (
@@ -154,7 +154,7 @@ const AddNewAddress = () => {
           {Addresses.map((Address) => (
             <div
               key={Address.ID}
-              onClick={() => dispatch(UpdateAddressID({ AddressID: Address.ID }))}
+              onClick={() => dispatch(UpdateAddress({ Address: Address }))}
               className={`group relative cursor-pointer rounded-xl border p-5 transition-all duration-200 ${AddressID === Address.ID
                   ? "border-primary bg-primary/5 ring-1 ring-primary"
                   : "border-border bg-card hover:border-primary/30 hover:bg-primary/5"

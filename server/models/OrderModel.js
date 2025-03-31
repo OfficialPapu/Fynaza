@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const OrderItemsSchema = new mongoose.Schema({
     ProductID: { type: mongoose.Schema.Types.ObjectId, ref: "Products", required: true },
-    StandardPrice: {
+    BasePrice: {
         type: Number,
         required: true
     },
@@ -38,7 +38,8 @@ const OrderSchema = new mongoose.Schema({
     },
     UserID: { type: mongoose.Schema.Types.ObjectId, ref: "Users", required: true },
     OrderItemsID: [{ type: mongoose.Schema.Types.ObjectId, ref: "OrderItems" }],
-    Total: { type: Number, required: true },
+    BaseTotal: { type: Number, required: true },
+    GrandTotal: { type: Number, required: true },
     Discount: { type: Number, default: 0 },
     Shipping: {
         ShipmentID: { type: String },
