@@ -1,6 +1,8 @@
+const ejs = require('ejs');
 const { UserSchema } = require("../models/UserModel");
 const { serialize } = require('cookie')
 const jwt = require('jsonwebtoken');
+const { SendEmail } = require('../services/EmailService');
 
 const Signup = async (req, res) => {
     try {
@@ -96,4 +98,29 @@ const Logout = (req, res) => {
     }
 }
 
-module.exports = { Signup, Login, Logout, ValidateToken };
+const ForgotPassword = async (req, res) => {
+    try {
+        const { Email } = req.body;
+        const User = await UserSchema.findOne({ Email });
+        if (!User) return res.status(404).json({ message: "Please enter a valid email" });
+        const to = User.Email;
+        const subject = 'Password Reset - Fynaza';
+        const html = await ejs.renderFile("views/Emails/Notifications/ForgotPassword.ejs", User);
+        const info = await SendEmail(to, subject, html);
+        if (info.rejected.length > 0) {
+            return res.status(400).json({ message: "Invalid Email!" });
+        }
+        return res.status(200).json({ message: "Password sent to your email!" });
+    } catch (emailError) {
+        if (emailError.response) {
+            if (emailError.response.includes("550 No such user")) {
+                return res.status(400).json({ message: "The email does not exist." });
+            }
+            if (emailError.response.includes("Mailbox unavailable")) {
+                return res.status(400).json({ message: "The email is deactivated or unavailable." });
+            }
+        }
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+module.exports = { Signup, Login, Logout, ValidateToken, ForgotPassword };

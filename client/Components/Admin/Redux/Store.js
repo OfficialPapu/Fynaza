@@ -4,6 +4,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
 import { encryptTransform } from "redux-persist-transform-encrypt";
 import LoginSlice from "./Slices/LoginSlice";
+import OrderDetailsSlice from "./Slices//OrderDetailsSlice";
 const persistConfig = ({
     key: "Admin",
     storage,
@@ -20,6 +21,7 @@ const persistConfig = ({
 
 const rootReducer = combineReducers({
     Admin: LoginSlice,
+    OrderDetails: OrderDetailsSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

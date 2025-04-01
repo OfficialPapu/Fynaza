@@ -6,7 +6,12 @@ import { Button } from "@/Components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card"
-
+const stats = [
+  { title: "Total Orders", value: "1,234", change: "+12.3%" },
+  { title: "Revenue", value: "$48,294", change: "+8.7%" },
+  { title: "Avg. Order Value", value: "$39.14", change: "+3.2%" },
+  { title: "Pending Orders", value: "23", change: "-5.1%" },
+]
 export function SalesOverview() {
   return (
     <div className="space-y-8">
@@ -53,6 +58,32 @@ export function SalesOverview() {
           </div>
         </Card>
       </div>
+
+
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat) => (
+              <Card key={stat.title}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-baseline justify-between">
+                    <div className="text-2xl font-bold">{stat.value}</div>
+                    <div
+                      className={`text-sm ${
+                        stat.change.startsWith("+")
+                          ? "text-green-600 dark:text-green-500"
+                          : "text-red-600 dark:text-red-500"
+                      }`}
+                    >
+                      {stat.change}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
 
       {/* Order Status */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

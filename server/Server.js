@@ -11,6 +11,7 @@ const { SecureRouter } = require('./routes/SecureRoutes');
 const { AuthRouter } = require('./routes/AuthRoute');
 const { CartRouter } = require('./routes/CartRouter');
 const { CheckoutRouter } = require('./routes/CheckoutRoute');
+const { AdminRouter } = require('./routes/AdminRouter');
 require('dotenv/config');
 ConnectDB();
 
@@ -33,17 +34,12 @@ app.use('/', SecureRouter);
 
 //Category
 app.use("/api/categories", CategoryRouter);
-
-//Product
 app.use('/api/product', ProductRouter);
-
-//auth
 app.use("/api/auth", AuthRouter);
-
-//cart
 app.use("/api/cart", CartRouter);
 app.use("/api/checkout", CheckoutRouter);
 
+app.use("/api/admin", AdminRouter)
 
 const startServer = async () => {
     try {

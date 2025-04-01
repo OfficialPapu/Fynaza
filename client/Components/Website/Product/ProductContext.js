@@ -2,7 +2,7 @@
 import React, { createContext, use, useContext, useEffect, useState } from 'react'
 import axios from "@/lib/axios";
 import { Home, Box } from "lucide-react"
-import { usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
@@ -12,8 +12,7 @@ export const ProductProvider = ({ children }) => {
     const isAuth = useSelector((state) => state.Login.isAuth);
     const UserID = useSelector((state) => state.Login?.UserDetails?.UserID);
     const router = useRouter();
-    const pathname = usePathname();
-    const Slug = pathname.split("/").pop();
+    const { Slug } = useParams();
     const [Rating, setRating] = useState(0);
     const [Comment, setComment] = useState("");
     const [Reviews, setReviews] = useState([]);

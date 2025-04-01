@@ -1,10 +1,10 @@
+const ejs = require('ejs');
 const { CartItemSchema } = require("../models/CartModel");
 const DeliverySchema = require("../models/DeliveryModel");
 const { OrderSchema, OrderItemsSchema } = require("../models/OrderModel");
 const { ProductSchema } = require("../models/ProductModel");
 const { UserSchema } = require("../models/UserModel");
 const { SendEmail } = require("../services/EmailService");
-const ejs = require('ejs');
 
 const AddNewAddress = async (req, res) => {
     try {
