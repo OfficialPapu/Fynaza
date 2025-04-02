@@ -1,15 +1,16 @@
 "use client"
 import React from 'react'
 import Link from "next/link"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { ArrowLeft, Calendar, ChevronDown, FileText, RefreshCw } from "lucide-react"
+import { format } from "date-fns"
+import { ArrowLeft, Calendar, ChevronDown, RefreshCw } from "lucide-react"
 import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import useOrderDetailsActions from './useOrderDetailsActions';
 import { HandelDialogChanges } from '../../Redux/Slices/OrderDetailsSlice'
 
 const Header = () => {
-    const { getStatusColor, setIsAddNoteDialogOpen, orderData, currentStatus, dispatch } = useOrderDetailsActions();
+    const { getStatusColor, OrderData, dispatch } = useOrderDetailsActions();
+
     return (
         <header className="border-b bg-white px-4 py-3 shadow-sm sm:px-6 sm:py-4">
             <div>
@@ -22,39 +23,31 @@ const Header = () => {
                             </Link>
                         </Button>
                         <div>
-                            <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Order {orderData.id}</h1>
+                            <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
+                                Order: {OrderData?.OrderID || 'N/A'}
+                            </h1>
                             <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                                 <Calendar className="h-4 w-4" />
-                                <span>{orderData.date}</span>
+                                <span>{OrderData?.CreatedAt ? format(new Date(OrderData.CreatedAt), "MMM dd, yyyy") : "Loading..."}</span>
                                 <Badge
                                     variant="outline"
-                                    className={`${getStatusColor(currentStatus)} ml-2 px-2.5 py-0.5 text-xs font-medium`}
+                                    className={`${getStatusColor(OrderData?.Shipping?.Status ? OrderData?.Shipping?.Status : "")} ml-2 px-2.5 py-0.5 text-xs font-medium`}
                                 >
-                                    {currentStatus}
+                                    {OrderData?.Shipping?.Status || 'N/A'}
                                 </Badge>
                             </div>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 self-end sm:self-auto">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="default" size="sm">
-                                    Actions
-                                    <ChevronDown className="ml-2 h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-[200px]">
-                                <DropdownMenuItem onClick={() =>  dispatch(HandelDialogChanges({Type:"UpdateStatusDialogOpen"}))}>
-                                    <RefreshCw className="mr-2 h-4 w-4" />
-                                    Update Status
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => dispatch(HandelDialogChanges({ Type: "UpdateAddNoteDialogOpen" }))}>
-                                    <FileText className="mr-2 h-4 w-4" />
-                                    Add Note
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Button
+                            variant="default"
+                            className="group"
+                            onClick={() => dispatch(HandelDialogChanges())}
+                            disabled={!OrderData}
+                        >
+                            <RefreshCw className="h-4 w-4 transition-transform group-hover:rotate-90" />
+                            Update Status
+                        </Button>
                     </div>
                 </div>
             </div>

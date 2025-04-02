@@ -1,7 +1,7 @@
 "use client"
 import { useCallback, useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import getStatusColor from "@/Components/ui/getStatusColor"
+import {getStatusColor} from "@/Components/ui/getStatusColor"
 import axios from "@/lib/axios"
 
 const useOrderActions = () => {

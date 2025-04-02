@@ -1,4 +1,4 @@
-const getStatusColor = (Status) => {
+export const getStatusColor = (Status) => {
   switch (Status.toLowerCase()) {
     case "completed":
       return "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-900";
@@ -19,4 +19,46 @@ const getStatusColor = (Status) => {
   }
 };
 
-export default getStatusColor;
+export const getStatusDotColor = (status) => {
+  const colors = {
+    completed: {
+      bg: "bg-emerald-50",
+      text: "text-emerald-700",
+      dot: "bg-emerald-500",
+    },
+    processing: {
+      bg: "bg-blue-50",
+      text: "text-blue-700",
+      dot: "bg-blue-500",
+    },
+    pending: {
+      bg: "bg-amber-50",
+      text: "text-amber-700",
+      dot: "bg-amber-500",
+    },
+    shipped: {
+      bg: "bg-indigo-50",
+      text: "text-indigo-700",
+      dot: "bg-indigo-500",
+    },
+    delivered: {
+      bg: "bg-teal-50",
+      text: "text-teal-700",
+      dot: "bg-teal-500",
+    },
+    cancelled: {
+      bg: "bg-rose-50",
+      text: "text-rose-700",
+      dot: "bg-rose-500",
+    },
+  };
+
+  return (
+    colors[status] || {
+      bg: "bg-gray-50",
+      text: "text-gray-700",
+      dot: "bg-gray-500",
+    }
+  );
+};
+

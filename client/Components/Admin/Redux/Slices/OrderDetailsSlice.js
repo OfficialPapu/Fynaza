@@ -4,15 +4,18 @@ const OrderDetailsSlice = createSlice({
     name: "OrderDetails",
     initialState: {
         UpdateStatusDialogOpen: false,
-        AddNoteDialogOpen: false,
+        NewStatus: "",
     },
     reducers: {
-        HandelDialogChanges: (state, action) => {
-            const { Type } = action.payload;
-            Type == "UpdateStatusDialogOpen" ? state.UpdateStatusDialogOpen = !state.UpdateStatusDialogOpen : state.AddNoteDialogOpen = !state.AddNoteDialogOpen
+        HandelDialogChanges: (state) => {
+            state.UpdateStatusDialogOpen = !state.UpdateStatusDialogOpen
+        },
+        HandelStatusChanges: (state, action) => {
+            const { status } = action.payload;
+            state.NewStatus = status;
         }
     }
 })
 
-export const { HandelDialogChanges } = OrderDetailsSlice.actions;
+export const { HandelDialogChanges, HandelStatusChanges } = OrderDetailsSlice.actions;
 export default OrderDetailsSlice.reducer;

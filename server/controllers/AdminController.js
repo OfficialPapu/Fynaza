@@ -11,13 +11,37 @@ const OrderList = async (req, res) => {
 
 const OrderByID = async (req, res) => {
     try {
-        const { OrderID } = req.query;
-        const Order = await OrderSchema.find({OrderID}).populate("UserID");
-        console.log(OrderID);
-        
+        const { OrderID } = req.params;
+        const Order = await OrderSchema.findOne({ _id: OrderID }).populate("UserID").populate("OrderItemsID")
+            .populate({
+                path: "OrderItemsID",
+                populate: {
+                    path: "ProductID",
+                    model: "Products"
+                }
+            }).populate("Shipping.Address").exec();
+
+        if (!Order) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+        return res.status(200).json(Order);
     } catch (error) {
         res.sendStatus(500);
     }
 }
 
-module.exports = { OrderList, OrderByID };
+const UpdateOrderByID = async (req, res) => {
+    try {
+        const { OrderID } = req.params;
+        const { updateMode, selectedItems } = req.body
+        if (updateMode == "all") {
+
+        }
+        res.sendStatus(200);
+
+    } catch (error) {
+        res.sendStatus(500);
+    }
+}
+
+module.exports = { OrderList, OrderByID, UpdateOrderByID };
