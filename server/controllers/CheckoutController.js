@@ -1,15 +1,17 @@
-const ejs = require('ejs');
+const { CountryInfo } = require("../config/BaseConfig");
 const { CartItemSchema } = require("../models/CartModel");
 const DeliverySchema = require("../models/DeliveryModel");
 const { OrderSchema, OrderItemsSchema } = require("../models/OrderModel");
 const { ProductSchema } = require("../models/ProductModel");
 const { UserSchema } = require("../models/UserModel");
 const { SendEmail } = require("../services/EmailService");
-
+const ejs = require('ejs');
 const AddNewAddress = async (req, res) => {
     try {
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const { Country } = CountryInfo(ip);
         const { UserID, Name, Phone, City, Address, PostalCode } = req.body;
-        const newAddress = new DeliverySchema({ UserID, Name, Phone, City, Address, PostalCode });
+        const newAddress = new DeliverySchema({ UserID, Name, Phone, City, Address, Country, PostalCode });
         const savedAddress = await newAddress.save();
         res.status(201).json({ AddressID: savedAddress._id });
     } catch (error) {

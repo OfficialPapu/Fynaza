@@ -1,26 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams, usePathname, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { getStatusColor, getStatusDotColor } from "@/Components/ui/getStatusColor"
 import { useDispatch, useSelector } from "react-redux"
 import axios from "@/lib/axios"
-import { HandelDialogChanges, HandelStatusChanges } from "../../Redux/Slices/OrderDetailsSlice"
+import { HandelDialogChanges, HandelStatusChanges, HandelOrderData, HandelOrderDataStatusChanges } from "../../Redux/Slices/OrderDetailsSlice"
+import { useSnackbar } from "notistack"
 
 const useOrderDetailsActions = () => {
-
-    const [OrderData, setOrderData] = useState([]);
-
-    const FetchOrderDetials = async (OrderID) => {
-        try {
-            const response = await axios.get(`api/admin/order/${OrderID}`);
-            return response.data;
-        } catch (error) {
-            console.error('Error fetching order details:', error);
-        }
-    }
-
-
+    const { enqueueSnackbar: ShowNotification } = useSnackbar();
+    let OrderData = useSelector((state) => state.OrderDetails.OrderData);
     const dispatch = useDispatch();
     const { OrderID } = useParams()
     const isUpdateStatusDialogOpen = useSelector((state) => state.OrderDetails.UpdateStatusDialogOpen);
@@ -31,20 +21,19 @@ const useOrderDetailsActions = () => {
     const [isProductListExpanded, setIsProductListExpanded] = useState(false)
     const BASE_IMAGES_PATH = process.env.NEXT_PUBLIC_BASE_IMAGES_PATH;
     const [isLoading, setIsLoading] = useState(false);
+    const [isCorrectInfo, setisCorrectInfo] = useState(false);
+    const FetchOrderDetials = async (OrderID) => {
+        try {
+            const response = await axios.get(`api/admin/order/${OrderID}`);
+            dispatch(HandelOrderData(response.data));
+            dispatch(HandelStatusChanges({ status: response.data.Shipping.Status }))
+            setisCorrectInfo(true);
+        } catch (error) {
+            ShowNotification(`Something went wrong!`, { variant: 'error' });
+        }
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
-            if (OrderID) {
-                const OrderDetails = await FetchOrderDetials(OrderID);
-                setOrderData(OrderDetails);
-                dispatch(HandelStatusChanges({ status: OrderDetails.Shipping.Status }))
-            }
-        };
-
-        fetchData();
-    }, [OrderID]);
-
-    useEffect(() => {
-
         if (isUpdateStatusDialogOpen) {
             setSelectedItems([])
             setUpdateMode("all")
@@ -70,24 +59,14 @@ const useOrderDetailsActions = () => {
 
     const handleStatusUpdate = async () => {
         setIsLoading(true);
-        // if (updateMode === "all") {
-
-        //     console.log(`Updating entire order ${OrderData.id} to status: ${NewStatus}`)
-        // } else {
-        //     console.log(`Updating items ${selectedItems.join(", ")} to status: ${NewStatus}`)
-        //     console.log(`Items to update: ${selectedItems.join(", ")}`)
-        //     console.log(`New status: ${NewStatus}`)
-        // }
-
         try {
-            const data = {
-                updateMode,
-                selectedItems
+            const ApiData = { updateMode, selectedItems, NewStatus };
+            const response = await axios.put(`api/admin/order/${OrderID}`, ApiData);
+            if (response.status == 200) {
+                ShowNotification(`Status Updated to ${NewStatus}`, { variant: 'success' });
+                dispatch(HandelOrderDataStatusChanges(ApiData));
             }
-            const response = await axios.put(`api/admin/order/${OrderID}`, data);
-            // return response.data;
         } catch (error) {
-            console.error('Error fetching order details:', error);
         } finally {
             setIsLoading(false);
             dispatch(HandelDialogChanges());
@@ -97,7 +76,7 @@ const useOrderDetailsActions = () => {
     }
 
 
-    return { getStatusColor, getStatusDotColor, OrderData, setActiveTab, isUpdateStatusDialogOpen, handleStatusUpdate, dispatch, selectAllItems, updateMode, BASE_IMAGES_PATH, setUpdateMode, handleModeChange, selectedItems, isProductListExpanded, setIsProductListExpanded, setSelectedItems, NewStatus, isLoading }
+    return { getStatusColor, getStatusDotColor, OrderData, setActiveTab, isUpdateStatusDialogOpen, handleStatusUpdate, dispatch, selectAllItems, updateMode, BASE_IMAGES_PATH, setUpdateMode, handleModeChange, selectedItems, isProductListExpanded, setIsProductListExpanded, setSelectedItems, NewStatus, isLoading, FetchOrderDetials, OrderID, isCorrectInfo }
 }
 
 export default useOrderDetailsActions

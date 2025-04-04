@@ -56,10 +56,10 @@ export default function FilterAndActions() {
                             <SelectValue placeholder="Show" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="5">5 per page</SelectItem>
-                            <SelectItem value="10">10 per page</SelectItem>
-                            <SelectItem value="15">15 per page</SelectItem>
-                            <SelectItem value="20">20 per page</SelectItem>
+                            <SelectItem value="10">10 items</SelectItem>
+                            <SelectItem value="20">20 items</SelectItem>
+                            <SelectItem value="50">50 items</SelectItem>
+                            <SelectItem value="100">100 items</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

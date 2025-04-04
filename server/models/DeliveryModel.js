@@ -24,7 +24,6 @@ const DeliverySchema = new mongoose.Schema({
     },
     Country: {
         type: String,
-        default: "Nepal",
     },
     PostalCode: {
         type: String,

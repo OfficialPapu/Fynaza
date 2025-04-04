@@ -1,38 +1,38 @@
 "use client"
-import { useCallback, useEffect, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import {getStatusColor} from "@/Components/ui/getStatusColor"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { getStatusColor } from "@/Components/ui/getStatusColor"
 import axios from "@/lib/axios"
 
 const useOrderActions = () => {
+    const [Orders, setOrders] = useState([]);
+
     const fetchOrderList = async () => {
         try {
             const response = await axios.get("api/admin/orders");
-            return response.data;
+            setOrders(Object.values(response.data));
         } catch (error) {
             console.error("Error fetching order list:", error);
         }
     }
-
-    const [Orders, setOrders] = useState([]);
-
+    const hasFetched = useRef(false);
     useEffect(() => {
         const fetchAndLogOrderList = async () => {
-            const Order = await fetchOrderList();
-            const Data = Object.values(Order);
-            setOrders(Data);
+            await fetchOrderList();
         }
-
-        fetchAndLogOrderList();
+        if (!hasFetched.current) {
+            hasFetched.current = true
+            fetchAndLogOrderList();
+        }
     }, [])
 
     const router = useRouter()
-    const pathname = usePathname()
+    const pathname = "/admin/orders"
     const searchParams = useSearchParams()
     const page = searchParams.get("page") ? Number.parseInt(searchParams.get("page")) : 1
     const perPage = searchParams.get("perPage") ? Number.parseInt(searchParams.get("perPage")) : 10
     const Status = searchParams.get("status") || "all"
-    
+
     const search = searchParams.get("search") || ""
     const [searchQuery, setSearchQuery] = useState(search)
 
@@ -78,11 +78,19 @@ const useOrderActions = () => {
 
     const filteredOrders = Orders.filter((order) => {
         const matchesStatus = Status == "all" ? true : order?.Shipping?.Status.toLowerCase() == Status
-        const matchesSearch =
-            search === "" ? true
-                : order.OrderID.toLowerCase().includes(search.toLowerCase()) ||
-                order.UserID.Name.toLowerCase().includes(search.toLowerCase()) ||
-                order.UserID.Email.toLowerCase().includes(search.toLowerCase())
+        const normalizeText = (text) => {
+            if (!text) return '';
+            return text.toString().toLowerCase().replace(/[^a-z0-9]/g, '');
+        };
+
+        const matchesSearch = search === "" ? true :
+            normalizeText(order?.OrderID).includes(normalizeText(search)) ||
+            normalizeText(order?.UserID?.Name).includes(normalizeText(search)) ||
+            normalizeText(order?.UserID?.Email).includes(normalizeText(search)) ||
+            normalizeText(order?.UserID?.Mobile).includes(normalizeText(search)) ||
+            normalizeText(order?.Shipping?.Status).includes(normalizeText(search)) ||
+            normalizeText(order?.Shipping?.Address?.Name).includes(normalizeText(search)) ||
+            normalizeText(order?.Shipping?.Address?.Phone).includes(normalizeText(search));
         return matchesStatus && matchesSearch
     })
 
@@ -130,7 +138,7 @@ const useOrderActions = () => {
     }
 
 
-    return { getPageNumbers, getStatusColor, goToPage, page, totalPages, indexOfLastItem, indexOfFirstItem, currentItems, filteredOrders, Orders, updateFilters, handleSearchSubmit, searchQuery, setSearchQuery, perPage }
+    return { getPageNumbers, getStatusColor, goToPage, page, totalPages, indexOfLastItem, indexOfFirstItem, currentItems, filteredOrders, Orders, updateFilters, handleSearchSubmit, searchQuery, setSearchQuery, perPage, fetchOrderList }
 }
 
 export default useOrderActions;

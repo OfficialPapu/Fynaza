@@ -59,9 +59,9 @@ const sidebarLinks = [
         active: true,
     },
     {
-        title: "Staff",
+        title: "Users",
         icon: Users,
-        href: "/admin/staff",
+        href: "/admin/users",
         active: true,
     },
     {

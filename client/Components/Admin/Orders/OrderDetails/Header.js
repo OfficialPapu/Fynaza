@@ -31,7 +31,7 @@ const Header = () => {
                                 <span>{OrderData?.CreatedAt ? format(new Date(OrderData.CreatedAt), "MMM dd, yyyy") : "Loading..."}</span>
                                 <Badge
                                     variant="outline"
-                                    className={`${getStatusColor(OrderData?.Shipping?.Status ? OrderData?.Shipping?.Status : "")} ml-2 px-2.5 py-0.5 text-xs font-medium`}
+                                    className={`${getStatusColor(OrderData?.Shipping?.Status || "")} ml-2 px-2.5 py-0.5 text-xs font-medium capitalize`}
                                 >
                                     {OrderData?.Shipping?.Status || 'N/A'}
                                 </Badge>

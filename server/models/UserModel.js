@@ -23,7 +23,10 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    Address: {
+    Country: {
+        type: String,
+    },
+    City: {
         type: String,
     },
     ProfilePic: {

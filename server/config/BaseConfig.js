@@ -1,6 +1,7 @@
 const path = require('path');
 const { CartSchema } = require('../models/CartModel');
-
+const geoip = require('geoip-lite');
+const countries = require('i18n-iso-countries');
 const getFormattedPath = (filePath) => {
     const parts = filePath.split(path.sep);
     return `${parts[parts.length - 3]}/${parts[parts.length - 2]}/${parts[parts.length - 1]}`;
@@ -47,6 +48,16 @@ const CalculateTotalPrice = async (UserID) => {
     return { ProductTotal, CartTotal };
 };
 
+const CountryInfo = (ip) => {
+    const geo = geoip.lookup(ip);
+    if (geo) {
+        const Country = countries.getName(geo.country, "en") || null;
+        const City = geo.city || null;
+        return { Country, City };
+    } else {
+        return { Country: null, City: null };
+    }
+};
 
 
-module.exports = { getFormattedPath, createSlug, CalculateTotalPrice }
+module.exports = { getFormattedPath, createSlug, CalculateTotalPrice, CountryInfo }

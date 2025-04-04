@@ -8,15 +8,15 @@ import OrderDetailsSlice from "./Slices//OrderDetailsSlice";
 const persistConfig = ({
     key: "Admin",
     storage,
-    transforms: [
-        encryptTransform({
-            secretKey: process.env.NEXT_PUBLIC_PERSIST_ENCRYPT_KEY,
-            onError: function (error) {
-                localStorage.clear();
-                window.location.href = "/";
-            },
-        }),
-    ],
+    // transforms: [
+    //     encryptTransform({
+    //         secretKey: process.env.NEXT_PUBLIC_PERSIST_ENCRYPT_KEY,
+    //         onError: function (error) {
+    //             localStorage.clear();
+    //             window.location.href = "/";
+    //         },
+    //     }),
+    // ],
 })
 
 const rootReducer = combineReducers({

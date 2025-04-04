@@ -115,7 +115,7 @@ const UpdateStatusDialog = () => {
                                                     {item?.ProductID?.Name}
                                                 </div>
                                                 <div className="flex items-center gap-2 mt-1">
-                                                    <div className={`px-2 py-0.5 text-xs rounded-full ${getStatusDotColor(item?.Status).bg} ${getStatusDotColor(item?.Status).text}`}>
+                                                    <div className={`px-2 py-0.5 text-xs rounded-full capitalize ${getStatusDotColor(item?.Status).bg} ${getStatusDotColor(item?.Status).text}`}>
                                                         {item?.Status}
                                                     </div>
                                                 </div>
@@ -162,7 +162,7 @@ const UpdateStatusDialog = () => {
                                                                     {item?.ProductID?.Name}
                                                                 </div>
                                                                 <div className="flex items-center gap-2 mt-1">
-                                                                    <div className={`px-2 py-0.5 text-xs rounded-full ${getStatusDotColor(item?.Status).bg} ${getStatusDotColor(item?.Status).text}`}>
+                                                                    <div className={`px-2 py-0.5 text-xs rounded-full capitalize ${getStatusDotColor(item?.Status).bg} ${getStatusDotColor(item?.Status).text}`}>
                                                                         {item?.Status}
                                                                     </div>
                                                                 </div>
@@ -201,7 +201,7 @@ const UpdateStatusDialog = () => {
                             New Status
                         </Label>
                         <div className="grid grid-cols-3 gap-2">
-                            {["shipped", "completed", "cancelled"].map((status) => {
+                            {["shipped", "delivered", "cancelled"].map((status) => {
                                 const statusColors = getStatusDotColor(status)
                                 return (
                                     <button

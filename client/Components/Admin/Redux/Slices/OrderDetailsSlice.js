@@ -3,6 +3,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 const OrderDetailsSlice = createSlice({
     name: "OrderDetails",
     initialState: {
+        OrderData: [],
         UpdateStatusDialogOpen: false,
         NewStatus: "",
     },
@@ -13,9 +14,29 @@ const OrderDetailsSlice = createSlice({
         HandelStatusChanges: (state, action) => {
             const { status } = action.payload;
             state.NewStatus = status;
+        },
+        HandelOrderData: (state, action) => {
+            state.OrderData = action.payload;
+        },
+        HandelOrderDataStatusChanges: (state, action) => {
+            const { updateMode, selectedItems, NewStatus } = action.payload;
+            state.OrderData.Shipping.Status = NewStatus;
+            if (updateMode == "all") {
+                state.OrderData.OrderItemsID.forEach(item => {
+                    item.Status = NewStatus;
+                });
+            } else {
+                state.OrderData.OrderItemsID.forEach(item => {
+                    if (selectedItems.includes(item._id)) {
+                        item.Status = NewStatus;
+                    } else {
+                        item.Status = "Cancelled";
+                    }
+                });
+            }
         }
     }
 })
 
-export const { HandelDialogChanges, HandelStatusChanges } = OrderDetailsSlice.actions;
+export const { HandelDialogChanges, HandelStatusChanges, HandelOrderData, HandelOrderDataStatusChanges } = OrderDetailsSlice.actions;
 export default OrderDetailsSlice.reducer;

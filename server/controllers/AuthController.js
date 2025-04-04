@@ -3,9 +3,12 @@ const { UserSchema } = require("../models/UserModel");
 const { serialize } = require('cookie')
 const jwt = require('jsonwebtoken');
 const { SendEmail } = require('../services/EmailService');
+const { CountryInfo } = require('../config/BaseConfig');
 
 const Signup = async (req, res) => {
     try {
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const { Country, City } = CountryInfo(ip);
         const { Name, Email, Mobile, Password } = req.body;
         if (!Name || !Email || !Mobile || !Password) {
             res.status(400).json({ message: "All fields are mandatory" })
@@ -24,7 +27,7 @@ const Signup = async (req, res) => {
             res.status(401).json({ message: "User alredy exist" })
             return;
         }
-        const NewUser = new UserSchema({ UID, Name, Email, Mobile, Password });
+        const NewUser = new UserSchema({ UID, Name, Email, Mobile, Password, Country, City });
         await NewUser.save();
         res.status(201).json({ success: true });
     } catch (error) {

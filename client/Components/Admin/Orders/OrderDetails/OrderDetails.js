@@ -4,11 +4,11 @@ import { Badge } from "@/Components/ui/badge"
 import { Separator } from "@/Components/ui/separator"
 import { TabsContent } from "@/Components/ui/tabs"
 import useOrderDetailsActions from "./useOrderDetailsActions"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card"
 import ProductInfo from "./ProductInfo"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card"
 
 const OrderDetails = () => {
-    const { OrderData } = useOrderDetailsActions();
+    const { OrderData, getStatusColor } = useOrderDetailsActions();
     return (
         <>
             <TabsContent value="details" className="mt-6 space-y-6">
@@ -46,10 +46,7 @@ const OrderDetails = () => {
                                         <span className="text-slate-500 dark:text-slate-400">Status:</span>
                                         <Badge
                                             variant="outline"
-                                            className={`${OrderData?.Shipping?.Status === "Completed"
-                                                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                                : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                                } px-2 py-0.5 text-xs font-medium`}
+                                            className={`${getStatusColor(OrderData?.Shipping?.Status || "")} px-2 py-0.5 text-xs font-medium capitalize`}
                                         >
                                             {OrderData?.Shipping?.Status}
                                         </Badge>
