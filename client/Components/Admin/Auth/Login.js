@@ -8,7 +8,7 @@ import { Label } from "@/Components/ui/label"
 import { useLoginLogic } from "@/Components/Logic/LoginLogic"
 
 export default function AdminLogin() {
-    const { ShowPass, SetShowPass, isLoading, UserDetails, handleInputChange, handleSubmit, errors } = useLoginLogic({Role:"Admin"});
+    const { ShowPass, SetShowPass, isLoading, UserDetails, handleInputChange, handleSubmit, errors } = useLoginLogic({ Role: "Admin" });
     return (
         <div className="flex min-h-screen items-center justify-center bg-[#f3f7fa] p-4">
             <Card className="w-full max-w-md shadow-lg">

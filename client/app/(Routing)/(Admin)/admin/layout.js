@@ -1,5 +1,4 @@
 "use client"
-import ValidateToken from "@/Components/Hoc/ValidateToken";
 function RootLayout({ children }) {
   return (
     <div>
@@ -8,4 +7,4 @@ function RootLayout({ children }) {
   );
 }
 
-export default ValidateToken(RootLayout, "Admin");
+export default RootLayout;

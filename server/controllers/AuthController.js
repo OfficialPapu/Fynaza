@@ -55,7 +55,6 @@ const Login = async (req, res) => {
             httpOnly: true, secure: true, sameSite: "Strict", path: "/", maxAge: 2592000000, domain: process.env.NODE_ENV === 'production' ? '.fynaza.com' : undefined,
         }));
         res.status(200).json({ UserID: User._id, Name: User.Name, Email: User.Email, Mobile: User.Mobile, Role: User.Role })
-
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" });
     }
@@ -126,4 +125,4 @@ const ForgotPassword = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-module.exports = { Signup, Login, Logout, ValidateToken, ForgotPassword };
+module.exports = { Signup, Login, Logout, ForgotPassword };

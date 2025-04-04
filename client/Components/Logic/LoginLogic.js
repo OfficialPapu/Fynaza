@@ -2,7 +2,7 @@
 import axios from "@/lib/axios"
 import { useSnackbar } from "notistack"
 import { useRouter } from 'next/navigation'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 const useLoginLogic = ({ Role }) => {
     const router = useRouter();
@@ -17,6 +17,9 @@ const useLoginLogic = ({ Role }) => {
         isAdmin: (Role == "Admin" ? true : false),
     });
 
+    useEffect(() => {
+        localStorage.clear();
+    })
     const importLoginSlice = async () => {
         if (Role === "Admin") {
             return await import("@/Components/Admin/Redux/Slices/LoginSlice");
@@ -66,7 +69,7 @@ const useLoginLogic = ({ Role }) => {
         setIsLoading(true);
         try {
             const { Login } = await importLoginSlice();
-            const response = await axios.post("api/auth/login", UserDetails, { withCredentials: true });
+            const response = await axios.post("api/auth/login", UserDetails);
             if (response.status === 200) {
                 const UserDetails = { ...response.data };
                 dispatch(Login(UserDetails));
