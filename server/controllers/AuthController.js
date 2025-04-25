@@ -62,7 +62,7 @@ const Login = async (req, res) => {
 
 const GenerateJWTToken = (User, req) => {
     const UserData = { UserID: User._id, Email: User.Email, UserAgent: req.headers["user-agent"], IP: req.ip, Role: User.Role }
-    return token = jwt.sign(UserData, process.env.JWT_SECRET_KEY, { expiresIn: "30d" });
+    return jwt.sign(UserData, process.env.JWT_SECRET_KEY, { expiresIn: "30d" });
 }
 
 const ValidateToken = (req, res) => {

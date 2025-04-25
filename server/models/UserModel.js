@@ -36,11 +36,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         enum: ["Male", "Female", "Other"],
     },
-    Role: {
-        type: [String],
-        enum: ['Customer', 'Influencer', 'Admin'],
-        default: ['Customer'],
-    },
     LoginCount: {
         type: Number,
         default: 0
@@ -50,4 +45,4 @@ const UserSchema = mongoose.Schema({
     },
 }, { timestamps: { createdAt: 'CreatedAt', updatedAt: 'UpdateAt' } })
 
-module.exports = { UserSchema: mongoose.model("Users", UserSchema, "Users") };
+module.exports = { UserSchema: mongoose.model("Users", UserSchema) };

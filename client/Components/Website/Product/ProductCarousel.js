@@ -10,6 +10,7 @@ import { useProduct } from '@/Components/Website/Product/ProductContext'
 const ProductCarousel = () => {
     const { Product, BASE_IMAGES_PATH } = useProduct();
     const [thumbsSwiper, setThumbsSwiper] = useState(null)
+    
     return (
         <div className="relative flex flex-col md:flex-row gap-1 lg:h-[400px] sm:h-[350px] h-[300px]">
             <div className="md:flex flex-col gap-2 lg:h-[400px] sm:h-[350px] MiniImageBox">
@@ -20,7 +21,7 @@ const ProductCarousel = () => {
                     modules={[Thumbs]}
                     watchSlidesProgress
                     direction="vertical"
-                    loop={true}
+                    loop={Product.Media.Images.length > 2}
                     className='min-h-full'
                 >
                     {Product.Media.Images.map((image, index) => (
@@ -43,7 +44,7 @@ const ProductCarousel = () => {
                 slidesPerView={1}
                 spaceBetween={20}
                 thumbs={{ swiper: thumbsSwiper }}
-                loop={true}
+                loop={Product.Media.Images.length > 2}
                 className="lg:h-[400px] lg:w-[400px] sm:h-[350px] sm:w-[350px] h-[300px] w-[300px]"
             >
                 {Product.Media.Images.map((image, index) => (
